@@ -1,0 +1,12 @@
+{
+  "name": "fixy",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "npm install --prefix api && npm install --prefix client && npm run build --prefix client",
+    "start": "npm start --prefix api"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
