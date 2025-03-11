@@ -1,10 +1,10 @@
 import { Routes, Route } from "react-router-dom";
-import { LandingPage } from "./chat/LandingPage";
-import { ProfessionalsListing } from "./chat/ProfessionalsListing";
-import { Contact } from "./chat/Contact";
-import { ServicesBooking } from "./chat/ServicesBooking";
-import { Dashboard } from "./chat/Dashboard";
-import { ComprehensiveServices } from "./chat/ComprehensiveServices";
+import { LandingPage } from "./screens/LandingPage";
+import { Contact } from "./screens/Contact";
+import { ServicesBooking } from "./screens/ServicesBooking";
+import { ProfessionalsListing } from "./screens/ProfessionalsListing";
+import { Dashboard } from "./screens/Dashboard";
+import { ComprehensiveServices } from "./screens/ComprehensiveServices";
 
 export const App = () => {
   return (
