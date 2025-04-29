@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 
 const corsConfiguration = {
   cors: {
-    origin: `${process.env.CLIENT_APP_URL}:${process.env.CLIENT_APP_PORT}`,
+    origin: `http://localhost:${process.env.CLIENT_APP_PORT}`,
     methods: ["GET", "POST"],
   },
 };
