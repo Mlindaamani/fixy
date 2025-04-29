@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export const ProfessionalsListing = () => {
+ const ProfessionalsListing = () => {
   const [selectedServiceType, setSelectedServiceType] = useState("all");
   const [selectedLocation, setSelectedLocation] = useState("");
   const [selectedRating, setSelectedRating] = useState("all");

@@ -6,7 +6,7 @@ import { Footer } from "../components/Footer";
 import hero from "../assets/extra/hero.jpg";
 import { useNavigate } from "react-router-dom";
 
-export const LandingPage = () => {
+const LandingPage = () => {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [selectedService, setSelectedService] = useState("");
   const [location, setLocation] = useState("");
@@ -296,3 +296,5 @@ export const LandingPage = () => {
     </div>
   );
 };
+
+export default LandingPage;

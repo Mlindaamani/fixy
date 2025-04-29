@@ -24,12 +24,6 @@ const sidebarLinks = [
   },
 
   {
-    icon: "fa-solid fa-gear text-indigo-600",
-    label: "Settings",
-    route: "/dashboard/settings",
-  },
-
-  {
     icon: "fa-solid fa-house text-indigo-600",
     label: "Home",
     route: "/",
