@@ -6,7 +6,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import "../src/App.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { BrowserRouter } from "react-router-dom";
-import { AuthProvider } from "./providers/authProvider";
+import { AuthProvider } from "./context/AuthProvider";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

@@ -7,7 +7,7 @@ import LoadingSpinner from "./components/Spinner";
 import PageNotFound from "./components/PageNotFound";
 
 // Auth
-import PrivateRoute from "./providers/AuthRequired";
+import PrivateRoute from "./context/AuthRequired";
 import Login from "./screens/Auth/Login";
 import Register from "./screens/Auth/Register";
 

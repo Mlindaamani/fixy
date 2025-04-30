@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { AuthContext } from "../context/AuthContext";
 import { useAuthStore } from "../stores/authStore";
+import { AuthContext } from "./AuthContext";
 
 export const AuthProvider = ({ children }) => {
   const { verifyAccessToken, loading } = useAuthStore();
