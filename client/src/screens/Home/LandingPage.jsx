@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { professionals } from "../lib/professionals";
-import { testimonials } from "../lib/testimonial";
-import { services } from "../lib/services";
-import { Footer } from "../components/Footer";
-import hero from "../assets/extra/hero.jpg";
+import { professionals } from "../../lib/professionals";
+import { testimonials } from "../../lib/testimonial";
+import { services } from "../../lib/services";
+import { Footer } from "../../components/Footer";
+import hero from "../../assets/extra/hero.jpg";
 import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {

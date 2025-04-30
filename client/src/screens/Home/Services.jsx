@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Footer } from "../components/Footer";
-import compressiveServices from "../lib/compressiveServices";
+import { Footer } from "../../components/Footer";
+import compressiveServices from "../../lib/compressiveServices";
 
-export const FixyServices = () => {
+const FixyServices = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [priceRange, setPriceRange] = useState([0, 1000]);
   const [selectedLocation, setSelectedLocation] = useState("");
@@ -173,3 +173,5 @@ export const FixyServices = () => {
     </div>
   );
 };
+
+export default FixyServices;

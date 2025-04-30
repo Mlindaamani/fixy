@@ -1,14 +1,21 @@
+// Global
 import { Routes, Route } from "react-router-dom";
 import { Suspense } from "react";
-import { FixyServices } from "./screens/Services";
-import PrivateRoute from "./providers/AuthRequired";
-import Login from "./screens/Auth/Login";
-import Contact from "./screens/Contact";
-import LandingPage from "./screens/LandingPage";
-import ProfessionalsListing from "./screens/ProfessionalsListing";
-import Register from "./screens/Auth/Register";
+
+// Utility
 import LoadingSpinner from "./components/Spinner";
 import PageNotFound from "./components/PageNotFound";
+
+// Auth
+import PrivateRoute from "./providers/AuthRequired";
+import Login from "./screens/Auth/Login";
+import Register from "./screens/Auth/Register";
+
+// Landing Page
+import FixyServices from "./screens/Home/Services";
+import LandingPage from "./screens/Home/LandingPage";
+import Contact from "./screens/Home/Contact";
+import ProfessionalsListing from "./screens/Home/ProfessionalsListing";
 
 // Layouts
 import LandingPageLayout from "./layouts/LandingPageLayout";
@@ -54,7 +61,6 @@ export const App = () => {
             />
           </Route>
         </Route>
-
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </Suspense>

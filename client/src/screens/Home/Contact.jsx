@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import * as echarts from "echarts";
-import faqItems from "../lib/faqs";
+import faqItems from "../../lib/faqs";
 
 const Contact = () => {
   const [isScrolled, setIsScrolled] = useState(false);
