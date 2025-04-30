@@ -1,5 +1,6 @@
 const { model, Schema } = require("mongoose");
 const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
 
 const userSchema = Schema(
   {
@@ -46,6 +47,11 @@ const userSchema = Schema(
       },
     },
 
+    profileImage: {
+      type: String,
+      default: "https://via.placeholder.com/150",
+    },
+
     isVerified: {
       type: Boolean,
       default: false,
@@ -54,6 +60,7 @@ const userSchema = Schema(
     verificationToken: {
       type: String,
       select: false,
+      default: null,
     },
 
     verificationTokenExpires: {
@@ -64,6 +71,7 @@ const userSchema = Schema(
     resetPasswordToken: {
       type: String,
       select: false,
+      default: null,
     },
 
     resetPasswordExpires: {
@@ -72,12 +80,7 @@ const userSchema = Schema(
     },
   },
 
-  {
-    timestamps: {
-      createdAt: "created_at",
-      updatedAt: "updated_at",
-    },
-  }
+  { timestamps: true }
 );
 
 // Pre-save hook to hash password
@@ -89,8 +92,8 @@ userSchema.pre("save", async function (next) {
 });
 
 // Method to compare passwords
-userSchema.methods.comparePassword = async function (candidatePassword) {
-  return await bcrypt.compare(candidatePassword, this.password);
+userSchema.methods.comparePassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
 };
 
 // Method to generate verification token

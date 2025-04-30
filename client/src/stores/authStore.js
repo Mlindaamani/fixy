@@ -19,9 +19,8 @@ export const useAuthStore = create(
   persist(
     (set) => ({
       user: null,
-      profile: null,
-      loading: false,
       isAuthenticated: false,
+      loading: false,
 
       register: async (formData, navigate) => {
         set({ loading: true });
@@ -35,7 +34,7 @@ export const useAuthStore = create(
           navigate("/login");
         } catch (error) {
           const errorMessage = getBackendErrorMessage(error);
-          set({ loading: false, error: errorMessage });
+          set({ loading: false });
           toast.error(errorMessage, {
             ...TOAST_CONFIG,
             id: "register",
@@ -44,13 +43,12 @@ export const useAuthStore = create(
       },
 
       login: async (formData, navigate) => {
-        set({ loading: true, error: null });
+        set({ loading: true });
         try {
-          const response = (await axiosInstance.post("/auth/login/", formData))
-            .data;
-          const { id, username, email, role, accessToken, refreshToken } =
-            response;
+          const response = await axiosInstance.post("/auth/login/", formData);
 
+          const { id, username, email, role, accessToken, refreshToken } =
+            response.data;
           storeTokens(accessToken, refreshToken);
           set({
             isAuthenticated: true,
@@ -66,21 +64,7 @@ export const useAuthStore = create(
           navigate("/dashboard");
         } catch (error) {
           const errorMessage = getBackendErrorMessage(error);
-          set({ loading: false, error: errorMessage });
-          toast.error(errorMessage, {
-            ...TOAST_CONFIG,
-            id: "login",
-          });
-        }
-      },
-
-      getProfile: async () => {
-        try {
-          const response = await axiosInstance.get("/auth/me");
-          set({ profile: response.data });
-        } catch (error) {
-          const errorMessage = getBackendErrorMessage(error);
-          set({ loading: false, error: errorMessage });
+          set({ loading: false });
           toast.error(errorMessage, {
             ...TOAST_CONFIG,
             id: "login",
@@ -90,7 +74,7 @@ export const useAuthStore = create(
 
       logout: (navigate) => {
         removeTokens();
-        set({ isAuthenticated: false, user: null, error: null });
+        set({ isAuthenticated: false, user: null });
         toast.success("Logged out successfully", {
           ...TOAST_CONFIG,
           id: "logout",
@@ -146,29 +130,6 @@ export const useAuthStore = create(
             id: "refresh-token",
           });
           return false;
-        }
-      },
-
-      updateServiceProviderProfile: async (
-        serviceProviderId,
-        upddatedFormData
-      ) => {
-        set({ loading: true });
-        try {
-          const response = await axiosInstance.put(
-            `/providers/profile-update/${serviceProviderId}`,
-            upddatedFormData
-          );
-          toast.success(response.data.message);
-          set({ loading: false });
-        } catch (error) {
-          set({ loading: false });
-          const erroeMessage = getBackendErrorMessage(error);
-          toast.error(erroeMessage, {
-            duration: 3000,
-            position: "top-center",
-            id: "refresh-token",
-          });
         }
       },
     }),

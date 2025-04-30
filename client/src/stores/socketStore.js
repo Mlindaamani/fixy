@@ -15,7 +15,6 @@ export const useSocket = create((set, get) => ({
 
   connectToSocketServer: () => {
     const { user } = useAuthStore.getState();
-    console.log(user.username);
     const socket = io(SOCKET_SERVER_URL, {
       query: {
         userId: user?.id,
@@ -41,7 +40,7 @@ export const useSocket = create((set, get) => ({
       toast.success(message, {
         id: "join-chat",
         duration: 5000,
-        position: "bottom-left",
+        position: "bottom-center",
       });
     });
 

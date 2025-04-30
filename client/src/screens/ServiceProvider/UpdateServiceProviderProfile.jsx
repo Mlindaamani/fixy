@@ -1,18 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../../stores/authStore";
 import LoadingSpinner from "../../components/Spinner";
+import { useProfileStore } from "../../stores/profileStore";
 
 const UpdateServiceProviderProfile = () => {
   const navigate = useNavigate();
   const [error, setError] = useState("");
-  const { profile, loading, getProfile, updateServiceProviderProfile } =
-    useAuthStore();
 
+  const {
+    getServiceProviderProfile,
+    updateServiceProviderProfile,
+    profileData,
+    updatingProfile,
+  } = useProfileStore();
 
   useEffect(() => {
-    getProfile();
-  }, [getProfile]);
+    getServiceProviderProfile();
+  }, [getServiceProviderProfile]);
+
+  const { profile } = profileData;
+
+  const {
+    title,
+    bio,
+    serviceCategory,
+    specialties,
+    yearsOfExperience,
+    location,
+    availability,
+    hourlyRate,
+    certifications,
+  } = profile || {};
 
   const [formData, setFormData] = useState({
     title: "",
@@ -26,20 +44,19 @@ const UpdateServiceProviderProfile = () => {
     certifications: [],
   });
 
-
   useEffect(() => {
     if (profile) {
       setFormData({
-        title: profile.profile.title || "Your title ",
-        bio: profile.profile.bio || "I am part of fixy...",
-        serviceCategory: profile.profile.serviceCategory || "",
-        specialties: profile.profile.specialties || [],
-        yearsOfExperience: profile.profile.yearsOfExperience || 0,
-        location: profile.profile.location || "",
-        availability: profile.profile.availability || "",
-        hourlyRate: profile.profile.hourlyRate || 0,
+        title: title || "Your title ",
+        bio: bio || "I am part of fixy...",
+        serviceCategory: serviceCategory || "",
+        specialties: specialties || [],
+        yearsOfExperience: yearsOfExperience || 0,
+        location: location || "",
+        availability: availability || "",
+        hourlyRate: hourlyRate || 0,
         certifications:
-          profile.profile.certifications?.filter(
+          certifications?.filter(
             (cert) => cert.name && cert.issuer && cert.dateIssued
           ) || [],
       });
@@ -124,11 +141,11 @@ const UpdateServiceProviderProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-    updateServiceProviderProfile(profile.profile._id, formData);
+    updateServiceProviderProfile(_id, formData);
     setError("");
   };
 
-  if (loading) {
+  if (updatingProfile) {
     return <LoadingSpinner />;
   }
 
@@ -366,12 +383,12 @@ const UpdateServiceProviderProfile = () => {
               </button>
               <button
                 type="submit"
-                disabled={loading}
+                disabled={updatingProfile}
                 className={`px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 ${
-                  loading ? "opacity-50 cursor-not-allowed" : ""
+                  updatingProfile ? "opacity-50 cursor-not-allowed" : ""
                 }`}
               >
-                {loading ? "Saving..." : "Save Changes"}
+                {updatingProfile ? "Saving..." : "Save Changes"}
               </button>
             </div>
           </form>

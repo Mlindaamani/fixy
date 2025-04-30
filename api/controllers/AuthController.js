@@ -2,13 +2,10 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const Customer = require("../models/Customer");
 const ServiceProvider = require("../models/ServiceProvider");
+
 const {
   generateAccessToken,
   generateRefreshToken,
-  generateVerificationToken,
-  getVerificationTokenExpiration,
-  generatePasswordResetToken,
-  getPasswordTokenExpiration,
 } = require("../utils/functions");
 
 const register = async (req, res) => {
@@ -45,8 +42,7 @@ const register = async (req, res) => {
     });
 
     // Generate verification token
-    user.verificationToken = generateVerificationToken();
-    user.verificationTokenExpires = getVerificationTokenExpiration();
+    user.verificationToken = user.generateVerificationToken();
     await user.save();
 
     //
@@ -66,6 +62,7 @@ const register = async (req, res) => {
         certifications,
       });
     }
+
     user.profile = profile._id;
     await user.save();
     return res.status(201).json({
@@ -73,7 +70,7 @@ const register = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -110,29 +107,29 @@ const login = async (req, res) => {
       refreshToken,
     });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
 const deleteUser = async (req, res) => {
+  const { id } = req.params;
   try {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Delete corresponding profile
+    // Delete  profile
     if (user.role === "customer") {
       await Customer.deleteOne({ user: user._id });
     } else if (user.role === "serviceProvider") {
       await ServiceProvider.deleteOne({ user: user._id });
     }
 
-    // Delete user
     await user.deleteOne();
     res.status(200).json({ message: "Account deleted" });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -150,7 +147,7 @@ const myProfile = async (req, res) => {
     }
     res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -163,17 +160,14 @@ const requestPasswordReset = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Generate reset token
-    user.resetPasswordToken = generatePasswordResetToken();
-    user.resetPasswordExpires = getPasswordTokenExpiration();
-    //Save the user to the dataase
+    user.resetPasswordToken = user.generateResetPasswordToken();
     await user.save();
 
     res
       .status(200)
       .json({ message: "Password reset email sent", token: resetToken });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -187,14 +181,12 @@ const requestEmailReset = async (req, res) => {
     }
 
     // Generate reset token
-    const resetToken = generateVerificationToken();
-    user.verificationToken = resetToken;
-    user.verificationTokenExpires = getVerificationTokenExpiration();
+    user.verificationToken = user.generateVerificationToken;
     await user.save();
 
     res.status(200).json({ message: "Reeset email sent", token: resetToken });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -218,7 +210,7 @@ const verifyEmail = async (req, res) => {
 
     res.status(200).json({ message: "Email verified successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Server error" });
   }
 };
 

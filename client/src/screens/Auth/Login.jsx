@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuthStore } from "../../stores/authStore";
 const Login = () => {
   const navigate = useNavigate();
-  const { login, loading } = useAuthStore();
+  const { login, loading, isAuthenticated } = useAuthStore();
   const [formData, setFormData] = useState({ email: "", password: "" });
 
   const handleChange = (e) => {
@@ -15,6 +15,8 @@ const Login = () => {
     e.preventDefault();
     await login(formData, navigate);
   };
+
+  if (isAuthenticated) navigate("/");
 
   return (
     <div>

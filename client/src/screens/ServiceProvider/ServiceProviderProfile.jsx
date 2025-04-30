@@ -1,21 +1,19 @@
 import React, { useEffect } from "react";
-import LoadingSpinner from "../../components/Spinner";
-import { useAuthStore } from "../../stores/authStore";
 import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "../../components/Spinner";
+import { useProfileStore } from "../../stores/profileStore";
 
 const ServiceProviderProfile = () => {
   const navigate = useNavigate();
-  const { isLoading, profile: myprofile, getProfile } = useAuthStore();
+  const { getServiceProviderProfile, fetchingProfile, profileData } =
+    useProfileStore();
 
   useEffect(() => {
-    getProfile();
-  }, [getProfile]);
+    getServiceProviderProfile();
+  }, [getServiceProviderProfile]);
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
+  const { fullName, email, phoneNumber, isVerified, profile } = profileData;
 
-  const { fullName, email, phoneNumber, isVerified, profile } = myprofile;
   const {
     title,
     bio,
@@ -29,11 +27,15 @@ const ServiceProviderProfile = () => {
     totalJobCompleted,
     rating,
     profile_status,
-  } = profile || {};
+  } = profile;
 
   const validCertifications = certifications?.filter(
     (cert) => cert.name && cert.issuer && cert.dateIssued
   );
+
+  if (fetchingProfile) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">

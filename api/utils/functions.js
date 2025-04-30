@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
-const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 
 const corsConfiguration = {
@@ -20,28 +18,6 @@ const generateRefreshToken = (payload) => {
   return jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {
     expiresIn: process.env.REFRESH_TOKEN_EXPIRATION_TIME,
   });
-};
-
-const generateVerificationToken = () => {
-  return crypto.randomBytes(32).toString("hex");
-};
-
-const getVerificationTokenExpiration = () => {
-  return Date.now() + 3600000;
-};
-
-const generatePasswordResetToken = () => {
-  return crypto.randomBytes(32).toString("hex");
-};
-
-const getPasswordTokenExpiration = () => {
-  return Date.now() + 3600000;
-};
-
-const hashPassword = async (password) => {
-  const salt = await bcrypt.genSalt(10);
-  console.log(salt);
-  return await bcrypt.hash(password, salt);
 };
 
 const verifyMongoDbId = (videoId) => {
@@ -67,11 +43,6 @@ module.exports = {
   corsConfiguration,
   generateAccessToken,
   generateRefreshToken,
-  generateVerificationToken,
-  generatePasswordResetToken,
-  getPasswordTokenExpiration,
-  getVerificationTokenExpiration,
   verifyMongoDbId,
   startServer,
-  hashPassword,
 };

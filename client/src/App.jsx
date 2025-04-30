@@ -1,25 +1,27 @@
 import { Routes, Route } from "react-router-dom";
 import { Suspense } from "react";
 import { FixyServices } from "./screens/Services";
-import Contact from "./screens/Contact";
+import PrivateRoute from "./providers/AuthRequired";
 import Login from "./screens/Auth/Login";
+import Contact from "./screens/Contact";
+import LandingPage from "./screens/LandingPage";
 import ProfessionalsListing from "./screens/ProfessionalsListing";
 import Register from "./screens/Auth/Register";
+import LoadingSpinner from "./components/Spinner";
 import PageNotFound from "./components/PageNotFound";
+
+// Layouts
 import LandingPageLayout from "./layouts/LandingPageLayout";
 import ServiceProviderLayout from "./layouts/ServiceProviderLayout";
 import LoginLayout from "./layouts/LoginLayout";
 import RegisterLayout from "./layouts/RegisterLayout";
-import Services from "./screens/serviceProvider/Services";
-import Analytics from "./screens/serviceProvider/Analytics";
-import Settings from "./screens/serviceProvider/Settings";
-import LandingPage from "./screens/LandingPage";
-import ServiceProviderProfile from "./screens/serviceProvider/ServiceProviderProfile";
-import ServiceProRoom from "./screens/serviceProvider/ServiceProRoom";
-import Reports from "./screens/serviceProvider/Reports";
-import PrivateRoute from "./context/AuthRequired";
-import LoadingSpinner from "./components/Spinner";
-import UpdateServiceProviderProfile from "./screens/serviceProvider/UpdateServiceProviderProfile";
+
+// Service Provider
+import Analytics from "./screens/ServiceProvider/Analytics";
+import Services from "./screens/ServiceProvider/Services";
+import ServiceProRoom from "./screens/ServiceProvider/ServiceProRoom";
+import UpdateServiceProviderProfile from "./screens/ServiceProvider/UpdateServiceProviderProfile";
+import ServiceProviderProfile from "./screens/ServiceProvider/ServiceProviderProfile";
 
 export const App = () => {
   return (
@@ -44,14 +46,12 @@ export const App = () => {
           <Route path="/dashboard" element={<ServiceProviderLayout />}>
             <Route index element={<Analytics />} />
             <Route path="services" element={<Services />} />
-            <Route path="settings" element={<Settings />} />
+            <Route path="room" element={<ServiceProRoom />} />
             <Route path="profile" element={<ServiceProviderProfile />} />
             <Route
               path="profile/edit"
               element={<UpdateServiceProviderProfile />}
             />
-            <Route path="room" element={<ServiceProRoom />} />
-            <Route path="reports" element={<Reports />} />
           </Route>
         </Route>
 

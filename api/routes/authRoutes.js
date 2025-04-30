@@ -12,12 +12,14 @@ const {
   requestPasswordReset,
   verifyEmail,
   requestEmailReset,
+  deleteUser,
 } = require("../controllers/AuthController");
 
 const authRouter = express.Router();
 
 authRouter.post("/register", register);
 authRouter.post("/login", login);
+authRouter.delete("/delete/:id", deleteUser);
 authRouter.get("/verify-token", verifyAccessToken);
 authRouter.post("/refresh-token", refreshAccessToken);
 authRouter.get("/me", userIsAuthenticatedMiddleware, myProfile);
