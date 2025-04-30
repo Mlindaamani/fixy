@@ -80,7 +80,9 @@ const Analytics = () => {
       {/* Recent Orders */}
       <div className="bg-white rounded-lg shadow-sm">
         <div className="p-6 border-b">
-          <h2 className="text-lg font-semibold !text-gray-600">Recent Orders</h2>
+          <h2 className="text-lg font-semibold !text-gray-600">
+            Recent Orders
+          </h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
