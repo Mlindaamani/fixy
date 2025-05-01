@@ -30,6 +30,9 @@ import ServiceProRoom from "./screens/ServiceProvider/ServiceProRoom";
 import UpdateServiceProviderProfile from "./screens/ServiceProvider/UpdateServiceProviderProfile";
 import ServiceProviderProfile from "./screens/ServiceProvider/ServiceProviderProfile";
 
+// Customer
+import CustomerLayout from "./layouts/CustomerLayout";
+
 export const App = () => {
   return (
     <Suspense fallback={<LoadingSpinner />}>
@@ -50,6 +53,7 @@ export const App = () => {
         </Route>
 
         <Route element={<PrivateRoute />}>
+          {/* Service Provider */}
           <Route path="/dashboard" element={<ServiceProviderLayout />}>
             <Route index element={<Analytics />} />
             <Route path="services" element={<Services />} />
@@ -59,6 +63,12 @@ export const App = () => {
               path="profile/edit"
               element={<UpdateServiceProviderProfile />}
             />
+          </Route>
+
+          {/* Customer */}
+          <Route path="/customer" element={<CustomerLayout />}>
+            <Route index element={<Analytics />} />
+            <Route path="room" element={<ServiceProRoom />} />
           </Route>
         </Route>
         <Route path="*" element={<PageNotFound />} />

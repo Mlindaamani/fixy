@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../stores/authStore";
-import { useLocation } from "react-router-dom";
-
-const links = ["/", "/services", "/contact", "/professionals"];
 
 export const NavigationBar = () => {
-  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
-  const { isAuthenticated, logout } = useAuthStore();
-  const isActive = links.includes(location.pathname);
+  const { isAuthenticated, logout, user } = useAuthStore();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,7 +46,12 @@ export const NavigationBar = () => {
             </Link>
             {isAuthenticated ? (
               <>
-                <Link to="/dashboard" className="no-underline text-white">
+                <Link
+                  to={`${(user.role = "customer"
+                    ? "/customer"
+                    : "/dashboard")}`}
+                  className="no-underline text-white"
+                >
                   Dashboard
                 </Link>
 

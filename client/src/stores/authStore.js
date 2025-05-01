@@ -61,7 +61,12 @@ export const useAuthStore = create(
             duration: 4000,
             id: "login",
           });
-          navigate("/dashboard");
+
+          if (role == "customer") {
+            navigate("/customer");
+          } else if (role === "serviceProvider") {
+            navigate("/dashboard");
+          }
         } catch (error) {
           const errorMessage = getBackendErrorMessage(error);
           set({ loading: false });

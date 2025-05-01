@@ -1,24 +1,24 @@
-const ServiceProvider = require("../models/ServiceProvider");
+const Customer = require("../models/Customer");
 
-const getServiceProviders = async (_req, res) => {
+const getCustomers = async (_req, res) => {
   try {
-    const serviceProviders = await ServiceProvider.find()
-      .populate("user", "fullName phoneNumber")
-      .populate("portfolio")
-      .populate("reviews");
+    const customer = await Customer.find().populate(
+      "user",
+      "fullName phoneNumber, isVerified, email"
+    );
 
-    if (!serviceProviders || serviceProviders.length === 0) {
-      return res.status(404).json({ message: "No ServiceProvider found" });
+    if (!customer || customer.length === 0) {
+      return res.status(404).json({ message: "No service providers found" });
     }
 
-    return res.status(200).json(serviceProviders);
+    return res.status(200).json(customer);
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
 
-const updateServiceProviderProfile = async (req, res) => {
+const updateCustomerProfile = async (req, res) => {
   try {
     const { id } = req.params;
     const updates = req.body;
@@ -43,14 +43,14 @@ const updateServiceProviderProfile = async (req, res) => {
     if (!isValidOperation) {
       return$res.status(400).json({ error: "Invalid updates." });
     }
-    const serviceProvider = await ServiceProvider.findByIdAndUpdate(
+    const customer = await Customer.findByIdAndUpdate(
       id,
       { $set: updates },
       { new: true, runValidators: true }
     );
 
-    if (!serviceProvider) {
-      return res.status(404).json({ error: "Service provider not found." });
+    if (!customer) {
+      return res.status(404).json({ error: "Customer not found" });
     }
     res.status(200).json({ message: "Profile updated successfully!" });
   } catch (error) {
@@ -59,27 +59,27 @@ const updateServiceProviderProfile = async (req, res) => {
   }
 };
 
-const getServiceProviderById = async (req, res) => {
+const getCustomerById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const serviceProvider = await ServiceProvider.findById(id)
-      .populate("user", "fullName phoneNumber")
-      .populate("portfolio")
-      .populate("reviews");
+    const customer = await Customer.findById(id).populate(
+      "user",
+      "fullName phoneNumber profileImage email"
+    );
 
-    if (!serviceProvider) {
+    if (!customer) {
       return res.status(404).json({ message: "Service provider not found" });
     }
 
-    return res.status(200).json(serviceProvider);
+    return res.status(200).json(customer);
   } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
 
 module.exports = {
-  getServiceProviders,
-  updateServiceProviderProfile,
-  getServiceProviderById,
+  getCustomerById,
+  updateCustomerProfile,
+  getCustomers,
 };
