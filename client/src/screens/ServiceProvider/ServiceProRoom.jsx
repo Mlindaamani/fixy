@@ -26,6 +26,7 @@ const ServiceProRoom = () => {
     isLoading: messagesLoading,
   } = messageStore();
 
+
   const filteredUsers = showOnlineOnly
     ? users.filter((user) => onlineUsers.includes(user._id))
     : users;
@@ -84,7 +85,7 @@ const ServiceProRoom = () => {
         } transition-all duration-300`}
       >
         <div className="flex items-center justify-between mb-4">
-          <h5 className="text-lg font-semibold text-gray-800">Chats</h5>
+          <h5 className="text-lg font-semibold !text-gray-600">Chats</h5>
           <label className="relative inline-flex items-center cursor-pointer">
             <input
               type="checkbox"
@@ -106,8 +107,8 @@ const ServiceProRoom = () => {
             <p className="text-gray-500 text-center">No users found.</p>
           ) : (
             filteredUsers.map((user) => {
-              const usernameInitial = user.username.charAt(0).toUpperCase();
-              const isOnline = onlineUsers.includes(user._id);
+              const usernameInitial = user?.fullName?.charAt(0).toUpperCase();
+              const isOnline = onlineUsers.includes(user?._id);
 
               return (
                 <div
@@ -119,7 +120,7 @@ const ServiceProRoom = () => {
                       : "hover:bg-gray-100"
                   }`}
                   role="button"
-                  aria-label={`Chat with ${user.username}`}
+                  aria-label={`Chat with ${user.fullName}`}
                   tabIndex={0}
                   onKeyDown={(e) => e.key === "Enter" && handleUserClick(user)}
                 >
@@ -135,7 +136,7 @@ const ServiceProRoom = () => {
                   </div>
                   <div className="flex flex-col">
                     <span className="text-sm font-medium text-gray-800">
-                      {user.username}
+                      {user?.fullName}
                     </span>
                     <span
                       className={`text-xs ${

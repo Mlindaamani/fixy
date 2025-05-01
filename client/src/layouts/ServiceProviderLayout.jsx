@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Outlet, Link } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../stores/authStore";
 import ServiceProSidebar from "../screens/serviceProvider/ServiceProSidebar";
@@ -90,6 +91,7 @@ const ServiceProviderLayout = () => {
         <main className="flex-1 p-6 bg-gray-100 overflow-y-auto">
           <Outlet />
         </main>
+        <Toaster />
       </div>
     </div>
   );

@@ -26,9 +26,9 @@ export const useSocket = create((set, get) => ({
     set({ socket: socket });
 
     socket.on("new-message", (newMessage) => {
-      const { addMessage } = messageStore.getState();
+      const { updateMessages } = messageStore.getState();
       const sound = new Audio(notify);
-      addMessage(newMessage);
+      updateMessages(newMessage);
       sound.play();
     });
 
@@ -39,8 +39,9 @@ export const useSocket = create((set, get) => ({
 
       toast.success(message, {
         id: "join-chat",
-        duration: 5000,
+        duration: 1000,
         position: "bottom-center",
+        id: "join-chat",
       });
     });
 
@@ -52,7 +53,8 @@ export const useSocket = create((set, get) => ({
       toast.success(message, {
         id: "leave-chat",
         duration: 5000,
-        position: "bottom-left",
+        position: "bottom-center",
+        id: "leave-chat",
       });
     });
 

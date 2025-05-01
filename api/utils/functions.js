@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
+const USERROLE = {
+  SERVICEPROVIDER: "serviceProvider",
+  CUSTOMER: "customer",
+  ADMIN: "admin",
+};
+
 const corsConfiguration = {
   cors: {
     origin: `http://localhost:${process.env.CLIENT_APP_PORT}`,
@@ -45,4 +51,5 @@ module.exports = {
   generateRefreshToken,
   verifyMongoDbId,
   startServer,
+  USERROLE,
 };

@@ -2,36 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../components/Spinner";
 import { useProfileStore } from "../../stores/profileStore";
+import toast from "react-hot-toast";
 
 const UpdateServiceProviderProfile = () => {
   const navigate = useNavigate();
-  const [error, setError] = useState("");
-
-  const {
-    getServiceProviderProfile,
-    updateServiceProviderProfile,
-    profileData,
-    updatingProfile,
-  } = useProfileStore();
-
-  useEffect(() => {
-    getServiceProviderProfile();
-  }, [getServiceProviderProfile]);
-
-  const { profile } = profileData;
-
-  const {
-    title,
-    bio,
-    serviceCategory,
-    specialties,
-    yearsOfExperience,
-    location,
-    availability,
-    hourlyRate,
-    certifications,
-  } = profile || {};
-
   const [formData, setFormData] = useState({
     title: "",
     bio: "",
@@ -44,24 +18,51 @@ const UpdateServiceProviderProfile = () => {
     certifications: [],
   });
 
+  const {
+    getServiceProviderProfile,
+    updateServiceProviderProfile,
+    profileData,
+    updatingProfile,
+    fetchingProfile,
+  } = useProfileStore();
+
+  // Fetch profile data on mount
   useEffect(() => {
-    if (profile) {
+    getServiceProviderProfile();
+  }, [getServiceProviderProfile]);
+
+  // Populate formData when profileData is available
+  useEffect(() => {
+    if (profileData && profileData.profile) {
+      const {
+        title = "Your title",
+        bio = "I am part of fixy...",
+        serviceCategory = "",
+        specialties = [],
+        yearsOfExperience = 0,
+        location = "",
+        availability = "",
+        hourlyRate = 0,
+        certifications = [],
+      } = profileData.profile;
+
       setFormData({
-        title: title || "Your title ",
-        bio: bio || "I am part of fixy...",
-        serviceCategory: serviceCategory || "",
-        specialties: specialties || [],
-        yearsOfExperience: yearsOfExperience || 0,
-        location: location || "",
-        availability: availability || "",
-        hourlyRate: hourlyRate || 0,
-        certifications:
-          certifications?.filter(
-            (cert) => cert.name && cert.issuer && cert.dateIssued
-          ) || [],
+        title,
+        bio,
+        serviceCategory,
+        specialties,
+        yearsOfExperience,
+        location,
+        availability,
+        hourlyRate,
+        certifications: certifications.filter(
+          (cert) => cert.name && cert.issuer && cert.dateIssued
+        ),
       });
     }
-  }, [profile]);
+  }, [profileData]);
+
+  if (fetchingProfile) return <LoadingSpinner />;
 
   // Handle input changes
   const handleChange = (e) => {
@@ -112,42 +113,66 @@ const UpdateServiceProviderProfile = () => {
     }));
   };
 
-  // Validate form
   const validateForm = () => {
     if (!formData.serviceCategory) {
-      setError("Service category is required.");
+      toast.error("Service category is required", {
+        duration: 5000,
+        position: "top-right",
+        id: "validationError",
+      });
       return false;
     }
+
     if (formData.yearsOfExperience < 0) {
-      setError("Years of experience cannot be negative.");
+      toast.error("Years of experience cannot be negative.", {
+        duration: 5000,
+        position: "top-right",
+        id: "validationError",
+      });
       return false;
     }
+
     if (formData.hourlyRate < 0) {
-      setError("Hourly rate cannot be negative.");
+      toast.error("Hourly rate cannot be negative.", {
+        duration: 5000,
+        position: "top-right",
+        id: "validationError",
+      });
       return false;
     }
 
     for (const cert of formData.certifications) {
       if (cert.name && (!cert.issuer || !cert.dateIssued)) {
-        setError(
-          "All certification fields (name, issuer, date issued) are required if name is provided."
+        toast.error(
+          "All certification fields (name, issuer, date issued) are required if name is provided.",
+          {
+            duration: 5000,
+            position: "top-right",
+            id: "validationError",
+          }
         );
+        return false;
+      }
+
+      if (cert.dateIssued && new Date(cert.dateIssued) > new Date()) {
+        toast.error("Certification date cannot be in the future.", {
+          duration: 5000,
+          position: "top-right",
+          id: "validationError",
+        });
         return false;
       }
     }
     return true;
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-    updateServiceProviderProfile(_id, formData);
-    setError("");
+    await updateServiceProviderProfile(profileData.profile._id, formData);
+    navigate("/dashboard/profile");
   };
-
-  if (updatingProfile) {
-    return <LoadingSpinner />;
-  }
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -156,7 +181,6 @@ const UpdateServiceProviderProfile = () => {
           <h4 className="text-2xl font-bold !text-gray-600 mb-6 text-center">
             Update Profile
           </h4>
-          <span className="text-red-600">{error}</span>
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Title */}
             <div>
@@ -168,8 +192,7 @@ const UpdateServiceProviderProfile = () => {
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-indigo-400 focus:border-indigo-400"
-                aria-label="Title"
+                className="mt-1 w-full p-2 border !border-gray-300 rounded-lg focus:!ring-indigo-400 !focus:border-indigo-400"
               />
             </div>
 
@@ -183,7 +206,7 @@ const UpdateServiceProviderProfile = () => {
                 value={formData.bio}
                 onChange={handleChange}
                 rows={4}
-                className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-indigo-400 focus:border-indigo-400"
+                className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:!ring-indigo-400 focus:!border-indigo-400"
                 aria-label="Bio"
               />
             </div>

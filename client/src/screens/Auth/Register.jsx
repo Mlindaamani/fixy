@@ -69,23 +69,26 @@ const Register = () => {
       <form onSubmit={handleSubmit} className="space-y-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           {[
-            { label: "Email", name: "email", type: "email", required: true },
-            {
-              label: "Password",
-              name: "password",
-              type: "password",
-              required: true,
-            },
             {
               label: "Full Name",
               name: "fullName",
               type: "text",
               required: true,
             },
+
             {
               label: "Phone Number",
               name: "phoneNumber",
               type: "text",
+              required: true,
+            },
+
+            { label: "Email", name: "email", type: "email", required: true },
+
+            {
+              label: "Password",
+              name: "password",
+              type: "password",
               required: true,
             },
           ].map(({ label, name, type, required }) => (

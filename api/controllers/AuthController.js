@@ -1,15 +1,34 @@
-const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-const Customer = require("../models/Customer");
-const ServiceProvider = require("../models/ServiceProvider");
 
+// Utility
+const { USERROLE } = require("../utils/functions");
 const {
   generateAccessToken,
   generateRefreshToken,
 } = require("../utils/functions");
 
+// Models
+const Customer = require("../models/Customer");
+const User = require("../models/User");
+const ServiceProvider = require("../models/ServiceProvider");
+
+const getSidebarUsers = async (req, res) => {
+  const { id: userId } = req.user;
+  try {
+    const filteredUsers = await User.find({ _id: { $ne: userId } })
+      .select("-password")
+      .sort({ username: -1 });
+    res.status(200).json(filteredUsers);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to retrieve users",
+    });
+  }
+};
+
 const register = async (req, res) => {
-  let profile;
   try {
     const {
       email,
@@ -25,7 +44,7 @@ const register = async (req, res) => {
       certifications,
     } = req.body;
 
-    if (!["customer", "serviceProvider"].includes(role)) {
+    if (![USERROLE.CUSTOMER, USERROLE.SERVICEPROVIDER].includes(role)) {
       return res.status(400).json({ message: "Invalid role" });
     }
 
@@ -33,6 +52,7 @@ const register = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ message: "Email already exists" });
     }
+
     const user = await User.create({
       email,
       password,
@@ -41,17 +61,16 @@ const register = async (req, res) => {
       role,
     });
 
-    // Generate verification token
-    user.verificationToken = user.generateVerificationToken();
-    await user.save();
+    let profile;
 
-    //
-    if (role === "customer") {
+    if (role === USERROLE.CUSTOMER) {
       profile = await Customer.create({
         user: user._id,
         location: location,
       });
-    } else if (role === "serviceProvider") {
+    }
+
+    if (role === USERROLE.SERVICEPROVIDER) {
       profile = await ServiceProvider.create({
         user: user._id,
         serviceCategory,
@@ -64,6 +83,7 @@ const register = async (req, res) => {
     }
 
     user.profile = profile._id;
+    user.verificationToken = user.generateVerificationToken();
     await user.save();
     return res.status(201).json({
       message: "User registered successfully",
@@ -115,27 +135,31 @@ const deleteUser = async (req, res) => {
   const { id } = req.params;
   try {
     const user = await User.findById(id);
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
     // Delete  profile
-    if (user.role === "customer") {
+    if (user.role === USERROLE.CUSTOMER) {
       await Customer.deleteOne({ user: user._id });
-    } else if (user.role === "serviceProvider") {
+    } else if (user.role === USERROLE.SERVICEPROVIDER) {
       await ServiceProvider.deleteOne({ user: user._id });
     }
 
     await user.deleteOne();
-    res.status(200).json({ message: "Account deleted" });
+    res.status(200).json({
+      message: "Your have successfully deleted your account and profile",
+    });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
 };
 
 const myProfile = async (req, res) => {
+  const { id: userId } = req.user;
+
   try {
-    const user = await User.findById(req.user.id)
+    const user = await User.findById(userId)
       .populate({
         path: "profile",
         select: "-user",
@@ -277,4 +301,5 @@ module.exports = {
   requestEmailReset,
   verifyAccessToken,
   refreshAccessToken,
+  getSidebarUsers,
 };

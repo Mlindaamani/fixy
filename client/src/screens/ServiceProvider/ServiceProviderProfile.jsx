@@ -10,7 +10,21 @@ const ServiceProviderProfile = () => {
 
   useEffect(() => {
     getServiceProviderProfile();
-  }, [getServiceProviderProfile]);
+  }, []);
+
+  if (fetchingProfile) return <LoadingSpinner />;
+
+  if (!profileData) {
+    return (
+      <div className="min-h-screen bg-gray-100 p-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white shadow-sm rounded-lg p-6">
+            <p className="text-gray-500">Unable to load profile data.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const { fullName, email, phoneNumber, isVerified, profile } = profileData;
 
@@ -32,10 +46,6 @@ const ServiceProviderProfile = () => {
   const validCertifications = certifications?.filter(
     (cert) => cert.name && cert.issuer && cert.dateIssued
   );
-
-  if (fetchingProfile) {
-    return <LoadingSpinner />;
-  }
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -130,7 +140,7 @@ const ServiceProviderProfile = () => {
 
         {/* Stats Section */}
         <div className="bg-white shadow-sm rounded-lg p-6 mb-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Stats</h2>
+          <h2 className="text-xl font-semibold !text-gray-600 mb-4">Stats</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <p className="text-sm text-gray-500">Jobs Completed</p>

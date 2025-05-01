@@ -24,19 +24,23 @@ export const useProfileStore = create((set) => ({
     }
   },
 
-  updateServiceProviderProfile: async (serviceProviderId, upddatedFormData) => {
+  updateServiceProviderProfile: async (serviceProviderId, updatedFormData) => {
     set({ updatingProfile: true });
     try {
       const response = await axiosInstance.put(
         `/providers/profile-update/${serviceProviderId}`,
-        upddatedFormData
+        updatedFormData
       );
-      toast.success(response.data.message);
+      toast.success(response.data.message, {
+        duration: 5000,
+        position: "bottom-center",
+        id: "service-provider",
+      });
       set({ updatingProfile: false });
     } catch (error) {
       set({ updatingProfile: false });
-      const erroeMessage = getBackendErrorMessage(error);
-      toast.error(erroeMessage, {
+      const errorMessage = getBackendErrorMessage(error);
+      toast.error(errorMessage, {
         duration: 3000,
         position: "top-center",
         id: "service-provider",

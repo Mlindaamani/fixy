@@ -21,15 +21,20 @@ export const messageStore = create((set, get) => ({
         return;
       }
 
-      const { data: newMessage } = await axiosInstance.post(
+      const response = await axiosInstance.post(
         `/messages/send/${selectedUser._id}`,
         {
           message,
         }
       );
-      set({ messages: [...messages, newMessage] });
+      set({ messages: [...messages, response.data] });
     } catch (error) {
-      console.error(getBackendErrorMessage(error));
+      const newError = getBackendErrorMessage(error);
+      toast.error(newError, {
+        duration: 3000,
+        position: "top-center",
+        id: "new-message",
+      });
     }
   },
 
@@ -49,7 +54,7 @@ export const messageStore = create((set, get) => ({
 
   getChatUsers: async () => {
     try {
-      const { data } = await axiosInstance.get("/users/chat-users/");
+      const { data } = await axiosInstance.get("/auth/chat-users/");
       set({ users: data });
     } catch (error) {
       console.error(getBackendErrorMessage(error));
@@ -75,7 +80,7 @@ export const messageStore = create((set, get) => ({
     }
   },
 
-  addMessage: (newMessage) => {
+  updateMessages: (newMessage) => {
     set((state) => ({
       messages: [...state.messages, newMessage],
     }));

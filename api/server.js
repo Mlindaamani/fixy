@@ -15,6 +15,7 @@ const { startServer } = require("./utils/functions");
 const { connnectToMongoDb } = require("./config/database");
 const { serviceProviderRouter } = require("./routes/serviceProviderRoutes");
 const { authRouter } = require("./routes/authRoutes");
+const { messageRouter } = require("./routes/messageRoutes");
 
 app.use(cors());
 app.use(express.json());
@@ -23,6 +24,7 @@ app.use(morgan("dev"));
 // Fixy Endpoints
 app.use("/api/providers", serviceProviderRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/messages", messageRouter);
 
 server.listen(process.env.PORT, () => {
   startServer();

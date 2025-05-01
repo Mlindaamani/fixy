@@ -13,10 +13,11 @@ const {
   verifyEmail,
   requestEmailReset,
   deleteUser,
+  getSidebarUsers
 } = require("../controllers/AuthController");
 
 const authRouter = express.Router();
-
+authRouter.get("/chat-users", userIsAuthenticatedMiddleware, getSidebarUsers);
 authRouter.post("/register", register);
 authRouter.post("/login", login);
 authRouter.delete("/delete/:id", deleteUser);
