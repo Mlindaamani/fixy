@@ -85,6 +85,13 @@ const UpdateServiceProviderProfile = () => {
     setFormData((prev) => ({ ...prev, specialties }));
   };
 
+  // const handleCertificationChange = (index, e) => {
+  //   const { name, value } = e.target;
+  //   const updatedCertifications = [...formData.certifications];
+  //   updatedCertifications[index][name] = value;
+  //   setFormData({ ...formData, certifications: updatedCertifications });
+  // };
+
   // Handle certification changes
   const handleCertificationChange = (index, field, value) => {
     setFormData((prev) => {
@@ -112,6 +119,12 @@ const UpdateServiceProviderProfile = () => {
       certifications: prev.certifications.filter((_, i) => i !== index),
     }));
   };
+
+  // const removeCertifications = (index) => {
+  //   const updatedCertifications = [...formData.certifications];
+  //   updatedCertifications.splice(index, 1);
+  //   setFormData({ ...formData, certifications: updatedCertifications });
+  // };
 
   const validateForm = () => {
     if (!formData.serviceCategory) {
