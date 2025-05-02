@@ -13,12 +13,13 @@ export const useProfileStore = create((set) => ({
     set({ isFetchingProfile: true });
     try {
       const response = await axiosInstance.get("/auth/me");
+      const { profile, message } = response.data;
 
       setTimeout(() => {
-        set({ profileData: response.data, isFetchingProfile: false });
-        toast.success(response.data.message, {
+        set({ profileData: profile, isFetchingProfile: false });
+        toast.success(message, {
           duration: 4000,
-          position: "bottom-center",
+          position: "top-center",
           id: "service-provider",
         });
       }, 1000);

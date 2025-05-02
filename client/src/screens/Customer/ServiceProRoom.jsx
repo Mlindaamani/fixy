@@ -26,7 +26,6 @@ const ServiceProRoom = () => {
     isLoading: messagesLoading,
   } = messageStore();
 
-
   const filteredUsers = showOnlineOnly
     ? users.filter((user) => onlineUsers.includes(user._id))
     : users;
@@ -65,11 +64,8 @@ const ServiceProRoom = () => {
     <div className="flex h-full bg-gray-100">
       {/* Mobile Toggle Button */}
       <button
-        className="md:hidden fixed top-16 left-0 p-3 bg-indigo-600 text-white z-20"
+        className="md:hidden fixed top-16 left-0 p-3 bg-red-600 text-white z-20"
         onClick={() => setIsChatSidebarOpen(!isChatSidebarOpen)}
-        aria-label={
-          isChatSidebarOpen ? "Close chat sidebar" : "Open chat sidebar"
-        }
       >
         <i
           className={`fa-solid ${isChatSidebarOpen ? "fa-times" : "fa-bars"}`}
@@ -125,7 +121,7 @@ const ServiceProRoom = () => {
                   onKeyDown={(e) => e.key === "Enter" && handleUserClick(user)}
                 >
                   <div className="relative mr-3">
-                    <div className="w-10 h-10 bg-gray-500 text-white rounded-full flex items-center justify-center text-lg">
+                    <div className="w-10 h-10 bg-gray-600 text-white rounded-full flex items-center justify-center text-lg">
                       {usernameInitial}
                     </div>
                     <span

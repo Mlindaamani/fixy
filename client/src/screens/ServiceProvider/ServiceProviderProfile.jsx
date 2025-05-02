@@ -141,15 +141,15 @@ const ServiceProviderProfile = () => {
             </div>
             <div>
               <p className="text-sm text-gray-500">Profile Status</p>
-              <p
-                className={`text-gray-700 capitalize ${
-                  profile_status === "pending"
-                    ? "text-yellow-600"
-                    : "text-green-600"
+              <span
+                className={`px-3 py-1 text-sm font-medium rounded-full ${
+                  isVerified
+                    ? "bg-green-100 text-green-600"
+                    : "bg-yellow-100 text-yellow-600"
                 }`}
               >
                 {profile_status || "N/A"}
-              </p>
+              </span>
             </div>
           </div>
         </div>
