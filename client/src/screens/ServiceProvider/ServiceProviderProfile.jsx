@@ -5,26 +5,15 @@ import { useProfileStore } from "../../stores/profileStore";
 
 const ServiceProviderProfile = () => {
   const navigate = useNavigate();
-  const { getServiceProviderProfile, fetchingProfile, profileData } =
-    useProfileStore();
+  const { getUserProfile, isFetchingProfile, profileData } = useProfileStore();
 
   useEffect(() => {
-    getServiceProviderProfile();
-  }, []);
+    getUserProfile();
+  }, [getUserProfile]);
 
-  if (fetchingProfile) return <LoadingSpinner />;
+  if (isFetchingProfile) return <LoadingSpinner />;
 
-  if (!profileData) {
-    return (
-      <div className="min-h-screen bg-gray-100 p-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-white shadow-sm rounded-lg p-6">
-            <p className="text-gray-500">Unable to load profile data.</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  if (!profileData) return <LoadingSpinner />;
 
   const { fullName, email, phoneNumber, isVerified, profile } = profileData;
 
@@ -69,7 +58,7 @@ const ServiceProviderProfile = () => {
               {isVerified ? "Verified" : "Not Verified"}
             </span>
             <button
-              onClick={() => navigate("/dashboard/profile/edit")}
+              onClick={() => navigate("/provider/profile/edit")}
               className="px-4 py-2 bg-indigo-600 text-white !rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
             >
               Edit Profile
@@ -79,9 +68,9 @@ const ServiceProviderProfile = () => {
 
         {/* Profile Card */}
         <div className="bg-white shadow-sm rounded-lg p-6 mb-6">
-          <h2 className="text-xl font-semibold !text-gray-600 mb-4">
+          <h4 className="text-xl font-semibold !text-gray-600 mb-4">
             Profile Details
-          </h2>
+          </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <p className="text-sm text-gray-500">Bio</p>
@@ -118,9 +107,9 @@ const ServiceProviderProfile = () => {
 
         {/* Certifications Section */}
         <div className="bg-white shadow-sm rounded-lg p-6 mb-6">
-          <h2 className="text-xl font-semibold !text-gray-600 mb-4">
+          <h4 className="text-xl font-semibold !text-gray-600 mb-4">
             Certifications
-          </h2>
+          </h4>
           {validCertifications?.length > 0 ? (
             <ul className="space-y-4">
               {validCertifications.map((cert) => (
@@ -140,7 +129,7 @@ const ServiceProviderProfile = () => {
 
         {/* Stats Section */}
         <div className="bg-white shadow-sm rounded-lg p-6 mb-6">
-          <h2 className="text-xl font-semibold !text-gray-600 mb-4">Stats</h2>
+          <h4 className="text-xl font-semibold !text-gray-600 mb-4">Stats</h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <p className="text-sm text-gray-500">Jobs Completed</p>
@@ -167,9 +156,9 @@ const ServiceProviderProfile = () => {
 
         {/* Contact Info */}
         <div className="bg-white shadow-sm rounded-lg p-6">
-          <h2 className="text-xl font-semibold !text-gray-600 mb-4">
+          <h4 className="text-xl font-semibold !text-gray-600 mb-4">
             Contact Information
-          </h2>
+          </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <p className="text-sm text-gray-500">Email</p>

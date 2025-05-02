@@ -6,16 +6,16 @@ getBackendErrorMessage;
 
 export const useProfileStore = create((set) => ({
   profileData: null,
-  fetchingProfile: false,
-  updatingProfile: false,
+  isFetchingProfile: false,
+  isUpdatingProfile: false,
 
-  getServiceProviderProfile: async () => {
-    set({ fetchingProfile: true });
+  getUserProfile: async () => {
+    set({ isFetchingProfile: true });
     try {
       const response = await axiosInstance.get("/auth/me");
 
       setTimeout(() => {
-        set({ profileData: response.data, fetchingProfile: false });
+        set({ profileData: response.data, isFetchingProfile: false });
         toast.success(response.data.message, {
           duration: 4000,
           position: "bottom-center",
@@ -24,7 +24,7 @@ export const useProfileStore = create((set) => ({
       }, 1000);
     } catch (error) {
       const errorMessage = getBackendErrorMessage(error);
-      set({ fetchingProfile: false });
+      set({ isFetchingProfile: false });
       toast.error(errorMessage, {
         ...TOAST_CONFIG,
         id: "service-provider",
@@ -33,7 +33,7 @@ export const useProfileStore = create((set) => ({
   },
 
   updateServiceProviderProfile: async (serviceProviderId, updatedFormData) => {
-    set({ updatingProfile: true });
+    set({ isUpdatingProfile: true });
     try {
       const response = await axiosInstance.put(
         `/providers/profile-update/${serviceProviderId}`,
@@ -47,10 +47,10 @@ export const useProfileStore = create((set) => ({
           id: "service-provider",
         });
 
-        set({ updatingProfile: false });
+        set({ isUpdatingProfile: false });
       }, 1000);
     } catch (error) {
-      set({ updatingProfile: false });
+      set({ isUpdatingProfile: false });
       const errorMessage = getBackendErrorMessage(error);
       toast.error(errorMessage, {
         duration: 3000,

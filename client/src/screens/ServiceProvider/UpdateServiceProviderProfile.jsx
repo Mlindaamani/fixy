@@ -19,16 +19,16 @@ const UpdateServiceProviderProfile = () => {
   });
 
   const {
-    getServiceProviderProfile,
+    isUpdatingProfile,
+    isFetchingProfile,
+    getUserProfile,
     updateServiceProviderProfile,
     profileData,
-    updatingProfile,
-    fetchingProfile,
   } = useProfileStore();
 
   useEffect(() => {
-    getServiceProviderProfile();
-  }, [getServiceProviderProfile]);
+    getUserProfile();
+  }, [getUserProfile]);
 
   useEffect(() => {
     if (profileData && profileData.profile) {
@@ -60,7 +60,7 @@ const UpdateServiceProviderProfile = () => {
     }
   }, [profileData]);
 
-  if (fetchingProfile) return <LoadingSpinner />;
+  if (isFetchingProfile) return <LoadingSpinner />;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -162,7 +162,7 @@ const UpdateServiceProviderProfile = () => {
     e.preventDefault();
     if (!validateForm()) return;
     await updateServiceProviderProfile(profileData.profile._id, formData);
-    navigate("/dashboard/profile");
+    navigate("/provider/profile");
   };
 
   return (
@@ -382,12 +382,12 @@ const UpdateServiceProviderProfile = () => {
               </button>
               <button
                 type="submit"
-                disabled={updatingProfile}
+                disabled={isUpdatingProfile}
                 className={`px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 ${
-                  updatingProfile ? "opacity-50 cursor-not-allowed" : ""
+                  isUpdatingProfile ? "opacity-50 cursor-not-allowed" : ""
                 }`}
               >
-                {updatingProfile ? "Saving..." : "Save Changes"}
+                {isUpdatingProfile ? "Saving..." : "Save Changes"}
               </button>
             </div>
           </form>

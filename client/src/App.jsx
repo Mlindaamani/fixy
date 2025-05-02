@@ -32,6 +32,7 @@ import ServiceProviderProfile from "./screens/ServiceProvider/ServiceProviderPro
 
 // Customer
 import CustomerLayout from "./layouts/CustomerLayout";
+import CustomerProfile from "./screens/Customer/CustomerProfile";
 
 export const App = () => {
   return (
@@ -69,6 +70,7 @@ export const App = () => {
           <Route path="/customer" element={<CustomerLayout />}>
             <Route index element={<Analytics />} />
             <Route path="room" element={<ServiceProRoom />} />
+            <Route path="profile" element={<CustomerProfile />} />
           </Route>
         </Route>
         <Route path="*" element={<PageNotFound />} />

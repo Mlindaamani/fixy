@@ -155,7 +155,7 @@ const deleteUser = async (req, res) => {
   }
 };
 
-const myProfile = async (req, res) => {
+const getUseProfile = async (req, res) => {
   const { id: userId } = req.user;
 
   try {
@@ -294,7 +294,7 @@ const refreshAccessToken = async (req, res) => {
 module.exports = {
   register,
   deleteUser,
-  myProfile,
+  getUseProfile,
   login,
   verifyEmail,
   requestPasswordReset,
