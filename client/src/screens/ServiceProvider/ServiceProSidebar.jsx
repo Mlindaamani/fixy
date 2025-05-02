@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import sidebarLinks from "../../lib/sidebarLinks";
 import { useUtilsStore } from "../../stores/utilsStore";
+import providerLinks from "../../lib/providerLinks";
 
 const ServiceProSidebar = () => {
   const { isSidebarCollapsed, setIsSidebarCollapsed } = useUtilsStore();
@@ -35,7 +35,7 @@ const ServiceProSidebar = () => {
 
       {/* Navigation Links */}
       <nav className="flex-1 mt-4 overflow-y-auto">
-        {sidebarLinks.map((link, index) => {
+        {providerLinks.map((link, index) => {
           const isActive = location.pathname === link.route;
           return (
             <Link

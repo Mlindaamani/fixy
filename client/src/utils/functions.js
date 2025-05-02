@@ -13,3 +13,10 @@ export const formatDate = (isoDate, options = {}) => {
 
   return date.toLocaleString("en-US", finalOptions);
 };
+
+export const USERROLE = {
+  CUSTOMER: "customer",
+  CUSTOMER_DASHBAORD: "/customer",
+  SERVICEPROVIDER: "serviceProvider",
+  SERVICEPROVIDER_DASHBOARD: "/provider",
+};

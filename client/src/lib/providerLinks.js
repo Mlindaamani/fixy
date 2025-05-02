@@ -1,26 +1,26 @@
-const sidebarLinks = [
+const providerLinks = [
   {
     icon: "fa-solid fa-chart-pie text-indigo-600",
     label: "Analytics",
-    route: "/dashboard",
+    route: "/provider",
   },
 
   {
     icon: "fa-solid fa-envelope text-indigo-600",
     label: "Messages",
-    route: "/dashboard/room",
+    route: "/provider/room",
   },
 
   {
     icon: "fa-solid fa-briefcase text-indigo-600",
     label: "Services",
-    route: "/dashboard/services",
+    route: "/provider/services",
   },
 
   {
     icon: "fa-solid fa-circle-user text-indigo-600",
     label: "Profile",
-    route: "/dashboard/profile",
+    route: "/provider/profile",
   },
 
   {
@@ -30,4 +30,4 @@ const sidebarLinks = [
   },
 ];
 
-export default sidebarLinks;
+export default providerLinks;

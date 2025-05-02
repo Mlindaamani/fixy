@@ -4,7 +4,7 @@ import { useAuthStore } from "../../stores/authStore";
 
 const Register = () => {
   const navigate = useNavigate();
-  const { register, loading, isAuthenticated } = useAuthStore();
+  const { register, loading } = useAuthStore();
   const { search } = useLocation();
   const role = new URLSearchParams(search).get("role") || "customer";
 
@@ -48,8 +48,6 @@ const Register = () => {
     e.preventDefault();
     await register(formData, navigate);
   };
-
-  if (isAuthenticated) navigate("/");
 
   return (
     <div>

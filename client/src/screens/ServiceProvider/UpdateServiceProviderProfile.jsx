@@ -26,12 +26,10 @@ const UpdateServiceProviderProfile = () => {
     fetchingProfile,
   } = useProfileStore();
 
-  // Fetch profile data on mount
   useEffect(() => {
     getServiceProviderProfile();
   }, [getServiceProviderProfile]);
 
-  // Populate formData when profileData is available
   useEffect(() => {
     if (profileData && profileData.profile) {
       const {
@@ -64,7 +62,6 @@ const UpdateServiceProviderProfile = () => {
 
   if (fetchingProfile) return <LoadingSpinner />;
 
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -85,23 +82,13 @@ const UpdateServiceProviderProfile = () => {
     setFormData((prev) => ({ ...prev, specialties }));
   };
 
-  // const handleCertificationChange = (index, e) => {
-  //   const { name, value } = e.target;
-  //   const updatedCertifications = [...formData.certifications];
-  //   updatedCertifications[index][name] = value;
-  //   setFormData({ ...formData, certifications: updatedCertifications });
-  // };
-
-  // Handle certification changes
-  const handleCertificationChange = (index, field, value) => {
-    setFormData((prev) => {
-      const certifications = [...prev.certifications];
-      certifications[index] = { ...certifications[index], [field]: value };
-      return { ...prev, certifications };
-    });
+  const handleCertificationChange = (index, e) => {
+    const { name, value } = e.target;
+    const updatedCertifications = [...formData.certifications];
+    updatedCertifications[index][name] = value;
+    setFormData({ ...formData, certifications: updatedCertifications });
   };
 
-  // Add a new certification
   const addCertification = () => {
     setFormData((prev) => ({
       ...prev,
@@ -112,19 +99,11 @@ const UpdateServiceProviderProfile = () => {
     }));
   };
 
-  // Remove a certification
   const removeCertification = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      certifications: prev.certifications.filter((_, i) => i !== index),
-    }));
+    const updatedCertifications = [...formData.certifications];
+    updatedCertifications.splice(index, 1);
+    setFormData({ ...formData, certifications: updatedCertifications });
   };
-
-  // const removeCertifications = (index) => {
-  //   const updatedCertifications = [...formData.certifications];
-  //   updatedCertifications.splice(index, 1);
-  //   setFormData({ ...formData, certifications: updatedCertifications });
-  // };
 
   const validateForm = () => {
     if (!formData.serviceCategory) {
@@ -179,7 +158,6 @@ const UpdateServiceProviderProfile = () => {
     return true;
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -331,15 +309,10 @@ const UpdateServiceProviderProfile = () => {
                         Name
                       </label>
                       <input
+                        name="name"
                         type="text"
                         value={cert.name}
-                        onChange={(e) =>
-                          handleCertificationChange(
-                            index,
-                            "name",
-                            e.target.value
-                          )
-                        }
+                        onChange={(e) => handleCertificationChange(index, e)}
                         className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-indigo-400 focus:border-indigo-400"
                         aria-label={`Certification ${index + 1} Name`}
                       />
@@ -349,15 +322,10 @@ const UpdateServiceProviderProfile = () => {
                         Issuer
                       </label>
                       <input
+                        name="issuer"
                         type="text"
                         value={cert.issuer}
-                        onChange={(e) =>
-                          handleCertificationChange(
-                            index,
-                            "issuer",
-                            e.target.value
-                          )
-                        }
+                        onChange={(e) => handleCertificationChange(index, e)}
                         className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-indigo-400 focus:border-indigo-400"
                         aria-label={`Certification ${index + 1} Issuer`}
                       />
@@ -367,6 +335,7 @@ const UpdateServiceProviderProfile = () => {
                         Date Issued
                       </label>
                       <input
+                        name="dateIssued"
                         type="date"
                         value={
                           cert.dateIssued
@@ -375,13 +344,7 @@ const UpdateServiceProviderProfile = () => {
                                 .split("T")[0]
                             : ""
                         }
-                        onChange={(e) =>
-                          handleCertificationChange(
-                            index,
-                            "dateIssued",
-                            e.target.value
-                          )
-                        }
+                        onChange={(e) => handleCertificationChange(index, e)}
                         className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-indigo-400 focus:border-indigo-400"
                         aria-label={`Certification ${index + 1} Date Issued`}
                       />

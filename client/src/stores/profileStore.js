@@ -13,7 +13,15 @@ export const useProfileStore = create((set) => ({
     set({ fetchingProfile: true });
     try {
       const response = await axiosInstance.get("/auth/me");
-      set({ profileData: response.data, fetchingProfile: false });
+
+      setTimeout(() => {
+        set({ profileData: response.data, fetchingProfile: false });
+        toast.success(response.data.message, {
+          duration: 4000,
+          position: "bottom-center",
+          id: "service-provider",
+        });
+      }, 1000);
     } catch (error) {
       const errorMessage = getBackendErrorMessage(error);
       set({ fetchingProfile: false });
@@ -31,12 +39,16 @@ export const useProfileStore = create((set) => ({
         `/providers/profile-update/${serviceProviderId}`,
         updatedFormData
       );
-      toast.success(response.data.message, {
-        duration: 5000,
-        position: "bottom-center",
-        id: "service-provider",
-      });
-      set({ updatingProfile: false });
+
+      setTimeout(() => {
+        toast.success(response.data.message, {
+          duration: 5000,
+          position: "bottom-center",
+          id: "service-provider",
+        });
+
+        set({ updatingProfile: false });
+      }, 1000);
     } catch (error) {
       set({ updatingProfile: false });
       const errorMessage = getBackendErrorMessage(error);

@@ -3,6 +3,7 @@ import create from "zustand";
 import { persist } from "zustand/middleware";
 import { axiosInstance } from "../config/axiosInstance";
 import { getBackendErrorMessage } from "../utils/functions";
+import { USERROLE } from "../utils/functions";
 import {
   removeTokens,
   storeTokens,
@@ -26,11 +27,13 @@ export const useAuthStore = create(
         set({ loading: true });
         try {
           await axiosInstance.post("/auth/register/", formData);
+
           set({ loading: false });
           toast.success("You have successfully registered", {
             ...TOAST_CONFIG,
             id: "register",
           });
+
           navigate("/login");
         } catch (error) {
           const errorMessage = getBackendErrorMessage(error);
@@ -47,9 +50,12 @@ export const useAuthStore = create(
         try {
           const response = await axiosInstance.post("/auth/login/", formData);
 
+          console.log(response.data);
+
           const { id, username, email, role, accessToken, refreshToken } =
             response.data;
           storeTokens(accessToken, refreshToken);
+
           set({
             isAuthenticated: true,
             loading: false,
@@ -62,10 +68,12 @@ export const useAuthStore = create(
             id: "login",
           });
 
-          if (role == "customer") {
-            navigate("/customer");
-          } else if (role === "serviceProvider") {
-            navigate("/dashboard");
+          if (role == USERROLE.CUSTOMER) {
+            navigate(USERROLE.CUSTOMER_DASHBAORD);
+          }
+
+          if (role === USERROLE.SERVICEPROVIDER) {
+            navigate(USERROLE.SERVICEPROVIDER_DASHBOARD);
           }
         } catch (error) {
           const errorMessage = getBackendErrorMessage(error);
@@ -79,11 +87,14 @@ export const useAuthStore = create(
 
       logout: (navigate) => {
         removeTokens();
+
         set({ isAuthenticated: false, user: null });
+
         toast.success("Logged out successfully", {
           ...TOAST_CONFIG,
           id: "logout",
         });
+
         navigate("/login", { replace: true });
       },
 

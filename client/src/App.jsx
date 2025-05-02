@@ -54,7 +54,7 @@ export const App = () => {
 
         <Route element={<PrivateRoute />}>
           {/* Service Provider */}
-          <Route path="/dashboard" element={<ServiceProviderLayout />}>
+          <Route path="/provider" element={<ServiceProviderLayout />}>
             <Route index element={<Analytics />} />
             <Route path="services" element={<Services />} />
             <Route path="room" element={<ServiceProRoom />} />
