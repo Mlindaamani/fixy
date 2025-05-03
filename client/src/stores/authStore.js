@@ -99,7 +99,7 @@ export const useAuthStore = create(
           id: "logout",
         });
 
-        navigate("/login", { replace: true });
+        navigate("/");
       },
 
       verifyAccessToken: async () => {

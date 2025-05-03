@@ -26,7 +26,7 @@ const CustomerProfile = () => {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-2xl font-bold !text-gray-600">{fullName}</h2>
-              <p className="text-lg text-indigo-600">{role}</p>
+              <p className="text-lg text-indigo-600 capitalize">{role}</p>
             </div>
             <span
               className={`px-3 py-1 text-sm font-medium rounded-full ${
