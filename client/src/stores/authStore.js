@@ -23,6 +23,10 @@ export const useAuthStore = create(
       isAuthenticated: false,
       loading: false,
 
+      setIsAuthenticated: (isAuthenticated) => {
+        set({ isAuthenticated: isAuthenticated });
+      },
+
       register: async (formData, navigate) => {
         set({ loading: true });
         try {

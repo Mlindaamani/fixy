@@ -31,11 +31,13 @@ axiosInstance.interceptors.response.use(
     if (error.response?.status === 401 && !previousRequest.sent) {
       previousRequest.sent = true;
 
-      const { refreshAccessToken } = useAuthStore.getState();
+      const { refreshAccessToken, setIsAuthenticated } =
+        useAuthStore.getState();
       const success = await refreshAccessToken();
 
       if (success) {
         previousRequest.headers.Authorization = `JWT ${getAccessToken()}`;
+        setIsAuthenticated(true);
         return axiosInstance(previousRequest);
       } else {
         useAuthStore.getState().logout();
