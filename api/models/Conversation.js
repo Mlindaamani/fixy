@@ -17,18 +17,16 @@ const conversationSchema = Schema(
     lastMessageAt: {
       type: Date,
       default: Date.now,
-      description: "Timestamp of the last message for sorting on dashboard",
     },
 
     lastMessageContent: {
       type: String,
-      description: "Preview of the last message for dashboard display",
+      default: null,
     },
 
     isActive: {
       type: Boolean,
       default: true,
-      description: "Indicates if the conversation is active",
     },
   },
   {
