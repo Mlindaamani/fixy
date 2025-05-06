@@ -40,4 +40,4 @@ conversationSchema.index({ providerId: 1, customerId: 1 }, { unique: true });
 conversationSchema.index({ providerId: 1, lastMessageAt: -1 });
 conversationSchema.index({ customerId: 1, lastMessageAt: -1 });
 
-module.exports = model("Conversation", conversationSchema);
+module.exports = model("Conversationci", conversationSchema);

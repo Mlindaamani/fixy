@@ -33,5 +33,5 @@ const messageSchema = Schema(
 
 messageSchema.index({ conversationId: 1, created_at: -1 });
 messageSchema.index({ senderId: 1 });
-module.exports = model("Message", messageSchema);
+module.exports = model("Messageci", messageSchema);
 

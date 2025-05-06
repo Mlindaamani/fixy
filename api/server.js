@@ -24,6 +24,8 @@ const { messageRouter } = require("./routes/messageRoutes");
 const { customerRouter } = require("./routes/customerRoutes");
 const { serviceProviderRouter } = require("./routes/serviceProviderRoutes");
 const { authRouter } = require("./routes/authRoutes");
+const { ciConversationRouter } = require("./routes/ci/ConversationRoutes");
+const { ciMessageRouter } = require("./routes/ci/MessageRoutes");
 
 // Middlewares
 app.use(cors());
@@ -35,6 +37,10 @@ app.use("/api/providers", serviceProviderRouter);
 app.use("/api/customers", customerRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/messages", messageRouter);
+
+// Test realtime model
+app.use("/api/ci/conversations", ciConversationRouter);
+app.use("/api/ci/messages", ciMessageRouter);
 
 server.listen(process.env.PORT, () => {
   startServer();
