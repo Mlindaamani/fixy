@@ -54,8 +54,6 @@ export const useAuthStore = create(
         try {
           const response = await axiosInstance.post("/auth/login/", formData);
 
-          console.log(response.data);
-
           const { id, username, email, role, accessToken, refreshToken } =
             response.data;
           storeTokens(accessToken, refreshToken);

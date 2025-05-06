@@ -5,30 +5,32 @@ import { getBackendErrorMessage } from "../utils/functions";
 
 export const messageStore = create((set, get) => ({
   messages: [],
-  users: [],
-  selectedUser: null,
-  deleting: false,
+  conversations: [],
+  isLoadingMessage: false,
+  isSendingMessage: false,
+  selectedConversation: null,
 
   setSelectedUser: (userToChatWith) => {
-    set({ selectedUser: userToChatWith });
+    set({ selectedConversation: userToChatWith });
   },
 
-  sendNewMessage: async (message) => {
-    const { selectedUser, messages } = get();
-    try {
-      if (!selectedUser) {
-        toast.error("Please select a user to chat with.");
-        return;
-      }
+  setSelectedConversation: (conversation) => {
+    set({ selectedConversation: conversation });
+  },
 
-      const response = await axiosInstance.post(
-        `/messages/send/${selectedUser._id}`,
-        {
-          message,
-        }
-      );
-      set({ messages: [...messages, response.data] });
+  sendMessage: async (message) => {
+    const { selectedConversation, messages } = get();
+    set({ isSendingMessage: true });
+
+    try {
+      const response = await axiosInstance.post("/ci/messages/send/", {
+        message,
+        conversationId: selectedConversation.conversationId,
+      });
+
+      set({ messages: [...messages, response.data], isSendingMessage: false });
     } catch (error) {
+      set({ isSendingMessage: false });
       const newError = getBackendErrorMessage(error);
       toast.error(newError, {
         duration: 3000,
@@ -39,44 +41,29 @@ export const messageStore = create((set, get) => ({
   },
 
   getMessages: async () => {
-    const { selectedUser } = get();
+    set({ isLoadingMessage: true });
+
+    const { selectedConversation } = get();
     try {
-      if (selectedUser._id) {
-        const { data } = await axiosInstance.get(
-          `/messages/chats/${selectedUser._id}`
+      if (selectedConversation) {
+        const response = await axiosInstance.get(
+          `/ci/messages/${selectedConversation.conversationId}`
         );
-        set({ messages: data });
+
+        set({ messages: response.data, isLoadingMessage: false });
       }
     } catch (error) {
+      set({ isLoadingMessage: false });
       console.error(getBackendErrorMessage(error));
     }
   },
 
-  getChatUsers: async () => {
+  getConversations: async () => {
     try {
-      const { data } = await axiosInstance.get("/auth/chat-users/");
-      set({ users: data });
+      const response = await axiosInstance.get("/ci/conversations/");
+      set({ conversations: response.data });
     } catch (error) {
       console.error(getBackendErrorMessage(error));
-    }
-  },
-
-  deleteConversation: async (conversationId) => {
-    set({ deleting: true });
-    try {
-      const response = await axiosInstance.delete(
-        `/messages/delete/${conversationId}`
-      );
-      toast.success(response.data.message);
-      set({ deleting: false });
-    } catch (error) {
-      set({ deleting: false });
-      toast.error(`${getBackendErrorMessage(error)}`, {
-        duration: 4000,
-        id: "delete-message",
-      });
-    } finally {
-      set({ deleting: false });
     }
   },
 

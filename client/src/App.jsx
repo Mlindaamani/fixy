@@ -26,9 +26,9 @@ import RegisterLayout from "./layouts/RegisterLayout";
 // Service Provider
 import Analytics from "./screens/ServiceProvider/Analytics";
 import Services from "./screens/ServiceProvider/Services";
-import ServiceProRoom from "./screens/ServiceProvider/ServiceProRoom";
 import UpdateServiceProviderProfile from "./screens/ServiceProvider/UpdateServiceProviderProfile";
 import ServiceProviderProfile from "./screens/ServiceProvider/ServiceProviderProfile";
+import ChatRoom from "./screens/ServiceProvider/ChatRoom";
 
 // Customer
 import CustomerLayout from "./layouts/CustomerLayout";
@@ -58,7 +58,7 @@ export const App = () => {
           <Route path="/provider" element={<ServiceProviderLayout />}>
             <Route index element={<Analytics />} />
             <Route path="services" element={<Services />} />
-            <Route path="room" element={<ServiceProRoom />} />
+            <Route path="room" element={<ChatRoom />} />
             <Route path="profile" element={<ServiceProviderProfile />} />
             <Route
               path="profile/edit"
@@ -69,7 +69,7 @@ export const App = () => {
           {/* Customer */}
           <Route path="/customer" element={<CustomerLayout />}>
             <Route index element={<Analytics />} />
-            <Route path="room" element={<ServiceProRoom />} />
+            <Route path="room" element={<ChatRoom />} />
             <Route path="profile" element={<CustomerProfile />} />
           </Route>
         </Route>

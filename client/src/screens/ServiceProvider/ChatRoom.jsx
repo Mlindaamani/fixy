@@ -7,7 +7,7 @@ import { useSocket } from "../../stores/socketStore";
 import { useAuthStore } from "../../stores/authStore";
 import { useUtilsStore } from "../../stores/utilsStore";
 
-const ServiceProRoom = () => {
+const ChatRoom = () => {
   const lastMessageRef = useRef();
   const [message, setMessage] = useState("");
   const [showOnlineOnly, setShowOnlineOnly] = useState(false);
@@ -15,21 +15,23 @@ const ServiceProRoom = () => {
   const { connectToSocketServer, onlineUsers, disconnect } = useSocket();
   const { user } = useAuthStore();
   const { isSidebarCollapsed } = useUtilsStore();
+
   const {
+    isLoadingMessage,
+    selectedConversation,
+    conversations,
     messages,
-    sendNewMessage,
-    users,
-    getChatUsers,
     getMessages,
-    selectedUser,
-    setSelectedUser,
-    isLoading: messagesLoading,
+    sendMessage,
+    getConversations,
+    setSelectedConversation,
   } = messageStore();
 
-
-  const filteredUsers = showOnlineOnly
-    ? users.filter((user) => onlineUsers.includes(user._id))
-    : users;
+  useEffect(() => {
+    getConversations();
+    connectToSocketServer();
+    return () => disconnect();
+  }, [getConversations, connectToSocketServer, disconnect]);
 
   useEffect(() => {
     if (lastMessageRef.current && messages) {
@@ -37,27 +39,27 @@ const ServiceProRoom = () => {
     }
   }, [messages]);
 
-  const sendMessage = (e) => {
+  const filteredConversations = showOnlineOnly
+    ? conversations.filter((conversation) =>
+        onlineUsers.includes(conversation.id)
+      )
+    : conversations;
+
+  const handleSendMessage = async (e) => {
     e.preventDefault();
     if (message.trim()) {
-      sendNewMessage(message);
+      await sendMessage(message);
       setMessage("");
     }
   };
 
-  const handleUserClick = (user) => {
-    setSelectedUser(user);
+  const handleSelectConversation = (conversation) => {
+    setSelectedConversation(conversation);
     getMessages();
     setIsChatSidebarOpen(false);
   };
 
-  useEffect(() => {
-    getChatUsers();
-    connectToSocketServer();
-    return () => disconnect();
-  }, [getChatUsers, connectToSocketServer, disconnect]);
-
-  if (messagesLoading && !selectedUser) {
+  if (isLoadingMessage && !selectedConversation) {
     return <LoadingSpinner />;
   }
 
@@ -92,7 +94,6 @@ const ServiceProRoom = () => {
               checked={showOnlineOnly}
               onChange={() => setShowOnlineOnly(!showOnlineOnly)}
               className="sr-only peer"
-              aria-label="Toggle online users only"
             />
             <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-indigo-600 peer-focus:ring-2 peer-focus:ring-indigo-400"></div>
             <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
@@ -103,26 +104,24 @@ const ServiceProRoom = () => {
         </div>
 
         <div className="flex-1 overflow-y-auto">
-          {filteredUsers.length === 0 ? (
-            <p className="text-gray-500 text-center">No users found.</p>
+          {filteredConversations.length === 0 ? (
+            <p className="text-gray-500 text-center">No conversation found.</p>
           ) : (
-            filteredUsers.map((user) => {
-              const usernameInitial = user?.fullName?.charAt(0).toUpperCase();
-              const isOnline = onlineUsers.includes(user?._id);
+            filteredConversations.map((conversation) => {
+              const usernameInitial = conversation?.fullName
+                ?.charAt(0)
+                .toUpperCase();
+              const isOnline = onlineUsers.includes(conversation?.userId);
 
               return (
                 <div
-                  key={user._id}
-                  onClick={() => handleUserClick(user)}
+                  key={conversation.conversationId}
+                  onClick={() => handleSelectConversation(conversation)}
                   className={`flex items-center p-3 mb-2 rounded-lg cursor-pointer transition-colors ${
-                    selectedUser?._id === user._id
+                    selectedConversation?.userId === user.id
                       ? "bg-indigo-100 text-indigo-800 font-medium"
                       : "hover:bg-gray-100"
                   }`}
-                  role="button"
-                  aria-label={`Chat with ${user.fullName}`}
-                  tabIndex={0}
-                  onKeyDown={(e) => e.key === "Enter" && handleUserClick(user)}
                 >
                   <div className="relative mr-3">
                     <div className="w-10 h-10 bg-gray-500 text-white rounded-full flex items-center justify-center text-lg">
@@ -136,7 +135,7 @@ const ServiceProRoom = () => {
                   </div>
                   <div className="flex flex-col">
                     <span className="text-sm font-medium text-gray-800">
-                      {user?.fullName}
+                      {conversation?.fullName}
                     </span>
                     <span
                       className={`text-xs ${
@@ -163,7 +162,7 @@ const ServiceProRoom = () => {
       >
         {/* Messages */}
         <div className="flex-1 p-6 overflow-y-auto">
-          {!selectedUser ? (
+          {!selectedConversation ? (
             <div className="h-full flex items-center justify-center">
               <div className="text-center text-gray-500">
                 <h4 className="text-lg font-medium">
@@ -179,9 +178,9 @@ const ServiceProRoom = () => {
               </div>
             </div>
           ) : (
-            messages.map(({ _id: id, senderId, message, created_at }) => (
+            messages.map(({ _id, senderId, message, createdAt }) => (
               <div
-                key={id}
+                key={_id}
                 ref={lastMessageRef}
                 className={`mb-4 flex ${
                   senderId === user?.id ? "justify-end" : "justify-start"
@@ -196,10 +195,12 @@ const ServiceProRoom = () => {
                 >
                   <div className="flex items-center mb-1">
                     <span className="text-xs font-medium">
-                      {senderId === user?.id ? "You" : selectedUser?.username}
+                      {senderId === user?.id
+                        ? "You"
+                        : selectedConversation?.fullName}
                     </span>
                     <span className="text-xs text-gray-400 ml-2">
-                      {formatDate(created_at)}
+                      {formatDate(createdAt)}
                     </span>
                   </div>
                   <p className="text-sm">{message}</p>
@@ -210,9 +211,9 @@ const ServiceProRoom = () => {
         </div>
 
         {/* Message Input */}
-        {selectedUser && (
+        {selectedConversation && (
           <div className="p-4 border-t border-gray-200 bg-white">
-            <form onSubmit={sendMessage} className="flex gap-3">
+            <form onSubmit={handleSendMessage} className="flex gap-3">
               <input
                 type="text"
                 value={message}
@@ -240,4 +241,4 @@ const ServiceProRoom = () => {
   );
 };
 
-export default ServiceProRoom;
+export default ChatRoom;
