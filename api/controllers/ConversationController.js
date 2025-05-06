@@ -1,5 +1,5 @@
-const Conversationci = require("../../models/ci/Conversation");
-const User = require("../../models/User");
+const Conversation = require("../models/Conversation");
+const User = require("../models/User");
 
 const createConversation = async (req, res) => {
   const { otherUserId } = req.body;
@@ -27,7 +27,7 @@ const createConversation = async (req, res) => {
     }
 
     // Check if conversation already exists
-    let conversation = await Conversationci.findOne({
+    let conversation = await Conversation.findOne({
       providerId,
       customerId,
     });
@@ -40,7 +40,7 @@ const createConversation = async (req, res) => {
     }
 
     // Create new conversation
-    conversation = await Conversationci.create({
+    conversation = await Conversation.create({
       providerId,
       customerId,
       lastMessageAt: new Date(),
@@ -50,7 +50,7 @@ const createConversation = async (req, res) => {
     });
 
     // Populate participant details for response
-    conversation = await Conversationci.findById(conversation._id)
+    conversation = await Conversation.findById(conversation._id)
       .populate({
         path: "providerId",
         select: "name email",
@@ -90,7 +90,7 @@ const getUserConversations = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    const conversations = await Conversationci.find({
+    const conversations = await Conversation.find({
       $or: [{ providerId: userId }, { customerId: userId }],
     })
       .populate({

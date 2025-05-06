@@ -2,110 +2,77 @@ const Message = require("../models/Message");
 const Conversation = require("../models/Conversation");
 const { io, getReceiverSocketId } = require("../socket");
 
+// Send a new message
 const sendMessage = async (req, res) => {
+  const { conversationId, message } = req.body;
+  const senderId = req.user.id;
+
   try {
-    const { receiverId } = req.params;
-    const { id: senderId } = req.user;
-    const { message } = req.body;
-
-    let conversation = await Conversation.findOne({
-      participants: { $all: [receiverId, senderId] },
-    });
-
+    // Verify conversation exists
+    const conversation = await Conversation.findById(conversationId);
     if (!conversation) {
-      conversation = await Conversation.create({
-        participants: [senderId, receiverId],
-      });
+      return res.status(404).json({ message: "Conversation not found" });
     }
 
+    // This ensures the user is part of the conversation
+    if (
+      conversation.providerId.toString() !== senderId &&
+      conversation.customerId.toString() !== senderId
+    ) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    // Create new message
     const newMessage = await Message.create({
-      receiverId,
+      conversationId,
       senderId,
       message,
+      isRead: false,
     });
 
-    conversation.messages.push(newMessage._id);
+    // Update conversation's last message details
+    conversation.lastMessageAt = new Date();
+    conversation.lastMessageContent = message;
+    await conversation.save();
 
-    const receiverSocketId = getReceiverSocketId(receiverId);
+    const receiverSocketId = getReceiverSocketId(senderId);
 
     if (receiverSocketId) {
-      console.log("Socket server called and message returned to the client...");
-      io.to(receiverSocketId).emit("new-message", newMessage);
+      io.emit("new-message", newMessage);
     }
 
-    await conversation.save();
     res.status(201).json(newMessage);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-    });
+    console.error("Error sending message:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-const getMessagesBetweenUsers = async (req, res) => {
-  const { receiverId } = req.params;
-  const { id: senderId } = req.user;
+// Get messages for a specific conversation
+const getMessages = async (req, res) => {
+  const { conversationId } = req.params;
 
   try {
-    const conversation = await Conversation.findOne({
-      participants: { $all: [senderId, receiverId] },
-    }).populate("messages");
-
-    if (conversation) {
-      return res.status(200).json(conversation.messages);
-    } else {
-      res.status(200).json([]);
-    }
+    const messages = await Message.find({ conversationId });
+    res.status(200).json(messages);
   } catch (error) {
-    console.log(error.message);
-    res.status(500).json({ message: "Internal sever error" });
+    res.status(500).json({ message: error.message });
   }
 };
 
 const markMessageAsRead = async (req, res) => {
-  const { id: messageId } = req.params;
+  const { messageId } = req.params;
+
   try {
-    const message = await Message.findByIdAndUpdate(
-      messageId,
-      { isRead: true },
-      { new: true }
-    );
-    return res
-      .status(200)
-      .json({ message, actionComment: "Message updated successfully" });
+    await Message.findByIdAndUpdate(messageId, { isRead: true });
+    res.status(200).json({ message: "Message marked as read" });
   } catch (error) {
-    console.log(error.message);
-    return res.status(500).json({ message: "Internal sever error" });
-  }
-};
-
-const deleteConversation = async (req, res) => {
-  const { conversationId } = req.params;
-  try {
-    const conversation = await Conversation.findById(conversationId);
-
-    if (conversation === null) {
-      return res.status(404).json({
-        message: "Conversation does not exist! Try again later",
-      });
-    }
-    await Message.deleteMany({ _id: { $in: conversation.messages } });
-    await Conversation.findByIdAndDelete(conversationId);
-
-    return res
-      .status(200)
-      .json({ message: "Conversation deleted successfully" });
-  } catch (error) {
-    console.log(error.message);
-    res.status(500).json({ message: "Internal sever error" });
+    res.status(500).json({ message: error.message });
   }
 };
 
 module.exports = {
   sendMessage,
-  getMessagesBetweenUsers,
+  getMessages,
   markMessageAsRead,
-  deleteConversation,
 };

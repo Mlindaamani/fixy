@@ -23,7 +23,7 @@ export const messageStore = create((set, get) => ({
     set({ isSendingMessage: true });
 
     try {
-      const response = await axiosInstance.post("/ci/messages/send/", {
+      const response = await axiosInstance.post("/messages/send/", {
         message,
         conversationId: selectedConversation.conversationId,
       });
@@ -60,7 +60,7 @@ export const messageStore = create((set, get) => ({
 
   getConversations: async () => {
     try {
-      const response = await axiosInstance.get("/ci/conversations/");
+      const response = await axiosInstance.get("/conversations/");
       set({ conversations: response.data });
     } catch (error) {
       console.error(getBackendErrorMessage(error));

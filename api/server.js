@@ -20,12 +20,11 @@ const { app, express, server } = require("./socket");
 const { connnectToMongoDb } = require("./config/database");
 
 // Routers
-const { messageRouter } = require("./routes/messageRoutes");
+const { MessageRouter } = require("./routes/messageRoutes");
 const { customerRouter } = require("./routes/customerRoutes");
 const { serviceProviderRouter } = require("./routes/serviceProviderRoutes");
 const { authRouter } = require("./routes/authRoutes");
-const { ciConversationRouter } = require("./routes/ci/ConversationRoutes");
-const { ciMessageRouter } = require("./routes/ci/MessageRoutes");
+const { ConversationRouter } = require("./routes/ConversationRoutes");
 
 // Middlewares
 app.use(cors());
@@ -36,11 +35,8 @@ app.use(morgan("dev"));
 app.use("/api/providers", serviceProviderRouter);
 app.use("/api/customers", customerRouter);
 app.use("/api/auth", authRouter);
-app.use("/api/messages", messageRouter);
-
-// Test realtime model
-app.use("/api/ci/conversations", ciConversationRouter);
-app.use("/api/ci/messages", ciMessageRouter);
+app.use("/api/messages", MessageRouter);
+app.use("/api/conversations", ConversationRouter);
 
 server.listen(process.env.PORT, () => {
   startServer();

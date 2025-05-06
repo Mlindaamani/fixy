@@ -1,23 +1,25 @@
 const express = require("express");
 const {
   userIsAuthenticatedMiddleware,
-} = require("../../middlewares/authMiddleware");
-const ciConversationRouter = express.Router();
+} = require("../middlewares/authMiddleware");
+
+const ConversationRouter = express.Router();
+
 const {
   createConversation,
   getUserConversations,
-} = require("../../controllers/ci/ConversationController");
+} = require("../controllers/ConversationController");
 
-ciConversationRouter.get(
+ConversationRouter.get(
   "/",
   userIsAuthenticatedMiddleware,
   getUserConversations
 );
 
-ciConversationRouter.post(
+ConversationRouter.post(
   "/create",
   userIsAuthenticatedMiddleware,
   createConversation
 );
 
-module.exports = { ciConversationRouter };
+module.exports = { ConversationRouter };

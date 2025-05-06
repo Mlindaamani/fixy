@@ -1,31 +1,18 @@
-const {
-  sendMessage,
-  markMessageAsRead,
-  getMessagesBetweenUsers,
-  deleteConversation,
-} = require("../controllers/messageController");
+const express = require("express");
 
 const {
   userIsAuthenticatedMiddleware,
 } = require("../middlewares/authMiddleware");
+const {
+  sendMessage,
+  getMessages,
+  markMessageAsRead,
+} = require("../controllers/messageController");
 
-const express = require("express");
-const messageRouter = express.Router();
+const MessageRouter = express.Router();
 
-messageRouter.post(
-  "/send/:receiverId",
-  userIsAuthenticatedMiddleware,
-  sendMessage
-);
+MessageRouter.post("/send", userIsAuthenticatedMiddleware, sendMessage);
+MessageRouter.get("/:conversationId", getMessages);
+MessageRouter.patch("/read/:messageId", markMessageAsRead);
 
-messageRouter.get(
-  "/chats/:receiverId",
-  userIsAuthenticatedMiddleware,
-  getMessagesBetweenUsers
-);
-
-messageRouter.delete("/delete/:conversationId", deleteConversation);
-
-messageRouter.patch("/mark-as-read/:id", markMessageAsRead);
-
-module.exports = { messageRouter };
+module.exports = { MessageRouter };
