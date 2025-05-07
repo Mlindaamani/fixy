@@ -15,6 +15,7 @@ export const useSocket = create((set, get) => ({
 
   connectToSocketServer: () => {
     const { user } = useAuthStore.getState();
+
     const socket = io(SOCKET_SERVER_URL, {
       query: {
         userId: user?.id,
@@ -22,14 +23,16 @@ export const useSocket = create((set, get) => ({
     });
 
     socket.connect();
-
     set({ socket: socket });
 
     socket.on("new-message", (newMessage) => {
+      const { user } = useAuthStore.getState();
       const { updateMessages } = messageStore.getState();
-      const sound = new Audio(notify);
-      updateMessages(newMessage);
-      sound.play();
+      if (newMessage.senderId !== user?.id) {
+        const sound = new Audio(notify);
+        updateMessages(newMessage);
+        sound.play();
+      }
     });
 
     socket.on("join-chat", (userId) => {
@@ -65,7 +68,7 @@ export const useSocket = create((set, get) => ({
 
   unsubscribeFromSocketEvents: () => {
     const { socket } = get();
-    socket.off("new-messages");
+    socket.off("new-message");
     socket.off("join-chat");
     socket.off("leave-chat");
     socket.off("online-users");

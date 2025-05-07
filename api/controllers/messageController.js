@@ -2,7 +2,6 @@ const Message = require("../models/Message");
 const Conversation = require("../models/Conversation");
 const { io, getReceiverSocketId } = require("../socket");
 
-// Send a new message
 const sendMessage = async (req, res) => {
   const { conversationId, message } = req.body;
   const senderId = req.user.id;
@@ -30,15 +29,22 @@ const sendMessage = async (req, res) => {
       isRead: false,
     });
 
-    // Update conversation's last message details
+    // Update conversation's last message
     conversation.lastMessageAt = new Date();
     conversation.lastMessageContent = message;
     await conversation.save();
 
-    const receiverSocketId = getReceiverSocketId(senderId);
+    // Determine receiver ID
+    const receiverId =
+      conversation.providerId.toString() === senderId
+        ? conversation.customerId.toString()
+        : conversation.providerId.toString();
 
+    const receiverSocketId = getReceiverSocketId(receiverId);
+
+    // Emit only to receiver
     if (receiverSocketId) {
-      io.emit("new-message", newMessage);
+      io.to(receiverSocketId).emit("new-message", newMessage);
     }
 
     res.status(201).json(newMessage);

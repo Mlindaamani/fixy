@@ -47,7 +47,7 @@ export const messageStore = create((set, get) => ({
     try {
       if (selectedConversation) {
         const response = await axiosInstance.get(
-          `/ci/messages/${selectedConversation.conversationId}`
+          `/messages/${selectedConversation.conversationId}`
         );
 
         set({ messages: response.data, isLoadingMessage: false });
