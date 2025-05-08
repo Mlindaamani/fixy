@@ -5,9 +5,7 @@ import { useAuthStore } from "./authStore";
 import { messageStore } from "./messageStore";
 import notify from "../assets/sounds/notify.mp3";
 
-const { VITE_SOCKET_DEV, VITE_SOCKET_PROD } = import.meta.env;
-const SOCKET_SERVER_URL =
-  import.meta.env.MODE === "development" ? VITE_SOCKET_DEV : VITE_SOCKET_PROD;
+const SOCKET_SERVER_URL = import.meta.env.VITE_SOCKET_DEV;
 
 export const useSocket = create((set, get) => ({
   socket: null,
@@ -15,12 +13,7 @@ export const useSocket = create((set, get) => ({
 
   connectToSocketServer: () => {
     const { user } = useAuthStore.getState();
-
-    const socket = io(SOCKET_SERVER_URL, {
-      query: {
-        userId: user?.id,
-      },
-    });
+    const socket = io(SOCKET_SERVER_URL, { query: { userId: user?.id } });
 
     socket.connect();
     set({ socket: socket });
@@ -64,6 +57,22 @@ export const useSocket = create((set, get) => ({
     socket.on("online-users", (users) => {
       set({ onlineUsers: users });
     });
+
+    socket.on("scheduled-notification", (data) => {
+      toast.success(data.message, {
+        duration: 9000,
+        position: "bottom-right",
+        id: "schedule",
+      });
+    });
+
+    socket.on("system-status", (data) => {
+      toast.success(`${data.currentOnline} users Currently online`, {
+        duration: 9000,
+        position: "bottom-right",
+        id: "system-status",
+      });
+    });
   },
 
   unsubscribeFromSocketEvents: () => {
@@ -72,6 +81,8 @@ export const useSocket = create((set, get) => ({
     socket.off("join-chat");
     socket.off("leave-chat");
     socket.off("online-users");
+    socket.off("system-status");
+    socket.off("scheduled-notification");
   },
 
   disconnect: () => {

@@ -3,7 +3,7 @@ import { professionals } from "../../lib/professionals";
 import { testimonials } from "../../lib/testimonial";
 import { services } from "../../lib/services";
 import { Footer } from "../../components/Footer";
-import hero from "../../assets/extra/hero.jpg";
+import smartHero from "../../assets/extra/smart.jpg";
 import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
@@ -28,7 +28,7 @@ const LandingPage = () => {
       <div
         className="relative min-h-screen flex items-center"
         style={{
-          backgroundImage: `url(${hero})`,
+          backgroundImage: `url(${smartHero})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}

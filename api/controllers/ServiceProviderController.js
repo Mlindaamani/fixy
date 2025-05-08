@@ -1,5 +1,8 @@
 const ServiceProvider = require("../models/ServiceProvider");
-
+/**
+ * @param {import('express').Request} _req
+ * @param {import('express').Response} res
+ */
 const getServiceProviders = async (_req, res) => {
   try {
     const serviceProviders = await ServiceProvider.find()

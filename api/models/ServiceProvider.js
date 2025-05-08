@@ -72,4 +72,5 @@ const serviceProviderSchema = Schema(
   }
 );
 
+/** @type {import('mongoose').Model} */
 module.exports = model("ServiceProvider", serviceProviderSchema);

@@ -2,6 +2,7 @@ const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
 const { corsConfiguration } = require("./utils/functions");
+const { initCronJobs } = require("./cronJobs");
 
 const app = express();
 const server = http.createServer(app);
@@ -30,6 +31,8 @@ io.on("connection", (socket) => {
     io.emit("leave-chat", userId);
   });
 });
+
+initCronJobs(io, onlineUsers);
 
 module.exports = {
   app,

@@ -1,13 +1,9 @@
 import axios from "axios";
 import { getAccessToken } from "../utils/localStorage";
 import { useAuthStore } from "../stores/authStore";
-const { VITE_BACKEND_URL_DEV, VITE_BACKEND_URL_PROD } = import.meta.env;
 
 export const axiosInstance = axios.create({
-  baseURL:
-    import.meta.env.MODE === "development"
-      ? VITE_BACKEND_URL_DEV
-      : VITE_BACKEND_URL_PROD,
+  baseURL: import.meta.env.VITE_BACKEND_URL_DEV,
 });
 
 axiosInstance.interceptors.request.use(
