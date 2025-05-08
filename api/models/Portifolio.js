@@ -14,4 +14,5 @@ const portfolioSchema = Schema(
   }
 );
 
+/** @type {import('mongoose').Model} */
 module.exports = model("Portfolio", portfolioSchema);

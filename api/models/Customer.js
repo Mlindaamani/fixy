@@ -21,4 +21,5 @@ const customerSchema = Schema(
   }
 );
 
+/** @type {import('mongoose').Model} */
 module.exports = model("Customer", customerSchema);

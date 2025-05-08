@@ -33,4 +33,6 @@ const messageSchema = Schema(
 
 messageSchema.index({ conversationId: 1, created_at: -1 });
 messageSchema.index({ senderId: 1 });
+
+/** @type {import('mongoose').Model} */
 module.exports = model("Message", messageSchema);

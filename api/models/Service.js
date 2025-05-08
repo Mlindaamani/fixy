@@ -30,4 +30,5 @@ const serviceSchema = Schema(
   }
 );
 
+/** @type {import('mongoose').Model} */
 module.exports = model("Service", serviceSchema);

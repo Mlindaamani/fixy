@@ -38,4 +38,5 @@ conversationSchema.index({ providerId: 1, customerId: 1 }, { unique: true });
 conversationSchema.index({ providerId: 1, lastMessageAt: -1 });
 conversationSchema.index({ customerId: 1, lastMessageAt: -1 });
 
+/** @type {import('mongoose').Model} */
 module.exports = model("Conversation", conversationSchema);

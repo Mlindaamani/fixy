@@ -27,4 +27,5 @@ const reviewSchema = Schema(
   }
 );
 
+/** @type {import('mongoose').Model} */
 module.exports = model("Review", reviewSchema);

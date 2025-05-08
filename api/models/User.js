@@ -132,4 +132,5 @@ userSchema.methods.isEmailVerified = function () {
   return this.isVerified;
 };
 
+/** @type {import('mongoose').Model} */
 module.exports = model("User", userSchema);
