@@ -32,7 +32,7 @@ io.on("connection", (socket) => {
   });
 });
 
-initCronJobs(io, onlineUsers);
+// initCronJobs(io, onlineUsers);
 
 module.exports = {
   app,
