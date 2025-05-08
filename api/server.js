@@ -4,7 +4,7 @@ const morgan = require("morgan");
 
 // Utility
 const { startServer } = require("./utils/functions");
-const { catchAllMiddleware } = require("./middlewares/catchAllMiddleware");
+const { catchAllMiddleware } = require("./middlewares/CatchAllMiddleware");
 const { app, express, server } = require("./socket");
 const { connnectToMongoDb } = require("./config/database");
 

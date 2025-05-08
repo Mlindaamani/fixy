@@ -1,7 +1,7 @@
 const express = require("express");
 const {
   userIsAuthenticatedMiddleware,
-} = require("../middlewares/authMiddleware");
+} = require("../middlewares/AuthMiddleware");
 
 const ConversationRouter = express.Router();
 

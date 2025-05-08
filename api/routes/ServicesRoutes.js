@@ -14,7 +14,7 @@ const {
 const {
   userIsAuthenticatedMiddleware,
   restrictTo,
-} = require("../middlewares/authMiddleware");
+} = require("../middlewares/AuthMiddleware");
 
 ServicesRouter.get("/", getServices);
 ServicesRouter.get("/:id", getServiceById);

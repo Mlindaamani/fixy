@@ -2,7 +2,7 @@ const express = require("express");
 
 const {
   userIsAuthenticatedMiddleware,
-} = require("../middlewares/authMiddleware");
+} = require("../middlewares/AuthMiddleware");
 const {
   sendMessage,
   getMessages,
