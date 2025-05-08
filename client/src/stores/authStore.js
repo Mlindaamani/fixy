@@ -3,18 +3,14 @@ import create from "zustand";
 import { persist } from "zustand/middleware";
 import { axiosInstance } from "../config/axiosInstance";
 import { getBackendErrorMessage } from "../utils/functions";
-import { USERROLE } from "../utils/functions";
+import { USERROLE, TOAST_CONFIG } from "../utils/functions";
+
 import {
   removeTokens,
   storeTokens,
   getAccessToken,
   getRefreshToken,
 } from "../utils/localStorage";
-
-const TOAST_CONFIG = {
-  duration: 3000,
-  position: "top-center",
-};
 
 export const useAuthStore = create(
   persist(

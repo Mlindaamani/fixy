@@ -20,3 +20,8 @@ export const USERROLE = {
   SERVICEPROVIDER: "serviceProvider",
   SERVICEPROVIDER_DASHBOARD: "/provider",
 };
+
+export const TOAST_CONFIG = {
+  duration: 3000,
+  position: "top-center",
+};

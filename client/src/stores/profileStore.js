@@ -43,13 +43,13 @@ export const useProfileStore = create((set) => ({
 
       setTimeout(() => {
         toast.success(response.data.message, {
-          duration: 5000,
+          duration: 4000,
           position: "bottom-center",
           id: "service-provider",
         });
 
         set({ isUpdatingProfile: false });
-      }, 1000);
+      }, 5000);
     } catch (error) {
       set({ isUpdatingProfile: false });
       const errorMessage = getBackendErrorMessage(error);
