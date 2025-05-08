@@ -11,7 +11,7 @@ const initCronJobs = (io, onlineUsers) => {
     const onlineUserIds = Array.from(onlineUsers.keys());
     if (onlineUserIds.length > 0) {
       io.emit("scheduled-notification", {
-        message: "Socket server is up aand running",
+        message: "Socket server is up and running",
       });
     }
 
