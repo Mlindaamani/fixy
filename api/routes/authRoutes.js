@@ -16,16 +16,16 @@ const {
   getUseProfile,
 } = require("../controllers/AuthController");
 
-const authRouter = express.Router();
-authRouter.get("/chat-users", userIsAuthenticatedMiddleware, getSidebarUsers);
-authRouter.post("/register", register);
-authRouter.post("/login", login);
-authRouter.delete("/delete/:id", deleteUser);
-authRouter.get("/verify-token", verifyAccessToken);
-authRouter.post("/refresh-token", refreshAccessToken);
-authRouter.get("/me", userIsAuthenticatedMiddleware, getUseProfile);
-authRouter.post("/password-reset", requestPasswordReset);
-authRouter.post("/email-reset", requestEmailReset);
-authRouter.post("/verify-email", verifyEmail);
+const AuthRouter = express.Router();
+AuthRouter.get("/chat-users", userIsAuthenticatedMiddleware, getSidebarUsers);
+AuthRouter.post("/register", register);
+AuthRouter.post("/login", login);
+AuthRouter.delete("/delete/:id", deleteUser);
+AuthRouter.get("/verify-token", verifyAccessToken);
+AuthRouter.post("/refresh-token", refreshAccessToken);
+AuthRouter.get("/me", userIsAuthenticatedMiddleware, getUseProfile);
+AuthRouter.post("/password-reset", requestPasswordReset);
+AuthRouter.post("/email-reset", requestEmailReset);
+AuthRouter.post("/verify-email", verifyEmail);
 
-module.exports = { authRouter };
+module.exports = { AuthRouter };

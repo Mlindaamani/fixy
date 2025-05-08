@@ -5,9 +5,9 @@ const {
   getCustomers,
 } = require("../controllers/customerController");
 
-const customerRouter = express.Router();
+const CustomerRouter = express.Router();
 
-customerRouter.get("/", getCustomers);
-customerRouter.get("/:id", getCustomerById);
-customerRouter.put("/profile-update/:id", updateCustomerProfile);
-module.exports = { customerRouter };
+CustomerRouter.get("/", getCustomers);
+CustomerRouter.get("/:id", getCustomerById);
+CustomerRouter.put("/profile-update/:id", updateCustomerProfile);
+module.exports = { CustomerRouter };

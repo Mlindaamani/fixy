@@ -44,6 +44,38 @@ const formatDate = (isoDate) => {
   return date.toLocaleString("en-US", options);
 };
 
+const validCategories = [
+  "plumbing",
+  "electrical",
+  "hvac",
+  "carpentry",
+  "cleaning",
+  "gardening",
+  "pest control",
+  "painting",
+  "roofing",
+  "masonry",
+  "welding",
+  "landscaping",
+  "flooring",
+  "remodeling",
+  "construction",
+  "handyman",
+  "appliance repair",
+  "moving",
+  "security",
+  "locksmith",
+  "car wash",
+  "car detailing",
+  "carpentry",
+  "home improvement",
+  "home repair",
+  "home cleaning",
+  "home maintenance",
+  "home organization",
+  "other",
+];
+
 module.exports = {
   formatDate,
   corsConfiguration,
@@ -52,4 +84,5 @@ module.exports = {
   verifyMongoDbId,
   startServer,
   USERROLE,
+  validCategories,
 };

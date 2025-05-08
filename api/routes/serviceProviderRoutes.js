@@ -5,10 +5,10 @@ const {
   updateServiceProviderProfile,
 } = require("../controllers/ServiceProviderController");
 
-const serviceProviderRouter = express.Router();
+const ServiceProviderRouter = express.Router();
 
-serviceProviderRouter.get("/", getServiceProviders);
-serviceProviderRouter.get("/:id", getServiceProviderById);
-serviceProviderRouter.put("/profile-update/:id", updateServiceProviderProfile);
-serviceProviderRouter.put("/profile-update/:id", updateServiceProviderProfile);
-module.exports = { serviceProviderRouter };
+ServiceProviderRouter.get("/", getServiceProviders);
+ServiceProviderRouter.get("/:id", getServiceProviderById);
+ServiceProviderRouter.put("/profile-update/:id", updateServiceProviderProfile);
+ServiceProviderRouter.put("/profile-update/:id", updateServiceProviderProfile);
+module.exports = { ServiceProviderRouter };
