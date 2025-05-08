@@ -12,6 +12,10 @@ const Customer = require("../models/Customer");
 const User = require("../models/User");
 const ServiceProvider = require("../models/ServiceProvider");
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const getSidebarUsers = async (req, res) => {
   const { id: userId } = req.user;
   try {
@@ -28,6 +32,10 @@ const getSidebarUsers = async (req, res) => {
   }
 };
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const register = async (req, res) => {
   try {
     const {
@@ -49,6 +57,7 @@ const register = async (req, res) => {
     }
 
     const existingUser = await User.findOne({ email });
+    const nonExistingUser = await User.findOne({ _id: req.user.Id });
     if (existingUser) {
       return res.status(400).json({ message: "Email already exists" });
     }
@@ -94,6 +103,10 @@ const register = async (req, res) => {
   }
 };
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -131,6 +144,10 @@ const login = async (req, res) => {
   }
 };
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const deleteUser = async (req, res) => {
   const { id } = req.params;
   try {
@@ -155,6 +172,10 @@ const deleteUser = async (req, res) => {
   }
 };
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const getUseProfile = async (req, res) => {
   const { id: userId } = req.user;
 
@@ -177,6 +198,10 @@ const getUseProfile = async (req, res) => {
   }
 };
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const requestPasswordReset = async (req, res) => {
   try {
     const { email } = req.body;
@@ -197,6 +222,10 @@ const requestPasswordReset = async (req, res) => {
   }
 };
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const requestEmailReset = async (req, res) => {
   try {
     const { email } = req.body;
@@ -216,6 +245,10 @@ const requestEmailReset = async (req, res) => {
   }
 };
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const verifyEmail = async (req, res) => {
   try {
     const { token } = req.body;
@@ -240,6 +273,10 @@ const verifyEmail = async (req, res) => {
   }
 };
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const verifyAccessToken = (req, res) => {
   const authHeader = req.headers["authorization"];
 
@@ -266,6 +303,10 @@ const verifyAccessToken = (req, res) => {
   }
 };
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const refreshAccessToken = async (req, res) => {
   const { refreshToken } = req.body;
 

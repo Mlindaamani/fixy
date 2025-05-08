@@ -1,4 +1,5 @@
 const ServiceProvider = require("../models/ServiceProvider");
+
 /**
  * @param {import('express').Request} _req
  * @param {import('express').Response} res
@@ -21,6 +22,10 @@ const getServiceProviders = async (_req, res) => {
   }
 };
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const updateServiceProviderProfile = async (req, res) => {
   try {
     const { id } = req.params;
@@ -62,6 +67,10 @@ const updateServiceProviderProfile = async (req, res) => {
   }
 };
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const getServiceProviderById = async (req, res) => {
   try {
     const { id } = req.params;

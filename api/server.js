@@ -7,7 +7,6 @@ require("./models/ServiceProvider");
 require("./models/User");
 require("./models/Customer");
 require("./models/Service");
-require("./models/ServiceCategory");
 require("./models/Review");
 require("./models/Message");
 require("./models/Portifolio");

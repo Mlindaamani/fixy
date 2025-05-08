@@ -2,6 +2,10 @@ const Message = require("../models/Message");
 const Conversation = require("../models/Conversation");
 const { io, getReceiverSocketId } = require("../socket");
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const sendMessage = async (req, res) => {
   const { conversationId, message } = req.body;
   const senderId = req.user.id;
@@ -54,6 +58,10 @@ const sendMessage = async (req, res) => {
   }
 };
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 // Get messages for a specific conversation
 const getMessages = async (req, res) => {
   const { conversationId } = req.params;

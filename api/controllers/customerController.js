@@ -1,5 +1,9 @@
 const Customer = require("../models/Customer");
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const getCustomers = async (_req, res) => {
   try {
     const customer = await Customer.find().populate(
@@ -18,6 +22,10 @@ const getCustomers = async (_req, res) => {
   }
 };
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const updateCustomerProfile = async (req, res) => {
   try {
     const { id } = req.params;
@@ -40,6 +48,10 @@ const updateCustomerProfile = async (req, res) => {
   }
 };
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const getCustomerById = async (req, res) => {
   try {
     const { id } = req.params;

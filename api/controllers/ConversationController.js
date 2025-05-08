@@ -1,6 +1,10 @@
 const Conversation = require("../models/Conversation");
 const User = require("../models/User");
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const createConversation = async (req, res) => {
   const { otherUserId } = req.body;
   const { role, id: userId } = req.user;
@@ -86,6 +90,10 @@ const createConversation = async (req, res) => {
   }
 };
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const getUserConversations = async (req, res) => {
   try {
     const userId = req.user.id;
