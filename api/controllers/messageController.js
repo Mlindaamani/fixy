@@ -74,6 +74,10 @@ const getMessages = async (req, res) => {
   }
 };
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const markMessageAsRead = async (req, res) => {
   const { messageId } = req.params;
 

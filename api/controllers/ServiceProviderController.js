@@ -1,10 +1,10 @@
 const ServiceProvider = require("../models/ServiceProvider");
 
 /**
- * @param {import('express').Request} _req
+ * @param {import('express').Request} req
  * @param {import('express').Response} res
  */
-const getServiceProviders = async (_req, res) => {
+const getServiceProviders = async (req, res) => {
   try {
     const serviceProviders = await ServiceProvider.find()
       .populate("user", "fullName phoneNumber")
