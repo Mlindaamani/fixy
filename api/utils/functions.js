@@ -1,5 +1,13 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
+const { v2: cloudinary } = require("../config/cloudinary.js");
+
+const IMAGE_TRANSFORMATIONS = {
+  width: 800,
+  height: 600,
+  crop: "limit",
+  quality: "auto",
+};
 
 const USERROLE = {
   SERVICEPROVIDER: "serviceProvider",
@@ -44,6 +52,24 @@ const formatDate = (isoDate) => {
   return date.toLocaleString("en-US", options);
 };
 
+const formatServiceImage = (req, upload_forder = "uploads") => {
+  const host = req.get("host");
+  const protocol = req.protocol;
+  return `${protocol}://${host}/${upload_forder}/${req.file.filename}`;
+};
+
+const uploadServiceImage = async (req) => {
+  if (process.env.NODE_ENV === "production") {
+    const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+      folder: "ServiceImages",
+      resource_type: "auto",
+      transformation: [IMAGE_TRANSFORMATIONS],
+    });
+    return uploadResult.secure_url;
+  }
+  return formatServiceImage(req);
+};
+
 const validCategories = [
   "plumbing",
   "electrical",
@@ -85,4 +111,6 @@ module.exports = {
   startServer,
   USERROLE,
   validCategories,
+  formatServiceImage,
+  uploadServiceImage,
 };

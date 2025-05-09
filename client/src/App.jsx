@@ -29,6 +29,7 @@ import Services from "./screens/ServiceProvider/Services";
 import UpdateServiceProviderProfile from "./screens/ServiceProvider/UpdateServiceProviderProfile";
 import ServiceProviderProfile from "./screens/ServiceProvider/ServiceProviderProfile";
 import ChatRoom from "./screens/ServiceProvider/ChatRoom";
+import ServiceForm from "./screens/ServiceProvider/CreatServices";
 
 // Customer
 import CustomerLayout from "./layouts/CustomerLayout";
@@ -58,6 +59,8 @@ export const App = () => {
           <Route path="/provider" element={<ServiceProviderLayout />}>
             <Route index element={<Analytics />} />
             <Route path="services" element={<Services />} />
+            <Route path="services/new" element={<ServiceForm />} />
+            <Route path="services/:id/edit" element={<ServiceForm />} />
             <Route path="room" element={<ChatRoom />} />
             <Route path="profile" element={<ServiceProviderProfile />} />
             <Route

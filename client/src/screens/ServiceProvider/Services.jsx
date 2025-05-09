@@ -1,38 +1,130 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useServiceStore } from "../../stores/serviceStore";
 import LoadingSpinner from "../../components/Spinner";
 
 const Services = () => {
-  const { services, getActiveServices, isLoading } = useServiceStore();
+  const { services, myServices, isLoading } = useServiceStore();
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    getActiveServices();
-  }, [getActiveServices]);
+    myServices();
+  }, [myServices]);
 
-  if (isLoading) <LoadingSpinner />;
+  const filteredServices = services.filter((service) =>
+    [service.name, service.category, service.location, service.status].some(
+      (field) => field.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  );
+
+  if (isLoading) return <LoadingSpinner />;
 
   return (
-    <div className="container min-h-screen">
-      <div className="bg-white flex justify-between items-center shadow-lg mb-3 p-3 rounded-lg">
-        <div className="w-10 h-10 flex justify-center items-center bg-blue-100 rounded-full p-6">
-          <i className="fa-solid fa-briefcase text-indigo-600"></i>
+    <div className="container min-h-screen py-6">
+      {/* Header */}
+      <div className="bg-white flex justify-between items-center shadow-lg mb-6 p-4 rounded-lg">
+        <div className="flex items-center">
+          <div className="w-10 h-10 flex justify-center items-center bg-blue-100 rounded-full">
+            <i className="fa-solid fa-briefcase text-indigo-600"></i>
+          </div>
+          <h5 className="text-indigo-600 font-semibold ml-3 text-lg">
+            My Services
+          </h5>
         </div>
-        <h5 className="!text-indigo-600 font-semibold p-2">My Services</h5>
+        <button
+          onClick={() => navigate("/provider/services/new")}
+          className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 text-sm"
+        >
+          Add Service
+        </button>
+      </div>
+
+      {/* Search Bar */}
+      <div className="mb-6">
+        <input
+          type="text"
+          placeholder="Search by name, category, or location, status..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full max-w-md px-4 py-2.5 border rounded-lg text-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
+        />
       </div>
 
       {/* Service Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-        {services.map((_, index) => (
-          <div
-            className="bg-white rounded-lg p-6 shadow-sm text-gray-600 text-sm transition-transform hover:-translate-y-2 cursor-pointer"
-            key={index}
-          >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
-            voluptate ducimus blanditiis aut obcaecati at nemo deserunt? Quia,
-            dignissimos iste?
-          </div>
-        ))}
-      </div>
+      {filteredServices.length === 0 ? (
+        <p className="text-gray-600 text-center">No services found.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {filteredServices.map((service) => (
+            <div
+              key={service._id}
+              className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform hover:-translate-y-2"
+            >
+              <div className="h-40 overflow-hidden">
+                <img
+                  src={service.image}
+                  alt={service.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-gray-600 mb-2">
+                  {service.name}
+                </h3>
+                <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                  {service.description}
+                </p>
+                <div className="flex justify-between items-center mb-3">
+                  <span className="text-indigo-600 font-bold">
+                    ${service.price}
+                  </span>
+                  <span className="text-gray-600 text-sm">
+                    {service.duration}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center mb-3">
+                  <span className="text-gray-600 text-sm">
+                    {service.category}
+                  </span>
+                  <div className="flex items-center">
+                    <span className="text-yellow-400 mr-1">
+                      {[...Array(5)].map((_, i) => (
+                        <i
+                          key={i}
+                          className={`fas fa-star ${
+                            i < Math.floor(service.rating)
+                              ? ""
+                              : "text-gray-300"
+                          }`}
+                        ></i>
+                      ))}
+                    </span>
+                    <span className="text-gray-600 text-sm">
+                      ({service.reviews})
+                    </span>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center text-sm text-gray-600 mb-4">
+                  <span>
+                    <i className="fas fa-map-marker-alt mr-1"></i>
+                    {service.location}
+                  </span>
+                  <span>{service.status}</span>
+                </div>
+                <button
+                  onClick={() =>
+                    navigate(`/provider/services/${service._id}/edit`)
+                  }
+                  className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 text-sm"
+                >
+                  Update Service
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

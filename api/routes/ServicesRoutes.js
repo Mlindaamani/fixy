@@ -9,12 +9,15 @@ const {
   updateService,
   deleteService,
   updateServiceStatus,
+  getCreatorServices,
 } = require("../controllers/ServicesController");
 
 const {
   userIsAuthenticatedMiddleware,
   restrictTo,
 } = require("../middlewares/AuthMiddleware");
+
+const upload = require("../middlewares/FileUploadMiddleware");
 
 ServicesRouter.get("/", getServices);
 ServicesRouter.get("/:id", getServiceById);
@@ -24,13 +27,21 @@ ServicesRouter.post(
   "/",
   userIsAuthenticatedMiddleware,
   restrictTo("serviceProvider"),
+  upload.single("image"),
   createService
+);
+
+ServicesRouter.get(
+  "/creator/my-services",
+  userIsAuthenticatedMiddleware,
+  getCreatorServices
 );
 
 ServicesRouter.put(
   "/:id",
   userIsAuthenticatedMiddleware,
   restrictTo("serviceProvider"),
+  upload.single("image"),
   updateService
 );
 
