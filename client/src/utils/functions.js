@@ -25,3 +25,9 @@ export const TOAST_CONFIG = {
   duration: 3000,
   position: "top-center",
 };
+
+export const navigateTo = (user) => {
+  return user?.role === USERROLE.CUSTOMER
+    ? USERROLE.CUSTOMER_DASHBAORD
+    : USERROLE.SERVICEPROVIDER_DASHBOARD;
+};

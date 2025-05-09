@@ -15,6 +15,7 @@ const { ServiceProviderRouter } = require("./routes/ServiceProviderRoutes");
 const { AuthRouter } = require("./routes/AuthRoutes");
 const { ConversationRouter } = require("./routes/ConversationRoutes");
 const { ServicesRouter } = require("./routes/ServicesRoutes");
+const ReviewRouter = require("./routes/ReviewRoutes");
 
 // Middlewares
 app.use(cors());
@@ -25,6 +26,7 @@ app.use("/uploads", express.static("uploads"));
 // Fixy Endpoints
 app.use("/api/providers", ServiceProviderRouter);
 app.use("/api/services", ServicesRouter);
+app.use("/api/reviews", ReviewRouter);
 app.use("/api/customers", CustomerRouter);
 app.use("/api/auth", AuthRouter);
 app.use("/api/messages", MessageRouter);

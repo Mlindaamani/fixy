@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Footer } from "../../components/Footer";
 import { useServiceStore } from "../../stores/serviceStore";
 import LoadingSpinner from "../../components/Spinner";
+import { useNavigate } from "react-router-dom";
 
 const LandingPageServices = () => {
   const { getActiveServices, services, isLoading } = useServiceStore();
@@ -9,6 +10,7 @@ const LandingPageServices = () => {
   const [priceRange, setPriceRange] = useState([0, 1000]);
   const [selectedLocation, setSelectedLocation] = useState("");
   const [selectedRating, setSelectedRating] = useState(0);
+  const navigate = useNavigate();
 
   const filteredServices = services.filter((service) => {
     const matchesCategory =
@@ -121,7 +123,7 @@ const LandingPageServices = () => {
           </div>
 
           <div className="flex-1">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredServices.map((service) => (
                 <div
                   key={service.id}
@@ -170,6 +172,64 @@ const LandingPageServices = () => {
                       </div>
                     </div>
                     <button className="!rounded-button w-full bg-indigo-600 text-white py-2 hover:bg-indigo-700 transition-colors whitespace-nowrap">
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div> */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredServices.map((service) => (
+                <div
+                  key={service._id}
+                  className="bg-white rounded-lg shadow-lg overflow-hidden"
+                >
+                  <div className="h-48 overflow-hidden">
+                    <img
+                      src={service.image}
+                      alt={service.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold mb-2">{service.name}</h3>
+                    <p className="text-gray-600 mb-4">{service.description}</p>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="text-2xl font-bold text-indigo-600">
+                        ${service.price}
+                      </div>
+                      <div className="flex items-center">
+                        <div className="flex text-yellow-400 mr-1">
+                          {[...Array(5)].map((_, i) => (
+                            <i
+                              key={i}
+                              className={`fas fa-star ${
+                                i < Math.floor(service.rating)
+                                  ? ""
+                                  : "text-gray-300"
+                              }`}
+                            ></i>
+                          ))}
+                        </div>
+                        <span className="text-gray-600">
+                          ({service.reviews})
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
+                      <div>
+                        <i className="far fa-clock mr-1"></i>
+                        {service.duration}
+                      </div>
+                      <div>
+                        <i className="fas fa-map-marker-alt mr-1"></i>
+                        {service.coverage}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => navigate(`/services/${service._id}`)}
+                      className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 text-sm"
+                    >
                       View Details
                     </button>
                   </div>

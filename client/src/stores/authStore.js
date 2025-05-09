@@ -66,12 +66,12 @@ export const useAuthStore = create(
             id: "login",
           });
 
-          if (role == USERROLE.CUSTOMER) {
+          if (role === USERROLE.CUSTOMER) {
             navigate(USERROLE.CUSTOMER_DASHBAORD);
-          }
-
-          if (role === USERROLE.SERVICEPROVIDER) {
+          } else if (role === USERROLE.SERVICEPROVIDER) {
             navigate(USERROLE.SERVICEPROVIDER_DASHBOARD);
+          } else {
+            navigate("/");
           }
         } catch (error) {
           const errorMessage = getBackendErrorMessage(error);

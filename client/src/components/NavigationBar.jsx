@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../stores/authStore";
-import { USERROLE } from "../utils/functions";
+import { navigateTo } from "../utils/functions";
 
 export const NavigationBar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -48,12 +48,7 @@ export const NavigationBar = () => {
             </Link>
             {isAuthenticated ? (
               <>
-                <Link
-                  to={`${(user.role = USERROLE.CUSTOMER
-                    ? USERROLE.CUSTOMER_DASHBAORD
-                    : USERROLE.SERVICEPROVIDER_DASHBOARD)}`}
-                  className="no-underline text-white"
-                >
+                <Link to={navigateTo(user)} className="no-underline text-white">
                   Dashboard
                 </Link>
 

@@ -38,7 +38,7 @@ const getServices = async (req, res) => {
     }
 
     services.forEach((service) => {
-      service.fileUrl = formatServiceImage(service.image, req);
+      service.image = formatServiceImage(req, service.image);
     });
 
     return res.status(200).json(services);

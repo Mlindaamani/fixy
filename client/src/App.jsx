@@ -16,6 +16,7 @@ import LandingPageServices from "./screens/Home/Services";
 import LandingPage from "./screens/Home/LandingPage";
 import Contact from "./screens/Home/Contact";
 import ProfessionalsListing from "./screens/Home/ProfessionalsListing";
+import ServiceDetails from "./screens/Home/ServiceDetails";
 
 // Layouts
 import LandingPageLayout from "./layouts/LandingPageLayout";
@@ -50,6 +51,7 @@ export const App = () => {
         <Route element={<LandingPageLayout />}>
           <Route path="/" element={<LandingPage />} />
           <Route path="/services" element={<LandingPageServices />} />
+          <Route path="/services/:id" element={<ServiceDetails />} />
           <Route path="/professionals" element={<ProfessionalsListing />} />
           <Route path="/contact" element={<Contact />} />
         </Route>
