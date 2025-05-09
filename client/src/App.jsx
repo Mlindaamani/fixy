@@ -12,7 +12,7 @@ import Login from "./screens/Auth/Login";
 import Register from "./screens/Auth/Register";
 
 // Landing Page
-import FixyServices from "./screens/Home/Services";
+import LandingPageServices from "./screens/Home/Services";
 import LandingPage from "./screens/Home/LandingPage";
 import Contact from "./screens/Home/Contact";
 import ProfessionalsListing from "./screens/Home/ProfessionalsListing";
@@ -48,7 +48,7 @@ export const App = () => {
 
         <Route element={<LandingPageLayout />}>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/services" element={<FixyServices />} />
+          <Route path="/services" element={<LandingPageServices />} />
           <Route path="/professionals" element={<ProfessionalsListing />} />
           <Route path="/contact" element={<Contact />} />
         </Route>

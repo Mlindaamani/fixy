@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useServiceStore } from "../../stores/serviceStore";
+import LoadingSpinner from "../../components/Spinner";
 
 const Services = () => {
-  const serviceCount = 40;
+  const { services, getActiveServices, isLoading } = useServiceStore();
+
+  useEffect(() => {
+    getActiveServices();
+  }, [getActiveServices]);
+
+  if (isLoading) <LoadingSpinner />;
+
   return (
     <div className="container min-h-screen">
       <div className="bg-white flex justify-between items-center shadow-lg mb-3 p-3 rounded-lg">
@@ -13,7 +22,7 @@ const Services = () => {
 
       {/* Service Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-        {[...Array(serviceCount)].map((_, index) => (
+        {services.map((_, index) => (
           <div
             className="bg-white rounded-lg p-6 shadow-sm text-gray-600 text-sm transition-transform hover:-translate-y-2 cursor-pointer"
             key={index}

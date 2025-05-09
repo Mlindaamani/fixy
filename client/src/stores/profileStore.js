@@ -22,7 +22,7 @@ export const useProfileStore = create((set) => ({
           position: "top-center",
           id: "service-provider",
         });
-      }, 1000);
+      }, 500);
     } catch (error) {
       const errorMessage = getBackendErrorMessage(error);
       set({ isFetchingProfile: false });
@@ -49,7 +49,7 @@ export const useProfileStore = create((set) => ({
         });
 
         set({ isUpdatingProfile: false });
-      }, 5000);
+      }, 500);
     } catch (error) {
       set({ isUpdatingProfile: false });
       const errorMessage = getBackendErrorMessage(error);

@@ -1,25 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Footer } from "../../components/Footer";
-import compressiveServices from "../../lib/compressiveServices";
+import { useServiceStore } from "../../stores/serviceStore";
+import LoadingSpinner from "../../components/Spinner";
 
-const FixyServices = () => {
+const LandingPageServices = () => {
+  const { getActiveServices, services, isLoading } = useServiceStore();
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [priceRange, setPriceRange] = useState([0, 1000]);
   const [selectedLocation, setSelectedLocation] = useState("");
   const [selectedRating, setSelectedRating] = useState(0);
 
-  const filteredServices = compressiveServices.filter((service) => {
+  const filteredServices = services.filter((service) => {
     const matchesCategory =
       selectedCategory === "all" || service.category === selectedCategory;
-
     const matchesPrice =
       service.price >= priceRange[0] && service.price <= priceRange[1];
-
     const matchesRating =
       selectedRating === 0 || service.rating >= selectedRating;
-
-    return matchesCategory && matchesPrice && matchesRating;
+    const matchesLocation =
+      selectedLocation === "" ||
+      service.location.toLowerCase().includes(selectedLocation.toLowerCase());
+    return matchesCategory && matchesPrice && matchesRating && matchesLocation;
   });
+
+  useEffect(() => {
+    getActiveServices();
+  }, []);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="min-h-screen p-0">
@@ -174,4 +184,4 @@ const FixyServices = () => {
   );
 };
 
-export default FixyServices;
+export default LandingPageServices;
