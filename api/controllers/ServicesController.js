@@ -62,6 +62,29 @@ const getServiceById = async (req, res) => {
  * @param {import('express').Request} req
  * @param {import('express').Response} res
  */
+const getServiceByCreator = async (req, res) => {
+  try {
+    const services = await Service.find({ creator: req.user.id }).populate(
+      "creator",
+      "fullName email"
+    );
+
+    if (!services || services.length === 0) {
+      return res.status(404).json({ message: "No services found" });
+    }
+
+    return res.status(200).json(services);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const createService = async (req, res) => {
   try {
     const {
@@ -99,7 +122,6 @@ const createService = async (req, res) => {
     return res.status(201).json(service);
   } catch (error) {
     console.log(error);
-    // Handle duplicate key error
     if (error.code === 11000) {
       return res.status(400).json({
         message: "Service with this name already exists",
@@ -197,4 +219,5 @@ module.exports = {
   updateService,
   deleteService,
   updateServiceStatus,
+  getServiceByCreator,
 };
