@@ -1,4 +1,6 @@
 const Service = require("../models/Service");
+const { v2: cloudinary } = require("../config/cloudinary");
+const path = require("path");
 const {
   validCategories,
   formatServiceImage,
@@ -83,6 +85,10 @@ const getCreatorServices = async (req, res) => {
     if (!services || services.length === 0) {
       return res.status(404).json({ message: "No services found" });
     }
+
+    services.forEach((service) => {
+      service.image = formatServiceImage(req, service.image);
+    });
 
     return res.status(200).json(services);
   } catch (error) {
@@ -186,20 +192,32 @@ const updateService = async (req, res) => {
  * @param {import('express').Response} res
  */
 const deleteService = async (req, res) => {
+  const { id } = req.params;
+  const { id: userId } = req.user;
   try {
-    const service = await Service.findById(req.params.id);
+    const service = await Service.findById(id);
 
     if (!service) {
       return res.status(404).json({ message: "Service not found" });
     }
 
-    if (service.creator.toString() !== req.user._id.toString()) {
+    if (service.creator.toString() !== userId.toString()) {
       return res
         .status(403)
         .json({ message: "Not authorized to delete this service" });
     }
 
-    await service.remove();
+    if (process.env.NODE_ENV === "development" && service.image) {
+      console.log(`Delete: ${service.image}`);
+      const fs = require("fs").promises;
+      await fs.unlink(path.join(__dirname, "../", service.image));
+    } else if (process.env.NODE_ENV === "production" && service.image) {
+      const publicId = service.image.split("/").pop().split(".")[0];
+      await cloudinary.uploader.destroy(`ServiceImages/${publicId}`);
+    }
+
+    // Delete service from database
+    await Service.findByIdAndDelete(id);
 
     return res.status(200).json({ message: "Service deleted" });
   } catch (error) {

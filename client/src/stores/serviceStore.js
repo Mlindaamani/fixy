@@ -76,7 +76,10 @@ export const useServiceStore = create((set) => ({
     set({ isLoading: true });
     try {
       await axiosInstance.delete(`/services/${id}`);
-      set({ isLoading: false });
+      set((state) => ({
+        services: state.services.filter((s) => s._id !== id),
+        isLoading: false,
+      }));
     } catch (error) {
       console.error("Failed to delete service:", error);
       set({ isLoading: false });

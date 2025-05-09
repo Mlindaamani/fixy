@@ -34,8 +34,8 @@ const generateRefreshToken = (payload) => {
   });
 };
 
-const verifyMongoDbId = (videoId) => {
-  return mongoose.Types.ObjectId.isValid(videoId);
+const verifyMongoDbId = (provided_id) => {
+  return mongoose.Types.ObjectId.isValid(provided_id);
 };
 
 const startServer = () => {
@@ -52,10 +52,13 @@ const formatDate = (isoDate) => {
   return date.toLocaleString("en-US", options);
 };
 
-const formatServiceImage = (req, upload_forder = "uploads") => {
+const formatServiceImage = (req, dbServiceImage) => {
   const host = req.get("host");
   const protocol = req.protocol;
-  return `${protocol}://${host}/${upload_forder}/${req.file.filename}`;
+  if (dbServiceImage.includes("https://res.cloudinary.com")) {
+    return dbServiceImage;
+  }
+  return `${protocol}://${host}/${dbServiceImage}`;
 };
 
 const uploadServiceImage = async (req) => {
@@ -67,7 +70,7 @@ const uploadServiceImage = async (req) => {
     });
     return uploadResult.secure_url;
   }
-  return formatServiceImage(req);
+  return `uploads/${req.file.filename}`;
 };
 
 const validCategories = [

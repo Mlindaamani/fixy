@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useServiceStore } from "../../stores/serviceStore";
 import LoadingSpinner from "../../components/Spinner";
+import { useDebounce } from "use-debounce";
 
 const Services = () => {
-  const { services, myServices, isLoading } = useServiceStore();
+  const { services, myServices, deleteService, isLoading } = useServiceStore();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery] = useDebounce(searchQuery, 500);
 
   useEffect(() => {
     myServices();
@@ -14,16 +16,27 @@ const Services = () => {
 
   const filteredServices = services.filter((service) =>
     [service.name, service.category, service.location, service.status].some(
-      (field) => field.toLowerCase().includes(searchQuery.toLowerCase())
+      (field) =>
+        field.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
     )
   );
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this service?")) {
+      try {
+        await deleteService(id);
+      } catch (error) {
+        console.error("Failed to delete service:", error);
+      }
+    }
+  };
 
   if (isLoading) return <LoadingSpinner />;
 
   return (
     <div className="container min-h-screen py-6">
       {/* Header */}
-      <div className="bg-white flex justify-between items-center shadow-lg mb-6 p-4 rounded-lg">
+      <div className="bg-white flex flex-wrap justify-between items-center shadow-lg mb-6 p-4 rounded-lg gap-4">
         <div className="flex items-center">
           <div className="w-10 h-10 flex justify-center items-center bg-blue-100 rounded-full">
             <i className="fa-solid fa-briefcase text-indigo-600"></i>
@@ -32,23 +45,21 @@ const Services = () => {
             My Services
           </h5>
         </div>
+        <div className="flex-1 max-w-md mx-4">
+          <input
+            type="text"
+            placeholder="Search by name, category, location, or status..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full px-4 py-2.5 border rounded-lg text-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
+          />
+        </div>
         <button
           onClick={() => navigate("/provider/services/new")}
           className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 text-sm"
         >
           Add Service
         </button>
-      </div>
-
-      {/* Search Bar */}
-      <div className="mb-6">
-        <input
-          type="text"
-          placeholder="Search by name, category, or location, status..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full max-w-md px-4 py-2.5 border rounded-lg text-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
-        />
       </div>
 
       {/* Service Grid */}
@@ -116,9 +127,15 @@ const Services = () => {
                   onClick={() =>
                     navigate(`/provider/services/${service._id}/edit`)
                   }
-                  className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 text-sm"
+                  className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 text-sm mb-2"
                 >
                   Update Service
+                </button>
+                <button
+                  onClick={() => handleDelete(service._id)}
+                  className="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 text-sm"
+                >
+                  Delete Service
                 </button>
               </div>
             </div>
