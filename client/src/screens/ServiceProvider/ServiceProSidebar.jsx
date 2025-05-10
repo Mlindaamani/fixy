@@ -11,7 +11,7 @@ const ServiceProSidebar = () => {
     <div
       className={`${
         isSidebarCollapsed ? "w-20" : "w-64"
-      } bg-white shadow-lg transition-all duration-300 fixed h-full flex flex-col z-50`}
+      } bg-white shadow-sm transition-all duration-300 fixed h-full flex flex-col z-50`}
     >
       {/* Header Section */}
       <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-indigo-50 to-white">

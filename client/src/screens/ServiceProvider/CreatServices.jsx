@@ -90,7 +90,7 @@ const ServiceForm = () => {
   return (
     <div className="container min-h-screen py-6">
       <div className="bg-white shadow-lg rounded-lg p-6 max-w-2xl mx-auto">
-        <h2 className="text-2xl font-bold text-gray-600 mb-6">
+        <h2 className="text-2xl font-bold !text-gray-600 mb-6 text-center">
           {isEdit ? "Update Service" : "Add New Service"}
         </h2>
         {error && <p className="text-red-600 mb-4">{error}</p>}
@@ -224,7 +224,7 @@ const ServiceForm = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white py-2.5 rounded-lg hover:bg-indigo-700 text-sm"
+            className="w-full bg-indigo-600 text-white py-2.5 !rounded-lg hover:bg-indigo-700 text-sm"
           >
             {isEdit ? "Update Service" : "Create Service"}
           </button>
