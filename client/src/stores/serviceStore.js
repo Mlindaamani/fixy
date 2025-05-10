@@ -12,7 +12,7 @@ export const useServiceStore = create((set) => ({
       const response = await axiosInstance.get("/services");
       setTimeout(() => {
         set({ services: response.data, isLoading: false });
-      }, 500);
+      }, 100);
     } catch (error) {
       console.error("Error fetching services:", error);
       set({ isLoading: false });

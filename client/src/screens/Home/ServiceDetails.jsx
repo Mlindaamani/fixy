@@ -104,6 +104,7 @@ const ServiceDetails = () => {
                 className="bg-white shadow-lg rounded-lg p-4"
               >
                 <div className="flex items-center justify-between mb-2">
+                  
                   <span className="text-gray-600 font-medium">
                     {review.user.fullName}
                   </span>
@@ -129,6 +130,7 @@ const ServiceDetails = () => {
           </div>
         )}
       </div>
+
       <ReviewForm serviceId={id} />
     </div>
   );

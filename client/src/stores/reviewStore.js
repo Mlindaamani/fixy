@@ -4,6 +4,7 @@ import { axiosInstance } from "../config/axiosInstance";
 export const useReviewStore = create((set) => ({
   reviews: [],
   isLoading: false,
+
   createReview: async (serviceId, reviewData) => {
     set({ isLoading: true });
     try {
@@ -21,6 +22,7 @@ export const useReviewStore = create((set) => ({
       throw error;
     }
   },
+
   getReviews: async (serviceId) => {
     set({ isLoading: true });
     try {
@@ -28,6 +30,22 @@ export const useReviewStore = create((set) => ({
       set({ reviews: data, isLoading: false });
     } catch (error) {
       console.error("Failed to fetch reviews:", error);
+      set({ isLoading: false });
+      throw error;
+    }
+  },
+
+
+  deleteReview: async (id) => {
+    set({ isLoading: true });
+    try {
+      await api.delete(`/reviews/${id}`);
+      set((state) => ({
+        reviews: state.reviews.filter((r) => r._id !== id),
+        isLoading: false,
+      }));
+    } catch (error) {
+      console.error("Failed to delete review:", error);
       set({ isLoading: false });
       throw error;
     }
