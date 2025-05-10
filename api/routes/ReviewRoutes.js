@@ -4,6 +4,7 @@ const {
   createReview,
   getReviewsByService,
   deleteReview,
+  updateReview,
 } = require("../controllers/ReviewController");
 
 const {
@@ -18,7 +19,15 @@ ReviewRouter.post(
   createReview,
   deleteReview
 );
+
 ReviewRouter.get("/service/:serviceId", getReviewsByService);
+
+ReviewRouter.put(
+  "/:id",
+  userIsAuthenticatedMiddleware,
+  restrictTo("customer"),
+  updateReview
+);
 
 ReviewRouter.delete(
   "/:id",
