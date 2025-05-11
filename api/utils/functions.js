@@ -39,11 +39,11 @@ const verifyMongoDbId = (provided_id) => {
 };
 
 const startServer = () => {
-  console.log(`✔️  Success! Server is running on port: ${process.env.PORT}`);
+  console.log(`✔️ Success! Server is running on port: ${process.env.PORT}`);
 };
 
-const formatDate = (isoDate) => {
-  const date = new Date(isoDate);
+const formatDate = (IsoDate) => {
+  const date = new Date(IsoDate);
   const options = {
     year: "numeric",
     month: "long",

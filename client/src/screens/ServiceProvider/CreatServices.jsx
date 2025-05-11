@@ -4,13 +4,18 @@ import { useServiceStore } from "../../stores/serviceStore";
 import LoadingSpinner from "../../components/Spinner";
 
 const ServiceForm = () => {
-  const { services, createService, updateService, isLoading } =
-    useServiceStore();
+  const {
+    services,
+    createService,
+    updateService,
+    isLoading,
+    creatingService,
+    updatingService,
+  } = useServiceStore();
+
   const { id } = useParams();
   const navigate = useNavigate();
   const isEdit = !!id;
-
-  console.log(services);
 
   const initialFormData = {
     name: "",
@@ -67,10 +72,10 @@ const ServiceForm = () => {
       submitData.append("category", formData.category);
       submitData.append("coverage", formData.coverage);
       submitData.append("location", formData.location);
+
       if (file) {
         submitData.append("image", file);
       } else if (isEdit) {
-        // Keep existing URL if no new file
         submitData.append("image", formData.image);
       }
 
@@ -223,10 +228,17 @@ const ServiceForm = () => {
             />
           </div>
           <button
+            disabled={creatingService || updatingService}
             type="submit"
             className="w-full bg-indigo-600 text-white py-2.5 !rounded-lg hover:bg-indigo-700 text-sm"
           >
-            {isEdit ? "Update Service" : "Create Service"}
+            {creatingService
+              ? "Creating..."
+              : updatingService
+              ? "Updating"
+              : isEdit
+              ? "Update"
+              : "Create"}
           </button>
         </form>
       </div>

@@ -53,8 +53,10 @@ const getServices = async (req, res) => {
  * @param {import('express').Response} res
  */
 const getServiceById = async (req, res) => {
+  const { id: serviceId } = req.params;
+
   try {
-    const service = await Service.findById(req.params.id).populate({
+    const service = await Service.findById(serviceId).populate({
       path: "creator",
       select: "fullName email profileImage",
     });
@@ -136,6 +138,7 @@ const createService = async (req, res) => {
     return res.status(201).json(service);
   } catch (error) {
     console.log(error);
+
     if (error.code === 11000) {
       return res.status(400).json({
         message: "Service with this name already exists",
@@ -208,7 +211,6 @@ const deleteService = async (req, res) => {
     }
 
     if (process.env.NODE_ENV === "development" && service.image) {
-      console.log(`Delete: ${service.image}`);
       const fs = require("fs").promises;
       await fs.unlink(path.join(__dirname, "../", service.image));
     } else if (process.env.NODE_ENV === "production" && service.image) {
