@@ -17,7 +17,10 @@ const {
   restrictTo,
 } = require("../middlewares/AuthMiddleware");
 
-const upload = require("../middlewares/FileUploadMiddleware");
+const {
+  uploadServices,
+  uploadProfiles,
+} = require("../middlewares/FileUploadMiddleware");
 
 ServicesRouter.get("/", getServices);
 ServicesRouter.get("/:id", getServiceById);
@@ -27,7 +30,7 @@ ServicesRouter.post(
   "/",
   userIsAuthenticatedMiddleware,
   restrictTo("serviceProvider"),
-  upload.single("image"),
+  uploadServices.single("image"),
   createService
 );
 
@@ -41,7 +44,7 @@ ServicesRouter.put(
   "/:id",
   userIsAuthenticatedMiddleware,
   restrictTo("serviceProvider"),
-  upload.single("image"),
+  uploadServices.single("image"),
   updateService
 );
 

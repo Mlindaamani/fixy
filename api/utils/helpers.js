@@ -1,26 +1,6 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
-const { v2: cloudinary } = require("../config/cloudinary.js");
-
-const IMAGE_TRANSFORMATIONS = {
-  width: 800,
-  height: 600,
-  crop: "limit",
-  quality: "auto",
-};
-
-const USERROLE = {
-  SERVICEPROVIDER: "serviceProvider",
-  CUSTOMER: "customer",
-  ADMIN: "admin",
-};
-
-const corsConfiguration = {
-  cors: {
-    origin: `http://localhost:${process.env.CLIENT_APP_PORT}`,
-    methods: ["GET", "POST"],
-  },
-};
+const { cloudinary } = require("../config/cloudinary.js");
 
 const generateAccessToken = (payload) => {
   return jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {
@@ -70,7 +50,7 @@ const uploadServiceImage = async (req) => {
     });
     return uploadResult.secure_url;
   }
-  return `uploads/${req.file.filename}`;
+  return `uploads/services/${req.file.filename}`;
 };
 
 const validCategories = [
@@ -107,12 +87,10 @@ const validCategories = [
 
 module.exports = {
   formatDate,
-  corsConfiguration,
   generateAccessToken,
   generateRefreshToken,
   verifyMongoDbId,
   startServer,
-  USERROLE,
   validCategories,
   formatServiceImage,
   uploadServiceImage,

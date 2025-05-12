@@ -1,13 +1,10 @@
 const jwt = require("jsonwebtoken");
-
-// Utility
-const { USERROLE } = require("../utils/functions");
+const { USERROLE } = require("../utils/constants");
 const {
   generateAccessToken,
   generateRefreshToken,
-} = require("../utils/functions");
+} = require("../utils/helpers");
 
-// Models
 const Customer = require("../models/Customer");
 const User = require("../models/User");
 const ServiceProvider = require("../models/ServiceProvider");

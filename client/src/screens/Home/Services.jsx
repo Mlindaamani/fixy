@@ -3,6 +3,7 @@ import { Footer } from "../../components/Footer";
 import { useServiceStore } from "../../stores/serviceStore";
 import LoadingSpinner from "../../components/Spinner";
 import { useNavigate } from "react-router-dom";
+import { useDebounce } from "use-debounce";
 
 const LandingPageServices = () => {
   const { getActiveServices, services, isLoading } = useServiceStore();
@@ -11,6 +12,7 @@ const LandingPageServices = () => {
   const [selectedLocation, setSelectedLocation] = useState("");
   const [selectedRating, setSelectedRating] = useState(0);
   const navigate = useNavigate();
+  const [debouncedLocation] = useDebounce(selectedLocation, 500);
 
   const filteredServices = services.filter((service) => {
     const matchesCategory =
@@ -21,7 +23,7 @@ const LandingPageServices = () => {
       selectedRating === 0 || service.rating >= selectedRating;
     const matchesLocation =
       selectedLocation === "" ||
-      service.location.toLowerCase().includes(selectedLocation.toLowerCase());
+      service.location.toLowerCase().includes(debouncedLocation.toLowerCase());
     return matchesCategory && matchesPrice && matchesRating && matchesLocation;
   });
 

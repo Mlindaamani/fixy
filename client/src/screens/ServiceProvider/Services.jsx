@@ -5,7 +5,7 @@ import LoadingSpinner from "../../components/Spinner";
 import { useDebounce } from "use-debounce";
 
 const Services = () => {
-  const { services, myServices, deleteService, isLoading, deletingService } =
+  const { services, myServices, deleteService, isLoading, deletingServices } =
     useServiceStore();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
@@ -141,12 +141,38 @@ const Services = () => {
                   >
                     Update
                   </button>
+
                   <button
-                    disabled={deletingService}
+                    disabled={deletingServices[service._id]}
                     onClick={() => handleDelete(service._id)}
-                    className="flex-1 bg-red-600 text-white py-2 !rounded-lg hover:bg-red-700 text-sm"
+                    className="flex-1 bg-red-600 text-white py-2 !rounded-lg hover:bg-red-700 text-sm disabled:opacity-50 flex items-center justify-center"
+                    aria-label={`Delete ${service.name} service`}
                   >
-                    {deletingService ? "Deleting..." : "Delete"}
+                    {deletingServices[service._id] ? (
+                      <span className="flex items-center">
+                        <svg
+                          className="animate-spin h-5 w-5 mr-2 text-white"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          />
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8v8H4z"
+                          />
+                        </svg>
+                        Deleting...
+                      </span>
+                    ) : (
+                      "Delete"
+                    )}
                   </button>
                 </div>
               </div>

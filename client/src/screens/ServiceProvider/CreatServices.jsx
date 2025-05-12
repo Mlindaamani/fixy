@@ -110,6 +110,7 @@ const ServiceForm = () => {
               value={formData.name}
               onChange={handleChange}
               required
+              autoCapitalize="words"
               className="w-full px-4 py-2.5 border rounded-lg text-gray-600 text-sm"
             />
           </div>

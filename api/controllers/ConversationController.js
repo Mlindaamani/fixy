@@ -48,7 +48,6 @@ const createConversation = async (req, res) => {
       providerId,
       customerId,
       lastMessageAt: new Date(),
-      // No messages yet
       lastMessageContent: "",
       isActive: true,
     });

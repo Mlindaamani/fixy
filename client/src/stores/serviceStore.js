@@ -6,8 +6,22 @@ export const useServiceStore = create((set) => ({
   service: null,
   isLoading: false,
   creatingService: false,
-  deletingService: false,
   updatingService: false,
+  deletingServices: {},
+
+  createService: async (serviceData) => {
+    set({ creatingService: true });
+    try {
+      const response = await axiosInstance.post("/services", serviceData);
+      set((state) => ({
+        services: [...state.services, response.data],
+        creatingService: false,
+      }));
+    } catch (error) {
+      console.error("Error creating service:", error);
+      set({ creatingService: false });
+    }
+  },
 
   getActiveServices: async () => {
     set({ isLoading: true });
@@ -46,20 +60,6 @@ export const useServiceStore = create((set) => ({
     }
   },
 
-  createService: async (serviceData) => {
-    set({ creatingService: true });
-    try {
-      const response = await axiosInstance.post("/services", serviceData);
-      set((state) => ({
-        services: [...state.services, response.data],
-        creatingService: false,
-      }));
-    } catch (error) {
-      console.error("Error creating service:", error);
-      set({ creatingService: false });
-    }
-  },
-
   updateService: async (id, formData) => {
     set({ updatingService: true });
     try {
@@ -76,16 +76,21 @@ export const useServiceStore = create((set) => ({
   },
 
   deleteService: async (id) => {
-    set({ deletingService: true });
+    set((state) => ({
+      deletingServices: { ...state.deletingServices, [id]: true },
+    }));
+
     try {
       await axiosInstance.delete(`/services/${id}`);
       set((state) => ({
         services: state.services.filter((s) => s._id !== id),
-        deletingService: false,
+        deletingServices: { ...state.deletingServices, [id]: false },
       }));
     } catch (error) {
       console.error("Failed to delete service:", error);
-      set({ deletingService: false });
+      set((state) => ({
+        deletingServices: { ...state.deletingServices, [id]: false },
+      }));
       throw error;
     }
   },

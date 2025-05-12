@@ -1,11 +1,60 @@
 const Service = require("../models/Service");
-const { v2: cloudinary } = require("../config/cloudinary");
+const { cloudinary } = require("../config/cloudinary");
 const path = require("path");
 const {
   validCategories,
   formatServiceImage,
   uploadServiceImage,
-} = require("../utils/functions");
+} = require("../utils/helpers");
+
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
+const createService = async (req, res) => {
+  try {
+    const { name, description, price, duration, category, coverage, location } =
+      req.body;
+
+    if (!validCategories.includes(category)) {
+      return res.status(400).json({
+        message: `Invalid category. Valid categories are: ${validCategories.join(
+          ", "
+        )}`,
+      });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ message: "Image is required" });
+    }
+
+    const imageUrl = await uploadServiceImage(req);
+
+    const service = await Service.create({
+      name,
+      description,
+      price: Number(price),
+      duration,
+      category,
+      creator: req.user.id,
+      image: imageUrl,
+      coverage,
+      location,
+      status: "pending",
+    });
+
+    return res.status(201).json(service);
+  } catch (error) {
+    console.log(error);
+
+    if (error.code === 11000) {
+      return res.status(400).json({
+        message: "Service with this name already exists",
+      });
+    }
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 /**
  * @param {import('express').Request} req
@@ -95,55 +144,6 @@ const getCreatorServices = async (req, res) => {
     return res.status(200).json(services);
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: "Internal server error" });
-  }
-};
-
-/**
- * @param {import('express').Request} req
- * @param {import('express').Response} res
- */
-const createService = async (req, res) => {
-  try {
-    const { name, description, price, duration, category, coverage, location } =
-      req.body;
-
-    if (!validCategories.includes(category)) {
-      return res.status(400).json({
-        message: `Invalid category. Valid categories are: ${validCategories.join(
-          ", "
-        )}`,
-      });
-    }
-
-    if (!req.file) {
-      return res.status(400).json({ message: "Image is required" });
-    }
-
-    const imageUrl = await uploadServiceImage(req);
-
-    const service = await Service.create({
-      name,
-      description,
-      price: Number(price),
-      duration,
-      category,
-      creator: req.user.id,
-      image: imageUrl,
-      coverage,
-      location,
-      status: "pending",
-    });
-
-    return res.status(201).json(service);
-  } catch (error) {
-    console.log(error);
-
-    if (error.code === 11000) {
-      return res.status(400).json({
-        message: "Service with this name already exists",
-      });
-    }
     return res.status(500).json({ message: "Internal server error" });
   }
 };

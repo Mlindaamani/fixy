@@ -1,7 +1,7 @@
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
-const { corsConfiguration } = require("./utils/functions");
+const { corsConfiguration } = require("./config/cors");
 const { initCronJobs } = require("./cronJobs");
 
 const app = express();
