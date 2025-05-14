@@ -3,6 +3,8 @@ const { USERROLE } = require("../utils/constants");
 const {
   generateAccessToken,
   generateRefreshToken,
+  uploadToCloudinaryOrToLocalServer,
+  formatImageRepresentation,
 } = require("../utils/helpers");
 
 const Customer = require("../models/Customer");
@@ -186,10 +188,13 @@ const getUseProfile = async (req, res) => {
     if (!profile) {
       return res.status(404).json({ message: "User not found" });
     }
+
+    profile.profileImage = formatImageRepresentation(req, profile.profileImage);
     res
       .status(200)
       .json({ profile, message: "User profile retrieved successfully" });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -330,6 +335,34 @@ const refreshAccessToken = async (req, res) => {
   }
 };
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
+const updateProfileImage = async (req, res) => {
+  console.log(req.file);
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.profileImage = await uploadToCloudinaryOrToLocalServer(req);
+    await user.save();
+
+    return res.status(200).json({ profileImage: user.profileImage });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ message: error.message || "Internal server error" });
+  }
+};
+
 module.exports = {
   register,
   deleteUser,
@@ -341,4 +374,5 @@ module.exports = {
   verifyAccessToken,
   refreshAccessToken,
   getSidebarUsers,
+  updateProfileImage,
 };

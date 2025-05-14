@@ -49,7 +49,7 @@ const userSchema = Schema(
 
     profileImage: {
       type: String,
-      default: "https://via.placeholder.com/150",
+      default: null,
     },
 
     isVerified: {

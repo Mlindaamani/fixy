@@ -74,9 +74,9 @@ const ServiceForm = () => {
       submitData.append("location", formData.location);
 
       if (file) {
-        submitData.append("image", file);
+        submitData.append("serviceImage", file);
       } else if (isEdit) {
-        submitData.append("image", formData.image);
+        submitData.append("serviceImage", formData.image);
       }
 
       if (isEdit) {
@@ -181,7 +181,7 @@ const ServiceForm = () => {
             </label>
             <input
               type="file"
-              name="image"
+              name="serviceImage"
               onChange={handleFileChange}
               accept="image/jpeg,image/jpg,image/png,image/gif"
               required={!isEdit}

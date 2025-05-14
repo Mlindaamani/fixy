@@ -1,10 +1,10 @@
 const Service = require("../models/Service");
 const { cloudinary } = require("../config/cloudinary");
 const path = require("path");
+const { SERVICE_CATEGORIES } = require("../utils/constants");
 const {
-  validCategories,
-  formatServiceImage,
-  uploadServiceImage,
+  uploadToCloudinaryOrToLocalServer,
+  formatImageRepresentation,
 } = require("../utils/helpers");
 
 /**
@@ -16,7 +16,7 @@ const createService = async (req, res) => {
     const { name, description, price, duration, category, coverage, location } =
       req.body;
 
-    if (!validCategories.includes(category)) {
+    if (!SERVICE_CATEGORIES.includes(category)) {
       return res.status(400).json({
         message: `Invalid category. Valid categories are: ${validCategories.join(
           ", "
@@ -28,7 +28,7 @@ const createService = async (req, res) => {
       return res.status(400).json({ message: "Image is required" });
     }
 
-    const imageUrl = await uploadServiceImage(req);
+    const imageUrl = await uploadToCloudinaryOrToLocalServer(req);
 
     const service = await Service.create({
       name,
@@ -46,7 +46,6 @@ const createService = async (req, res) => {
     return res.status(201).json(service);
   } catch (error) {
     console.log(error);
-
     if (error.code === 11000) {
       return res.status(400).json({
         message: "Service with this name already exists",
@@ -87,7 +86,7 @@ const getServices = async (req, res) => {
     }
 
     services.forEach((service) => {
-      service.image = formatServiceImage(req, service.image);
+      service.image = formatImageRepresentation(req, service.image);
     });
 
     return res.status(200).json(services);
@@ -138,7 +137,7 @@ const getCreatorServices = async (req, res) => {
     }
 
     services.forEach((service) => {
-      service.image = formatServiceImage(req, service.image);
+      service.image = formatImageRepresentation(req, service.image);
     });
 
     return res.status(200).json(services);
@@ -165,7 +164,7 @@ const updateService = async (req, res) => {
     // Handle image upload
     let imageUrl = service.image;
     if (req.file) {
-      imageUrl = await uploadServiceImage(req);
+      imageUrl = await uploadToCloudinaryOrToLocalServer(req);
     }
 
     // Prepare update data
@@ -215,7 +214,9 @@ const deleteService = async (req, res) => {
       await fs.unlink(path.join(__dirname, "../", service.image));
     } else if (process.env.NODE_ENV === "production" && service.image) {
       const publicId = service.image.split("/").pop().split(".")[0];
-      await cloudinary.uploader.destroy(`ServiceImages/${publicId}`);
+      await cloudinary.uploader.destroy(
+        `${process.env.CLOUDINARY_SERVICES_FOLDER}/${publicId}`
+      );
     }
 
     // Delete service from database
@@ -249,7 +250,6 @@ const updateServiceStatus = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
-
 module.exports = {
   getServices,
   getServiceById,

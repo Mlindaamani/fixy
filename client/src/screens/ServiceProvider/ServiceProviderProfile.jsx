@@ -11,11 +11,11 @@ const ServiceProviderProfile = () => {
     getUserProfile();
   }, [getUserProfile]);
 
-  if (isFetchingProfile) return <LoadingSpinner />;
+  if (isFetchingProfile || !profileData) return <LoadingSpinner />;
 
-  if (!profileData) return <LoadingSpinner />;
+  const { fullName, email, phoneNumber, isVerified, profile, profileImage } =
+    profileData;
 
-  const { fullName, email, phoneNumber, isVerified, profile } = profileData;
 
   const {
     title,
@@ -42,27 +42,38 @@ const ServiceProviderProfile = () => {
         {/* Header */}
         <div className="bg-white shadow-sm rounded-lg p-6 mb-6">
           <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-bold !text-gray-600">{fullName}</h2>
-              <p className="text-lg text-indigo-600">
-                {title || "Service Provider"}
-              </p>
+            <div className="flex items-center space-x-4">
+              <img
+                src={profileImage || "https://via.placeholder.com/100"}
+                alt={`${fullName}'s profile`}
+                className="w-20 h-20 rounded-full object-cover"
+              />
+              <div>
+                <h2 className="text-2xl font-bold !text-gray-600">
+                  {fullName}
+                </h2>
+                <p className="text-lg text-indigo-600">
+                  {title || "Service Provider"}
+                </p>
+              </div>
             </div>
-            <span
-              className={`px-3 py-1 text-sm font-medium rounded-full ${
-                isVerified
-                  ? "bg-green-100 text-green-600"
-                  : "bg-yellow-100 text-yellow-600"
-              }`}
-            >
-              {isVerified ? "Verified" : "Not Verified"}
-            </span>
-            <button
-              onClick={() => navigate("/provider/profile/edit")}
-              className="px-4 py-2 bg-indigo-600 text-white !rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            >
-              Edit Profile
-            </button>
+            <div className="flex items-center space-x-4">
+              <span
+                className={`px-3 py-1 text-sm font-medium rounded-full ${
+                  isVerified
+                    ? "bg-green-100 text-green-600"
+                    : "bg-yellow-100 text-yellow-600"
+                }`}
+              >
+                {isVerified ? "Verified" : "Not Verified"}
+              </span>
+              <button
+                onClick={() => navigate("/provider/profile/edit")}
+                className="px-4 py-2 bg-indigo-600 text-white !rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              >
+                Edit Profile
+              </button>
+            </div>
           </div>
         </div>
 

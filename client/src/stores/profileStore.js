@@ -3,6 +3,7 @@ import { axiosInstance } from "../config/axiosInstance";
 import toast from "react-hot-toast";
 import { getBackendErrorMessage } from "../utils/functions";
 getBackendErrorMessage;
+import { TOAST_CONFIG } from "../utils/functions";
 
 export const useProfileStore = create((set) => ({
   profileData: null,
@@ -12,7 +13,7 @@ export const useProfileStore = create((set) => ({
   getUserProfile: async () => {
     set({ isFetchingProfile: true });
     try {
-      const response = await axiosInstance.get("/auth/me");
+      const response = await axiosInstance.get("/auth/me/profile");
       const { profile, message } = response.data;
 
       setTimeout(() => {
@@ -58,6 +59,24 @@ export const useProfileStore = create((set) => ({
         position: "top-center",
         id: "service-provider",
       });
+    }
+  },
+
+  updateProfileImage: async (formData) => {
+    set({ isUpdatingProfile: true });
+    try {
+      const { data } = await axiosInstance.post(
+        "/auth/me/profile-image",
+        formData
+      );
+      set((state) => ({
+        profileData: { ...state.profileData, profileImage: data.profileImage },
+        isUpdatingProfile: false,
+      }));
+    } catch (error) {
+      console.error("Failed to update profile image:", error);
+      set({ isUpdatingProfile: false });
+      throw error;
     }
   },
 }));

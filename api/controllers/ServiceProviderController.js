@@ -90,6 +90,8 @@ const getServiceProviderById = async (req, res) => {
   }
 };
 
+
+
 module.exports = {
   getServiceProviders,
   updateServiceProviderProfile,

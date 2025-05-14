@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
-const { cloudinary } = require("../config/cloudinary.js");
+const { IMAGE_TRANSFORMATIONS } = require("./constants");
+const { cloudinary } = require("../config/cloudinary");
 
 const generateAccessToken = (payload) => {
   return jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {
@@ -32,58 +33,40 @@ const formatDate = (IsoDate) => {
   return date.toLocaleString("en-US", options);
 };
 
-const formatServiceImage = (req, dbServiceImage) => {
+const formatImageRepresentation = (req, assetUrl) => {
   const host = req.get("host");
   const protocol = req.protocol;
-  if (dbServiceImage.includes("https://res.cloudinary.com")) {
-    return dbServiceImage;
+  if (assetUrl && assetUrl.includes("https://res.cloudinary.com")) {
+    return assetUrl;
   }
-  return `${protocol}://${host}/${dbServiceImage}`;
+  return `${protocol}://${host}/${assetUrl}`;
 };
 
-const uploadServiceImage = async (req) => {
-  if (process.env.NODE_ENV === "production") {
-    const uploadResult = await cloudinary.uploader.upload(req.file.path, {
-      folder: "ServiceImages",
-      resource_type: "auto",
-      transformation: [IMAGE_TRANSFORMATIONS],
-    });
-    return uploadResult.secure_url;
-  }
-  return `uploads/services/${req.file.filename}`;
-};
+const uploadToCloudinaryOrToLocalServer = async (req) => {
+  try {
+    if (process.env.NODE_ENV === "production") {
+      const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+        folder:
+          req.file.fieldname === "serviceImage"
+            ? process.env.CLOUDINARY_SERVICES_FOLDER
+            : process.env.CLOUDINARY_PROFILE_FOLDER,
+        resource_type: "auto",
+        transformation: [IMAGE_TRANSFORMATIONS],
+      });
 
-const validCategories = [
-  "plumbing",
-  "electrical",
-  "hvac",
-  "carpentry",
-  "cleaning",
-  "gardening",
-  "pest control",
-  "painting",
-  "roofing",
-  "masonry",
-  "welding",
-  "landscaping",
-  "flooring",
-  "remodeling",
-  "construction",
-  "handyman",
-  "appliance repair",
-  "moving",
-  "security",
-  "locksmith",
-  "car wash",
-  "car detailing",
-  "carpentry",
-  "home improvement",
-  "home repair",
-  "home cleaning",
-  "home maintenance",
-  "home organization",
-  "other",
-];
+      return uploadResult.secure_url;
+    }
+
+    if (req.file.fieldname && req.file.fieldname === "serviceImage") {
+      return `uploads/services/${req.file.filename}`;
+    } else if (req.file.fieldname && req.file.fieldname === "profileImage") {
+      return `uploads/profiles/${req.file.filename}`;
+    }
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
 
 module.exports = {
   formatDate,
@@ -91,7 +74,6 @@ module.exports = {
   generateRefreshToken,
   verifyMongoDbId,
   startServer,
-  validCategories,
-  formatServiceImage,
-  uploadServiceImage,
+  formatImageRepresentation,
+  uploadToCloudinaryOrToLocalServer,
 };

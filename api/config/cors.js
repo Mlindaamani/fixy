@@ -4,3 +4,5 @@ const corsConfiguration = {
     methods: ["GET", "POST"],
   },
 };
+
+module.exports = { corsConfiguration };
