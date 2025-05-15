@@ -7,7 +7,7 @@ const ProfessionalsListing = () => {
   const [selectedRating, setSelectedRating] = useState("all");
   const [sortBy, setSortBy] = useState("rating");
   const [searchQuery, setSearchQuery] = useState("");
-  const [priceRange, setPriceRange] = useState([0, 500]);
+  const [priceRange, setPriceRange] = useState([0, 100000]);
   const [experienceLevel, setExperienceLevel] = useState("all");
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [selectedProfessional, setSelectedProfessional] = useState(null);
@@ -17,109 +17,10 @@ const ProfessionalsListing = () => {
     getServiceProviders();
   }, []);
 
-  console.log(providers);
-
-  const professionals = [
-    {
-      id: 1,
-      name: "Christopher Wilson",
-      title: "Master Plumber",
-      rating: 4.9,
-      reviews: 156,
-      experience: "12 years",
-      specialties: ["Emergency Plumbing", "Installation", "Maintenance"],
-      hourlyRate: 85,
-      availability: "Available Now",
-      location: "San Francisco, CA",
-      image:
-        "https://public.readdy.ai/ai/img_res/6d334dce4c648c86a8b394cc264c38d6.jpg",
-      bio: "Certified master plumber with extensive experience in both residential and commercial projects. Specializing in emergency repairs and modern plumbing installations.",
-    },
-    {
-      id: 2,
-      name: "Sarah Martinez",
-      title: "Licensed Electrician",
-      rating: 4.8,
-      reviews: 142,
-      experience: "8 years",
-      specialties: [
-        "Electrical Repairs",
-        "Smart Home Installation",
-        "Safety Inspections",
-      ],
-      hourlyRate: 90,
-      availability: "Available Tomorrow",
-      location: "San Francisco, CA",
-      image:
-        "https://public.readdy.ai/ai/img_res/1c5d4e597ca44b11d7b37ba7a5e22e54.jpg",
-      bio: "Licensed electrician specializing in residential and commercial electrical services. Expert in smart home technology integration and electrical system upgrades.",
-    },
-    {
-      id: 3,
-      name: "David Chen",
-      title: "HVAC Specialist",
-      rating: 4.9,
-      reviews: 198,
-      experience: "15 years",
-      specialties: ["AC Repair", "Heating Systems", "Ventilation"],
-      hourlyRate: 95,
-      availability: "Available Now",
-      location: "San Jose, CA",
-      image:
-        "https://public.readdy.ai/ai/img_res/406764d7693950f6a44d17c092a91771.jpg",
-      bio: "Certified HVAC specialist with comprehensive experience in all aspects of heating, ventilation, and air conditioning systems.",
-    },
-    {
-      id: 4,
-      name: "Emily Thompson",
-      title: "Master Carpenter",
-      rating: 4.7,
-      reviews: 89,
-      experience: "10 years",
-      specialties: ["Custom Furniture", "Restoration", "Installation"],
-      hourlyRate: 80,
-      availability: "Next Week",
-      location: "Oakland, CA",
-      image:
-        "https://public.readdy.ai/ai/img_res/c6efcb609fa3b6dcb50406d1d2b42c36.jpg",
-      bio: "Skilled carpenter specializing in custom furniture design and restoration. Expert in both traditional and modern woodworking techniques.",
-    },
-    {
-      id: 5,
-      name: "Michael Rodriguez",
-      title: "General Contractor",
-      rating: 4.8,
-      reviews: 167,
-      experience: "20 years",
-      specialties: ["Renovation", "Project Management", "Construction"],
-      hourlyRate: 100,
-      availability: "Available Now",
-      location: "San Francisco, CA",
-      image:
-        "https://public.readdy.ai/ai/img_res/30cc473186aa5f3061b717427eca2ae6.jpg",
-      bio: "Experienced general contractor with a proven track record in managing and executing complex renovation and construction projects.",
-    },
-    {
-      id: 6,
-      name: "Jennifer Lee",
-      title: "Interior Specialist",
-      rating: 4.9,
-      reviews: 134,
-      experience: "9 years",
-      specialties: ["Interior Repairs", "Painting", "Drywall"],
-      hourlyRate: 75,
-      availability: "Available Now",
-      location: "San Mateo, CA",
-      image:
-        "https://public.readdy.ai/ai/img_res/0391f4da5f585f803f729ef7260bd659.jpg",
-      bio: "Detail-oriented interior specialist with expertise in all aspects of interior repairs and finishing work.",
-    },
-  ];
-
-  const filteredProfessionals = professionals
+  const filteredProfessionals = providers
     .filter((pro) => {
       const matchesSearch =
-        pro.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        pro.user.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         pro.title.toLowerCase().includes(searchQuery.toLowerCase());
 
       const matchesService =
@@ -186,11 +87,11 @@ const ProfessionalsListing = () => {
                 <i className="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
                 <input
                   type="text"
-                  placeholder="Search professionals..."
+                  placeholder="Search providers..."
                   className="w-full pl-12 pr-4 py-3 rounded-lg border-none text-sm text-gray-800"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  aria-label="Search professionals"
+                  aria-label="Search providers"
                 />
               </div>
               <div className="relative">
@@ -225,7 +126,7 @@ const ProfessionalsListing = () => {
                   className="w-full pl-12 pr-4 py-3 rounded-lg border-none text-sm text-gray-800 appearance-none cursor-pointer"
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  aria-label="Sort professionals"
+                  aria-label="Sort providers"
                 >
                   <option value="rating">Sort by Rating</option>
                   <option value="experience">Sort by Experience</option>
@@ -306,7 +207,7 @@ const ProfessionalsListing = () => {
                   setSelectedServiceType("all");
                   setSelectedRating("all");
                   setExperienceLevel("all");
-                  setPriceRange([0, 500]);
+                  setPriceRange([0, 100000]);
                   setSearchQuery("");
                   setSelectedLocation("");
                 }}
@@ -327,8 +228,8 @@ const ProfessionalsListing = () => {
                 >
                   <div className="relative">
                     <img
-                      src={pro.image}
-                      alt={pro.name}
+                      src={pro?.user?.profileImage}
+                      alt={pro?.user?.fullName}
                       className="w-full h-64 object-cover"
                     />
                     <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full text-sm font-medium text-indigo-600">
@@ -345,7 +246,7 @@ const ProfessionalsListing = () => {
                       </div>
                       <div className="text-right">
                         <div className="text-xl font-bold text-gray-900">
-                          ${pro.hourlyRate}/hr
+                          Tsh {pro.hourlyRate}/hr
                         </div>
                         <div className="flex items-center mt-1">
                           <div className="flex text-yellow-400 mr-1">
@@ -424,13 +325,13 @@ const ProfessionalsListing = () => {
             <div className="flex justify-between items-start mb-6">
               <div className="flex items-center">
                 <img
-                  src={selectedProfessional.image}
-                  alt={selectedProfessional.name}
+                  src={selectedProfessional?.user?.profileImage}
+                  alt={selectedProfessional?.user?.fullName}
                   className="w-24 h-24 rounded-full object-cover mr-6"
                 />
                 <div>
                   <h2 className="text-2xl font-bold mb-1">
-                    {selectedProfessional.name}
+                    {selectedProfessional?.user?.fullName}
                   </h2>
                   <p className="text-indigo-600 font-medium">
                     {selectedProfessional.title}
@@ -467,13 +368,13 @@ const ProfessionalsListing = () => {
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="text-gray-600 mb-1">Hourly Rate</div>
                 <div className="text-2xl font-bold text-gray-900">
-                  ${selectedProfessional.hourlyRate}/hr
+                  Tsh {selectedProfessional.hourlyRate}/hr
                 </div>
               </div>
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="text-gray-600 mb-1">Experience</div>
                 <div className="text-2xl font-bold text-gray-900">
-                  {selectedProfessional.experience}
+                  {selectedProfessional.yearsOfExperience}
                 </div>
               </div>
               <div className="bg-gray-50 rounded-lg p-4">
