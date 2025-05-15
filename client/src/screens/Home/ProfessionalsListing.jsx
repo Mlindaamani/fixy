@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useProfileStore } from "../../stores/profileStore";
 
- const ProfessionalsListing = () => {
+const ProfessionalsListing = () => {
   const [selectedServiceType, setSelectedServiceType] = useState("all");
   const [selectedLocation, setSelectedLocation] = useState("");
   const [selectedRating, setSelectedRating] = useState("all");
@@ -10,6 +11,13 @@ import React, { useState } from "react";
   const [experienceLevel, setExperienceLevel] = useState("all");
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [selectedProfessional, setSelectedProfessional] = useState(null);
+  const { providers, getServiceProviders } = useProfileStore();
+
+  useEffect(() => {
+    getServiceProviders();
+  }, []);
+
+  console.log(providers);
 
   const professionals = [
     {

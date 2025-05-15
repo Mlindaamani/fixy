@@ -8,7 +8,7 @@ const getCustomers = async (_req, res) => {
   try {
     const customer = await Customer.find().populate(
       "user",
-      "fullName phoneNumber, isVerified, email"
+      "fullName phoneNumber, isVerified, email, profileImage"
     );
 
     if (!customer || customer.length === 0) {

@@ -50,14 +50,21 @@ export const useAuthStore = create(
         try {
           const response = await axiosInstance.post("/auth/login/", formData);
 
-          const { id, username, email, role, accessToken, refreshToken } =
-            response.data;
+          const {
+            id,
+            username,
+            email,
+            role,
+            accessToken,
+            refreshToken,
+            profileImage,
+          } = response.data;
           storeTokens(accessToken, refreshToken);
 
           set({
             isAuthenticated: true,
             loading: false,
-            user: { id, username, email, role },
+            user: { id, username, email, role, profileImage },
           });
 
           toast.success("You have successfully logged in", {

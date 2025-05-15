@@ -1,6 +1,7 @@
 // Global Library
 const cors = require("cors");
 const morgan = require("morgan");
+const { Portfolio } = require("./models/Portifolio");
 
 // Utility
 const { startServer } = require("./utils/helpers");

@@ -134,6 +134,7 @@ const login = async (req, res) => {
       username: user.fullName,
       email: user.email,
       role: user.role,
+      profileImage: formatImageRepresentation(req, user.profileImage),
       accessToken,
       refreshToken,
     });

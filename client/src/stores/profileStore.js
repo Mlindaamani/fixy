@@ -7,6 +7,8 @@ import { TOAST_CONFIG } from "../utils/functions";
 
 export const useProfileStore = create((set) => ({
   profileData: null,
+  providers: [],
+  loading: false,
   isFetchingProfile: false,
   isUpdatingProfile: false,
 
@@ -69,6 +71,7 @@ export const useProfileStore = create((set) => ({
         "/auth/me/profile-image",
         formData
       );
+      console.log(data);
       set((state) => ({
         profileData: { ...state.profileData, profileImage: data.profileImage },
         isUpdatingProfile: false,
@@ -77,6 +80,20 @@ export const useProfileStore = create((set) => ({
       console.error("Failed to update profile image:", error);
       set({ isUpdatingProfile: false });
       throw error;
+    }
+  },
+
+  getServiceProviders: async () => {
+    set({ loading: true });
+    try {
+      const response = await axiosInstance.get("/providers");
+      console.log(response.data);
+      set({ providers: response.data });
+      set({ loading: false });
+    } catch (error) {
+      console.log(error.message);
+      set({ loading: false });
+      console.log(getBackendErrorMessage(error));
     }
   },
 }));

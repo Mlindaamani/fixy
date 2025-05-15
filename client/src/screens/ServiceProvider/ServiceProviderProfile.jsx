@@ -101,7 +101,7 @@ const ServiceProviderProfile = () => {
             </div>
             <div>
               <p className="text-sm text-gray-500">Hourly Rate</p>
-              <p className="text-gray-700">${hourlyRate || "N/A"}</p>
+              <p className="text-gray-700">Tsh {hourlyRate || "N/A"}</p>
             </div>
             <div>
               <p className="text-sm text-gray-500">Years of Experience</p>

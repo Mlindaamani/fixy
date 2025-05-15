@@ -1,4 +1,5 @@
 const ServiceProvider = require("../models/ServiceProvider");
+const { formatImageRepresentation } = require("../utils/helpers");
 
 /**
  * @param {import('express').Request} req
@@ -7,13 +8,21 @@ const ServiceProvider = require("../models/ServiceProvider");
 const getServiceProviders = async (req, res) => {
   try {
     const serviceProviders = await ServiceProvider.find()
-      .populate("user", "fullName phoneNumber")
+      .populate("user", "fullName phoneNumber, profileImage")
       .populate("portfolio")
       .populate("reviews");
 
     if (!serviceProviders || serviceProviders.length === 0) {
       return res.status(404).json({ message: "No ServiceProvider found" });
     }
+
+    serviceProviders.map(
+      (provider) =>
+        (provider.user.profileImage = formatImageRepresentation(
+          req,
+          provider.user.profileImage
+        ))
+    );
 
     return res.status(200).json(serviceProviders);
   } catch (error) {
@@ -76,7 +85,7 @@ const getServiceProviderById = async (req, res) => {
     const { id } = req.params;
 
     const serviceProvider = await ServiceProvider.findById(id)
-      .populate("user", "fullName phoneNumber")
+      .populate("user", "fullName phoneNumber profileImage")
       .populate("portfolio")
       .populate("reviews");
 
@@ -89,8 +98,6 @@ const getServiceProviderById = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
-
-
 
 module.exports = {
   getServiceProviders,

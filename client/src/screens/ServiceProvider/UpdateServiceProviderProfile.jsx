@@ -28,11 +28,11 @@ const UpdateServiceProviderProfile = () => {
     profileData,
   } = useProfileStore();
 
-  console.log(profileData);
-
   useEffect(() => {
     getUserProfile();
   }, [getUserProfile]);
+
+  console.log(profileData);
 
   useEffect(() => {
     if (profileData && profileData.profile) {
@@ -379,7 +379,7 @@ const UpdateServiceProviderProfile = () => {
             {/* Hourly Rate */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Hourly Rate ($)
+                Hourly Rate (Tsh)
               </label>
               <input
                 type="number"

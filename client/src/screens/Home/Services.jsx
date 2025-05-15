@@ -8,7 +8,7 @@ import { useDebounce } from "use-debounce";
 const LandingPageServices = () => {
   const { getActiveServices, services, isLoading } = useServiceStore();
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [priceRange, setPriceRange] = useState([0, 1000]);
+  const [priceRange, setPriceRange] = useState([0, 100000]);
   const [selectedLocation, setSelectedLocation] = useState("");
   const [selectedRating, setSelectedRating] = useState(0);
   const navigate = useNavigate();
@@ -91,14 +91,14 @@ const LandingPageServices = () => {
                 <input
                   type="range"
                   min="0"
-                  max="1000"
+                  max="100000"
                   value={priceRange[1]}
                   onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
                   className="w-full"
                 />
                 <div className="flex justify-between text-sm text-gray-600">
-                  <span>${priceRange[0]}</span>
-                  <span>${priceRange[1]}</span>
+                  <span>Tsh{priceRange[0]}</span>
+                  <span>Tsh{priceRange[1]}</span>
                 </div>
               </div>
               <div>
@@ -143,7 +143,7 @@ const LandingPageServices = () => {
                     <p className="text-gray-600 mb-4">{service.description}</p>
                     <div className="flex items-center justify-between mb-4">
                       <div className="text-2xl font-bold text-indigo-600">
-                        ${service.price}
+                        Tsh{service.price}
                       </div>
                       <div className="flex items-center">
                         <div className="flex text-yellow-400 mr-1">
