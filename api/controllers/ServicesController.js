@@ -18,7 +18,7 @@ const createService = async (req, res) => {
 
     if (!SERVICE_CATEGORIES.includes(category)) {
       return res.status(400).json({
-        message: `Invalid category. Valid categories are: ${validCategories.join(
+        message: `Invalid category. Valid categories are: ${SERVICE_CATEGORIES.join(
           ", "
         )}`,
       });

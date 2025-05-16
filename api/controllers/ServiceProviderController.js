@@ -7,7 +7,10 @@ const { formatImageRepresentation } = require("../utils/helpers");
  */
 const getServiceProviders = async (req, res) => {
   try {
-    const serviceProviders = await ServiceProvider.find()
+    const serviceProviders = await ServiceProvider.find({
+      profile_status: "approved",
+      horlyRate: 1121,
+    })
       .populate("user", "fullName phoneNumber, profileImage")
       .populate("portfolio")
       .populate("reviews");
@@ -15,6 +18,8 @@ const getServiceProviders = async (req, res) => {
     if (!serviceProviders || serviceProviders.length === 0) {
       return res.status(404).json({ message: "No ServiceProvider found" });
     }
+
+
 
     serviceProviders.map(
       (provider) =>

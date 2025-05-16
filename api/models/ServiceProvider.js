@@ -14,7 +14,7 @@ const serviceProviderSchema = Schema(
 
     rating: { type: Number, default: 0 },
 
-    bio: { type: String, default: "I am part of fixy..." },
+    bio: { type: String, default: "Here is my bio." },
 
     user: {
       type: Schema.Types.ObjectId,

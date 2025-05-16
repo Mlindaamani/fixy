@@ -43,4 +43,8 @@ const SERVICE_CATEGORIES = [
   "other",
 ];
 
-module.exports = { USERROLE, IMAGE_TRANSFORMATIONS, SERVICE_CATEGORIES };
+module.exports = {
+  USERROLE,
+  IMAGE_TRANSFORMATIONS,
+  SERVICE_CATEGORIES,
+};
