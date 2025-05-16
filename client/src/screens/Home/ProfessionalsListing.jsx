@@ -17,6 +17,10 @@ const ProfessionalsListing = () => {
     getServiceProviders();
   }, []);
 
+  const { user } = providers;
+
+  console.log(user);
+
   const filteredProfessionals = providers
     .filter((pro) => {
       const matchesSearch =

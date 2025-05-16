@@ -22,7 +22,7 @@ export const useProfileStore = create((set) => ({
         set({ profileData: profile, isFetchingProfile: false });
         toast.success(message, {
           duration: 4000,
-          position: "top-center",
+          position: "bottom-right",
           id: "service-provider",
         });
       }, 100);
@@ -31,6 +31,7 @@ export const useProfileStore = create((set) => ({
       set({ isFetchingProfile: false });
       toast.error(errorMessage, {
         ...TOAST_CONFIG,
+        position: "bottom-right",
         id: "service-provider",
       });
     }
@@ -58,7 +59,7 @@ export const useProfileStore = create((set) => ({
       const errorMessage = getBackendErrorMessage(error);
       toast.error(errorMessage, {
         duration: 3000,
-        position: "top-center",
+        position: "bottom-right",
         id: "service-provider",
       });
     }
@@ -87,7 +88,6 @@ export const useProfileStore = create((set) => ({
     set({ loading: true });
     try {
       const response = await axiosInstance.get("/providers");
-      console.log(response.data);
       set({ providers: response.data });
       set({ loading: false });
     } catch (error) {

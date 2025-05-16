@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useServiceStore } from "../../stores/serviceStore";
 import LoadingSpinner from "../../components/Spinner";
+import { SERVICE_CATEGORIES } from "../../utils/constants";
+import toast, { Toaster } from "react-hot-toast";
 
 const ServiceForm = () => {
   const {
@@ -162,17 +164,22 @@ const ServiceForm = () => {
               Category
             </label>
             <select
+              onSelect={() => toast.success("You have selected the product")}
               name="category"
               value={formData.category}
               onChange={handleChange}
               required
+              defaultChecked={"home improvement"}
               className="w-full px-4 py-2.5 border rounded-lg text-gray-600 text-sm"
             >
-              <option value="plumbing">Plumbing</option>
-              <option value="electrical">Electrical</option>
-              <option value="hvac">HVAC</option>
-              <option value="carpentry">Carpentry</option>
-              <option value="other">Other</option>
+              <option value="" disabled>
+                Select Category
+              </option>
+              {SERVICE_CATEGORIES.map((category) => (
+                <option value={category} key={category}>
+                  {category}
+                </option>
+              ))}
             </select>
           </div>
           <div>
@@ -243,6 +250,7 @@ const ServiceForm = () => {
           </button>
         </form>
       </div>
+      <Toaster />
     </div>
   );
 };

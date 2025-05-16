@@ -89,7 +89,7 @@ const Services = () => {
                 </p>
                 <div className="flex justify-between items-center mb-3">
                   <span className="text-indigo-600 font-bold">
-                    Tsh{service.price}
+                    Tsh {service.price}
                   </span>
                   <span className="text-gray-600 text-sm">
                     {service.duration}

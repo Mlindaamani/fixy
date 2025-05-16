@@ -72,7 +72,7 @@ const UpdateServiceProviderProfile = () => {
       setPreview(objectUrl);
       return () => URL.revokeObjectURL(objectUrl);
     } else if (profileData?.profileImage) {
-      setPreview(profileData.profileImage);
+      setPreview(profileData?.profileImage);
     } else {
       setPreview(null);
     }

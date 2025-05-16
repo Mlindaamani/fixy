@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../stores/authStore";
 import dev_steve from "../assets/extra/dev-steve.jpg";
+import { useProfileStore } from "../stores/profileStore";
 
 const DashboardHeader = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
+  const { profileData, getUserProfile } = useProfileStore();
+
+  useEffect(() => {
+    getUserProfile();
+  }, []);
 
   return (
     <header className="bg-white shadow-sm">
@@ -29,7 +35,7 @@ const DashboardHeader = () => {
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-3">
             <img
-              src={dev_steve}
+              src={profileData?.profileImage || dev_steve}
               alt="Profile"
               className="w-10 h-10 rounded-full object-cover"
               loading="lazy"
