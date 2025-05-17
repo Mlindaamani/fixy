@@ -9,13 +9,12 @@ const ServiceProviderProfile = () => {
 
   useEffect(() => {
     getUserProfile();
-  }, [getUserProfile]);
+  }, []);
 
   if (isFetchingProfile || !profileData) return <LoadingSpinner />;
 
   const { fullName, email, phoneNumber, isVerified, profile, profileImage } =
     profileData;
-
 
   const {
     title,

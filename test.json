@@ -1,0 +1,20 @@
+{
+  "_id": "681ce2aac3baf3edf5f90da5",
+  "email": "hafeez@domain.com",
+  "fullName": "Hafeez",
+  "phoneNumber": "+25578234788",
+  "role": "customer",
+  "profileImage": "http://localhost:5000/",
+  "isVerified": false,
+  "createdAt": "2025-05-08T16:58:18.116Z",
+  "updatedAt": "2025-05-08T16:58:18.258Z",
+  "__v": 0,
+  "profile": {
+    "_id": "681ce2aac3baf3edf5f90da7",
+    "location": "Tabata",
+    "preferences": [],
+    "created_at": "2025-05-08T16:58:18.220Z",
+    "updated_at": "2025-05-08T16:58:18.220Z",
+    "__v": 0
+  }
+}

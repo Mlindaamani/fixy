@@ -35,6 +35,7 @@ import ServiceForm from "./screens/ServiceProvider/CreatServices";
 // Customer
 import CustomerLayout from "./layouts/CustomerLayout";
 import CustomerProfile from "./screens/Customer/CustomerProfile";
+import UpdateCustomerProfile from "./screens/Customer/UpdateCustomerProfile";
 
 export const App = () => {
   return (
@@ -76,6 +77,7 @@ export const App = () => {
             <Route index element={<Analytics />} />
             <Route path="room" element={<ChatRoom />} />
             <Route path="profile" element={<CustomerProfile />} />
+            <Route path="profile/edit" element={<UpdateCustomerProfile />} />
           </Route>
         </Route>
         <Route path="*" element={<PageNotFound />} />

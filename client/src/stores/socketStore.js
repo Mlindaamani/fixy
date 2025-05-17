@@ -36,7 +36,7 @@ export const useSocket = create((set, get) => ({
       toast.success(message, {
         id: "join-chat",
         duration: 1000,
-        position: "bottom-center",
+        position: "bottom-left",
         id: "join-chat",
       });
     });
@@ -49,7 +49,7 @@ export const useSocket = create((set, get) => ({
       toast.success(message, {
         id: "leave-chat",
         duration: 5000,
-        position: "bottom-center",
+        position: "bottom-left",
         id: "leave-chat",
       });
     });
