@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { professionals } from "../../lib/professionals";
 import { testimonials } from "../../lib/testimonial";
 import { services } from "../../lib/services";
 import { Footer } from "../../components/Footer";
 import smartHero from "../../assets/extra/smart.jpg";
 import { useNavigate } from "react-router-dom";
+import { useProfileStore } from "../../stores/profileStore";
 
 const LandingPage = () => {
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -12,6 +12,14 @@ const LandingPage = () => {
   const [location, setLocation] = useState("");
   const navigate = useNavigate();
   const handleService = () => navigate("/services");
+
+  const { providers: professionals, getServiceProviders } = useProfileStore();
+
+  console.log(professionals);
+
+  useEffect(() => {
+    getServiceProviders();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -175,9 +183,10 @@ const LandingPage = () => {
                 className="bg-white rounded-xl shadow-lg overflow-hidden"
               >
                 <div className="h-64 overflow-hidden">
+                  <span>{pro.profileImage}</span>
                   <img
-                    src={pro.image}
-                    alt={pro.name}
+                    src={pro.user.profileImage}
+                    alt={pro.user.fullName}
                     className="w-full h-full object-cover"
                   />
                 </div>

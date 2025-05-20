@@ -7,6 +7,8 @@ import { TOAST_CONFIG } from "../utils/functions";
 
 export const useProfileStore = create((set) => ({
   profileData: null,
+  conversationId: null,
+  creatingConversation: false,
   providers: [],
   loading: false,
   isFetchingProfile: false,
@@ -31,6 +33,38 @@ export const useProfileStore = create((set) => ({
       set({ isFetchingProfile: false });
       toast.error(errorMessage, {
         ...TOAST_CONFIG,
+        position: "bottom-right",
+        id: "service-provider",
+      });
+    }
+  },
+
+  createConversation: async (otherUserId, navigate) => {
+    set({ creatingConversation: true });
+    try {
+      const response = await axiosInstance.post("/conversations/create", {
+        otherUserId: otherUserId,
+      });
+
+      setTimeout(() => {
+        toast.success(response.data.message, {
+          duration: 4000,
+          position: "bottom-center",
+          id: "service-provider",
+        });
+        set({
+          conversationId: response.data.conversationId,
+          creatingConversation: false,
+        });
+        navigate(
+          `/customer/room?conversationId=${response.data.conversationId}`
+        );
+      }, 100);
+    } catch (error) {
+      set({ creatingConversation: false });
+      const errorMessage = getBackendErrorMessage(error);
+      toast.error(errorMessage, {
+        duration: 3000,
         position: "bottom-right",
         id: "service-provider",
       });

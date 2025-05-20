@@ -52,7 +52,7 @@ const ServiceDetails = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               <div>
                 <span className="text-indigo-600 font-bold text-xl">
-                  ${service.price}
+                  Tsh {service.price}
                 </span>
               </div>
               <div className="flex items-center">
@@ -104,7 +104,6 @@ const ServiceDetails = () => {
                 className="bg-white shadow-lg rounded-lg p-4"
               >
                 <div className="flex items-center justify-between mb-2">
-                  
                   <span className="text-gray-600 font-medium">
                     {review.user.fullName}
                   </span>

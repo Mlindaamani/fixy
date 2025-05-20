@@ -1,7 +1,6 @@
 import testmon_1 from "../assets/extra/testmon-1.jpg";
 import testmon_2 from "../assets/extra/testmon-2.jpg";
 
-
 export const testimonials = [
   {
     id: 1,
@@ -28,38 +27,6 @@ export const testimonials = [
     image: `${testmon_1}`,
   },
 
-  {
-    id: 4,
-    name: "Sarah Thompson",
-    service: "Plumbing Repair",
-    text: "Exceptional service! Fixed our leak quickly and professionally. Highly recommended!",
-    rating: 5,
-    image: `${testmon_1}`,
-  },
-  {
-    id: 4,
-    name: "Sarah Thompson",
-    service: "Plumbing Repair",
-    text: "Exceptional service! Fixed our leak quickly and professionally. Highly recommended!",
-    rating: 5,
-    image: `${testmon_1}`,
-  },
-  {
-    id: 4,
-    name: "Sarah Thompson",
-    service: "Plumbing Repair",
-    text: "Exceptional service! Fixed our leak quickly and professionally. Highly recommended!",
-    rating: 5,
-    image: `${testmon_1}`,
-  },
-  {
-    id: 4,
-    name: "Sarah Thompson",
-    service: "Plumbing Repair",
-    text: "Exceptional service! Fixed our leak quickly and professionally. Highly recommended!",
-    rating: 5,
-    image: `${testmon_1}`,
-  },
   {
     id: 4,
     name: "Sarah Thompson",
