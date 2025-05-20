@@ -1,11 +1,13 @@
 const Conversation = require("../models/Conversation");
 const User = require("../models/User");
+const { formatImageRepresentation } = require("../utils/helpers");
 
 /**
  * @param {import('express').Request} req
  * @param {import('express').Response} res
  */
 const createConversation = async (req, res) => {
+  console.log(req.body);
   const { otherUserId } = req.body;
   const { role, id: userId } = req.user;
 
@@ -63,7 +65,6 @@ const createConversation = async (req, res) => {
         select: "fullName email",
       });
 
-    // Format response
     const isProvider = conversation.providerId._id.toString() === userId;
     const otherParticipant = isProvider
       ? conversation.customerId
@@ -120,7 +121,10 @@ const getUserConversations = async (req, res) => {
         conversationId: conv._id,
         fullName: otherParticipant.fullName,
         phoneNumber: otherParticipant.phoneNumber,
-        profileImage: otherParticipant.profileImage,
+        profileImage: formatImageRepresentation(
+          req,
+          otherParticipant.profileImage
+        ),
         lastMessageContent: conv.lastMessageContent,
         lastMessageAt: conv.lastMessageAt,
         isActive: conv.isActive,

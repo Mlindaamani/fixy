@@ -15,6 +15,7 @@ const ProfessionalsListing = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [selectedProfessional, setSelectedProfessional] = useState(null);
   const { user } = useAuthStore();
+
   const {
     providers,
     getServiceProviders,

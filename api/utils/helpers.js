@@ -3,6 +3,22 @@ const jwt = require("jsonwebtoken");
 const { IMAGE_TRANSFORMATIONS } = require("./constants");
 const { cloudinary } = require("../config/cloudinary");
 
+const bcrypt = require("bcryptjs");
+
+const hashPassword = async (plainTextPassword) => {
+  try {
+    if (!plainTextPassword || typeof plainTextPassword !== 'string') {
+      throw new Error('Password must be a non-empty string');
+    }
+    const saltRounds = 10; 
+    const hashedPassword = await bcrypt.hash(plainTextPassword, saltRounds);
+    return hashedPassword;
+  } catch (error) {
+    throw new Error(`Hashing failed: ${error.message}`);
+  }
+};
+
+
 const generateAccessToken = (payload) => {
   return jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {
     expiresIn: process.env.ACCESS_TOKEN_EXPIRATION_TIME,

@@ -1,7 +1,9 @@
 // Global Library
 const cors = require("cors");
 const morgan = require("morgan");
-const { Portfolio } = require("./models/Portifolio");
+
+//Models
+const Portfolio = require("./models/Portifolio");
 
 // Utility
 const { startServer } = require("./utils/helpers");
@@ -33,17 +35,6 @@ app.use("/api/auth", AuthRouter);
 app.use("/api/messages", MessageRouter);
 app.use("/api/conversations", ConversationRouter);
 
-// Health Check
-app.get("/", (req, res) => {
-  res.status(200).json({
-    success: true,
-    error: false,
-    protocal: req.protocol,
-    host: req.hostname,
-    http_version: req.httpVersion,
-    message: "API server is up and running",
-  });
-});
 server.listen(process.env.PORT, () => {
   startServer();
   connnectToMongoDb();
