@@ -119,6 +119,8 @@ const ChatRoom = () => {
                 .toUpperCase();
               const isOnline = onlineUsers.includes(conversation?.userId);
 
+              console.log(isOnline);
+
               return (
                 <div
                   key={conversation.conversationId}

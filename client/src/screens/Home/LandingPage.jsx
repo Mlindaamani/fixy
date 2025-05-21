@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Profiler } from "react";
 import { testimonials } from "../../lib/testimonial";
 import { services } from "../../lib/services";
 import { Footer } from "../../components/Footer";
@@ -15,7 +15,7 @@ const LandingPage = () => {
 
   const { providers: professionals, getServiceProviders } = useProfileStore();
 
-  console.log(professionals);
+  console.log("The service professional will not be logged on the console");
 
   useEffect(() => {
     getServiceProviders();
