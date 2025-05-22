@@ -27,6 +27,7 @@ export const useAuthStore = create(
         set({ loading: true });
         try {
           await axiosInstance.post("/auth/register/", formData);
+          console.log("Finished loading the data from the backend");
 
           set({ loading: false });
           toast.success("You have successfully registered", {
