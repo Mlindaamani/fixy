@@ -7,7 +7,6 @@ const { formatImageRepresentation } = require("../utils/helpers");
  * @param {import('express').Response} res
  */
 const createConversation = async (req, res) => {
-  console.log(req.body);
   const { otherUserId } = req.body;
   const { role, id: userId } = req.user;
 

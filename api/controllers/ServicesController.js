@@ -24,6 +24,8 @@ const createService = async (req, res) => {
       });
     }
 
+    console.log(req.file);
+
     if (!req.file) {
       return res.status(400).json({ message: "Image is required" });
     }
@@ -45,7 +47,7 @@ const createService = async (req, res) => {
 
     return res.status(201).json(service);
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
     if (error.code === 11000) {
       return res.status(400).json({
         message: "Service with this name already exists",
