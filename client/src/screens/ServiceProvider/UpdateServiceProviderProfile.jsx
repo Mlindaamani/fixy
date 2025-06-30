@@ -32,7 +32,6 @@ const UpdateServiceProviderProfile = () => {
     getUserProfile();
   }, [getUserProfile]);
 
-
   useEffect(() => {
     if (profileData && profileData.profile) {
       const {

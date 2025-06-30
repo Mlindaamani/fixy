@@ -1,8 +1,7 @@
 import create from "zustand";
-import { axiosInstance } from "../config/axiosInstance";
 import toast from "react-hot-toast";
+import { axiosInstance } from "../config/axiosInstance";
 import { getBackendErrorMessage } from "../utils/functions";
-getBackendErrorMessage;
 import { TOAST_CONFIG } from "../utils/functions";
 
 export const useProfileStore = create((set) => ({
@@ -13,6 +12,8 @@ export const useProfileStore = create((set) => ({
   loading: false,
   isFetchingProfile: false,
   isUpdatingProfile: false,
+  isReceivingWebSocketEvents: false,
+
 
   getUserProfile: async () => {
     set({ isFetchingProfile: true });
@@ -35,6 +36,8 @@ export const useProfileStore = create((set) => ({
         ...TOAST_CONFIG,
         position: "bottom-right",
         id: "service-provider",
+        icon: "assets/svg/fixy.svg",
+        iconTheme: "#0EF",
       });
     }
   },
@@ -52,10 +55,12 @@ export const useProfileStore = create((set) => ({
           position: "bottom-center",
           id: "service-provider",
         });
+
         set({
           conversationId: response.data.conversationId,
           creatingConversation: false,
         });
+
         navigate(
           `/customer/room?conversationId=${response.data.conversationId}`
         );

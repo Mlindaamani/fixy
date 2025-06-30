@@ -12,7 +12,7 @@ const DashboardHeader = () => {
 
   useEffect(() => {
     getUserProfile();
-  }, []);
+  }, [getUserProfile]);
 
   return (
     <header className="bg-white shadow-sm">

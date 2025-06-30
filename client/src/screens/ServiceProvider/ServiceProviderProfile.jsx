@@ -9,7 +9,7 @@ const ServiceProviderProfile = () => {
 
   useEffect(() => {
     getUserProfile();
-  }, []);
+  }, [getUserProfile]);
 
   if (isFetchingProfile || !profileData) return <LoadingSpinner />;
 

@@ -35,12 +35,12 @@ const ChatRoom = () => {
   }, [getConversations, connectToSocketServer, disconnect]);
 
   useEffect(() => {
-    // Load conversation from URL params on mount
     const conversationId = searchParams.get("conversationId");
     if (conversationId) {
       const conversation = conversations.find(
         (c) => c.conversationId === conversationId
       );
+
       if (
         conversation &&
         conversation.userId !== selectedConversation?.userId
