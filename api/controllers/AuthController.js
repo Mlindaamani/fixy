@@ -17,7 +17,7 @@ const ServiceProvider = require("../models/ServiceProvider");
  */
 const getSidebarUsers = async (req, res) => {
   const { id: userId } = req.user;
-  
+
   try {
     const filteredUsers = await User.find({ _id: { $ne: userId } })
       .select("-password")

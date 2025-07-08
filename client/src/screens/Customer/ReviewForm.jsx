@@ -9,8 +9,6 @@ const ReviewForm = ({ serviceId }) => {
   const [comment, setComment] = useState("");
   const [error, setError] = useState("");
 
-  console.log(user);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (rating < 1 || rating > 5) {

@@ -43,6 +43,7 @@ const fileFilter = (req, file, cb) => {
   );
 
   const mimetype = allowedTypes.test(file.mimetype);
+
   if (extname && mimetype) {
     return cb(null, true);
   }

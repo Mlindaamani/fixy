@@ -23,12 +23,15 @@ const ServiceDetails = () => {
 
   const service = services.find((s) => s._id === id);
 
+  console.log(service);
+
   if (serviceLoading || reviewLoading) return <LoadingSpinner />;
+
   if (!service)
     return <p className="text-gray-600 text-center">Service not found.</p>;
 
   return (
-    <div className="container min-h-screen py-6">
+    <div className="container min-h-screen py-6 mt-6">
       <button
         onClick={() => navigate("/services")}
         className="mb-6 text-indigo-600 hover:underline text-sm"

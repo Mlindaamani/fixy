@@ -23,7 +23,7 @@ import LandingPageLayout from "./layouts/LandingPageLayout";
 import ServiceProviderLayout from "./layouts/ServiceProviderLayout";
 import LoginLayout from "./layouts/LoginLayout";
 import RegisterLayout from "./layouts/RegisterLayout";
-
+ 
 // Service Provider
 import Analytics from "./screens/ServiceProvider/Analytics";
 import Services from "./screens/ServiceProvider/Services";

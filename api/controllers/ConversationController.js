@@ -23,6 +23,7 @@ const createConversation = async (req, res) => {
     }
 
     let providerId, customerId;
+
     if (role === "provider") {
       providerId = userId;
       customerId = otherUserId;

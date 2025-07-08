@@ -15,11 +15,9 @@ const LandingPage = () => {
 
   const { providers: professionals, getServiceProviders } = useProfileStore();
 
-  console.log("The service professional will not be logged on the console");
-
   useEffect(() => {
     getServiceProviders();
-  }, []);
+  }, [getServiceProviders]);
 
   useEffect(() => {
     const handleScroll = () => {

@@ -1,5 +1,8 @@
 import create from "zustand";
+import toast from "react-hot-toast";
 import { axiosInstance } from "../config/axiosInstance";
+import { getBackendErrorMessage } from "../utils/functions";
+import { TOAST_CONFIG } from "../utils/functions";
 
 export const useReviewStore = create((set) => ({
   reviews: [],
@@ -19,7 +22,11 @@ export const useReviewStore = create((set) => ({
     } catch (error) {
       console.error("Failed to create review:", error);
       set({ isLoading: false });
-      throw error;
+      const errorMessage = getBackendErrorMessage(error);
+      toast.error(errorMessage, {
+        ...TOAST_CONFIG,
+        id: "register",
+      });
     }
   },
 
@@ -35,11 +42,10 @@ export const useReviewStore = create((set) => ({
     }
   },
 
-
   deleteReview: async (id) => {
     set({ isLoading: true });
     try {
-      await api.delete(`/reviews/${id}`);
+      await axiosInstance.delete(`/reviews/${id}`);
       set((state) => ({
         reviews: state.reviews.filter((r) => r._id !== id),
         isLoading: false,

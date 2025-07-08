@@ -120,12 +120,14 @@ const UpdateServiceProviderProfile = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+
     if (file) {
       if (!["image/jpeg", "image/png"].includes(file.type)) {
         setImageError("Please upload a JPEG or PNG image");
         setFormData((prev) => ({ ...prev, profileImage: null }));
         return;
       }
+
       if (file.size > 5 * 1024 * 1024) {
         setImageError("Image size must be less than 5MB");
         setFormData((prev) => ({ ...prev, profileImage: null }));

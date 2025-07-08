@@ -145,6 +145,7 @@ export const useAuthStore = create(
           return true;
         } catch (error) {
           set({ isAuthenticated: false, user: null, loading: false });
+
           removeTokens();
           toast.error(getBackendErrorMessage(error), {
             duration: 3000,
