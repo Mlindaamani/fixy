@@ -2,6 +2,12 @@ const Conversation = require("../models/Conversation");
 const User = require("../models/User");
 const { formatImageRepresentation } = require("../utils/helpers");
 
+const USERROLE = {
+  SERVICEPROVIDER: "serviceProvider",
+  ADMIN: "admin",
+  CUSTOMER: "customer",
+};
+
 /**
  * @param {import('express').Request} req
  * @param {import('express').Response} res
@@ -13,23 +19,25 @@ const createConversation = async (req, res) => {
   try {
     // Validate otherUserId
     if (!otherUserId) {
-      return res.status(400).json({ message: "Other user ID is required" });
+      return res
+        .status(400)
+        .json({ message: "Please pick a user to chat with" });
     }
 
     // Check if other user exists
     const otherUser = await User.findById(otherUserId);
     if (!otherUser) {
-      return res.status(404).json({ message: "Other user not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     let providerId, customerId;
 
-    if (role === "provider") {
+    if (role === USERROLE.SERVICEPROVIDER) {
       providerId = userId;
       customerId = otherUserId;
     } else {
-      providerId = otherUserId;
       customerId = userId;
+      providerId = otherUserId;
     }
 
     // Check if conversation already exists

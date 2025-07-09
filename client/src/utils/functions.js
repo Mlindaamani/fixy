@@ -16,8 +16,9 @@ export const formatDate = (isoDate, options = {}) => {
 
 export const USERROLE = {
   CUSTOMER: "customer",
-  CUSTOMER_DASHBAORD: "/customer",
   SERVICEPROVIDER: "serviceProvider",
+  ADMIN: "admin",
+  CUSTOMER_DASHBAORD: "/customer",
   SERVICEPROVIDER_DASHBOARD: "/provider",
 };
 
