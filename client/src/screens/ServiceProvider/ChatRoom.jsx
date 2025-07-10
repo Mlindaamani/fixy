@@ -17,7 +17,6 @@ const ChatRoom = () => {
   const { user } = useAuthStore();
   const { isSidebarCollapsed } = useUtilsStore();
 
-console.log("The request has ")
 
   const {
     isLoadingMessage,

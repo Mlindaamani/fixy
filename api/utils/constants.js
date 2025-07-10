@@ -9,6 +9,7 @@ const USERROLE = {
   SERVICEPROVIDER: "serviceProvider",
   CUSTOMER: "customer",
   ADMIN: "admin",
+  ADMIN_IMAGE: "http://localhost:3000/uploads/profiles/admin.jpg",
 };
 
 const SERVICE_CATEGORIES = [

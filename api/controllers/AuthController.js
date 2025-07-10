@@ -135,7 +135,10 @@ const login = async (req, res) => {
       username: user.fullName,
       email: user.email,
       role: user.role,
-      profileImage: formatImageRepresentation(req, user.profileImage),
+      profileImage:
+        user.role === USERROLE.ADMIN
+          ? USERROLE.ADMIN_IMAGE
+          : formatImageRepresentation(req, user.profileImage),
       accessToken,
       refreshToken,
     });
@@ -191,7 +194,10 @@ const getUseProfile = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    profile.profileImage = formatImageRepresentation(req, profile.profileImage);
+    profile.profileImage =
+      profile.role === USERROLE.ADMIN
+        ? USERROLE.ADMIN_IMAGE
+        : formatImageRepresentation(req, profile.profileImage);
     res
       .status(200)
       .json({ profile, message: "User profile retrieved successfully" });

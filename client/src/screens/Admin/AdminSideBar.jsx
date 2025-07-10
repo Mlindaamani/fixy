@@ -1,9 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useUtilsStore } from "../../stores/utilsStore";
-import adminLinks from "../../lib/customerLinks";
-
-
+import adminLinks from "../../lib/adminLinks";
 
 const AdminSidebar = () => {
   const { isSidebarCollapsed, setIsSidebarCollapsed } = useUtilsStore();
