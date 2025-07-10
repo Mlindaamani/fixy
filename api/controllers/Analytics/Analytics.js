@@ -4,7 +4,8 @@ const moment = require("moment");
 
 const getServiceProviderAnalytics = async (req, res) => {
   try {
-    const providerId = req.user._id;
+
+    const providerId = req.user.id;
 
     // Fetch ServiceProvider
     const provider = await User.findById(providerId).populate("profile");

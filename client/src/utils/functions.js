@@ -20,6 +20,7 @@ export const USERROLE = {
   ADMIN: "admin",
   CUSTOMER_DASHBAORD: "/customer",
   SERVICEPROVIDER_DASHBOARD: "/provider",
+  ADMIN_DASHBOARD: "/admin",
 };
 
 export const TOAST_CONFIG = {
@@ -28,7 +29,14 @@ export const TOAST_CONFIG = {
 };
 
 export const navigateTo = (user) => {
-  return user?.role === USERROLE.CUSTOMER
-    ? USERROLE.CUSTOMER_DASHBAORD
-    : USERROLE.SERVICEPROVIDER_DASHBOARD;
+  switch (user?.role) {
+    case USERROLE.CUSTOMER:
+      return USERROLE.CUSTOMER_DASHBAORD;
+    case USERROLE.SERVICEPROVIDER:
+      return USERROLE.SERVICEPROVIDER_DASHBOARD;
+    case USERROLE.ADMIN:
+      return USERROLE.ADMIN_DASHBOARD;
+    default:
+      return "/";
+  }
 };

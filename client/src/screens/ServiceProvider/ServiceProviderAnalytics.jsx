@@ -3,8 +3,8 @@ import * as echarts from "echarts";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useAuthStore } from "../../stores/authStore";
-import { useAnalyticsStore } from "../../stores/analyticsStore";
 import LoadingSpinner from "../../components/Spinner";
+import { useAnalyticsStore } from "../../stores/analyticsStore";
 
 const ServiceProviderAnalytics = () => {
   const navigate = useNavigate();

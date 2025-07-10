@@ -77,8 +77,10 @@ export const useAuthStore = create(
             navigate(USERROLE.CUSTOMER_DASHBAORD);
           } else if (role === USERROLE.SERVICEPROVIDER) {
             navigate(USERROLE.SERVICEPROVIDER_DASHBOARD);
+          } else if (role === USERROLE.ADMIN) {
+            navigate(USERROLE.ADMIN_DASHBOARD);
           } else {
-            navigate("/admin");
+            navigate("/");
           }
         } catch (error) {
           const errorMessage = getBackendErrorMessage(error);

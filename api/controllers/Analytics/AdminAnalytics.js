@@ -3,6 +3,7 @@ const Service = require("../../models/Service");
 const Booking = require("../../models/Booking");
 const Conversation = require("../../models/Conversation");
 const moment = require("moment");
+const { formatImageRepresentation } = require("../../utils/helpers");
 
 const getAdminAnalytics = async (req, res) => {
   try {
@@ -42,6 +43,9 @@ const getAdminAnalytics = async (req, res) => {
       },
       { $sort: { _id: 1 } },
     ]);
+
+
+    // Format user growth data
     const userGrowth = userGrowthRaw.map((r) => ({
       month: moment()
         .month(r._id - 1)
@@ -51,6 +55,7 @@ const getAdminAnalytics = async (req, res) => {
 
     // Users List
     const rawUsers = await User.find(userQuery).populate("profile").lean();
+
     const users = await Promise.all(
       rawUsers.map(async (u) => {
         const services =
@@ -62,7 +67,7 @@ const getAdminAnalytics = async (req, res) => {
           fullName: u.fullName,
           email: u.email,
           role: u.role,
-          profileImage: u.profileImage,
+          profileImage: formatImageRepresentation(req, u.profileImage),
           profile: u.profile,
           services: services.map((s) => ({
             id: s._id,
@@ -82,7 +87,7 @@ const getAdminAnalytics = async (req, res) => {
     const services = rawServices.map((s) => ({
       id: s._id,
       name: s.name,
-      providerName: s.creator.fullName,
+      providerName: s.creator?.fullName,
       category: s.category,
       price: s.price,
       status: s.status,

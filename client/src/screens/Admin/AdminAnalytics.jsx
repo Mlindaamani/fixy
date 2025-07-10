@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { useAuthStore } from "../../stores/authStore";
 import { useAnalyticsStore } from "../../stores/analyticsStore";
 import LoadingSpinner from "../../components/Spinner";
-import axios from "axios";
+import { axiosInstance } from "../../config/axiosInstance";
 
 const AdminAnalytics = () => {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const AdminAnalytics = () => {
     } else {
       fetchAdminAnalytics(userFilter);
     }
-  }, [user, fetchAdminAnalytics, navigate, userFilter]);
+  }, [user, fetchAdminAnalytics, userFilter, navigate]);
 
   useEffect(() => {
     if (adminAnalytics) {
@@ -30,10 +30,12 @@ const AdminAnalytics = () => {
       const userOption = {
         title: { text: "User Growth", textStyle: { color: "#4B5563" } },
         tooltip: { trigger: "axis" },
+
         xAxis: {
           type: "category",
           data: adminAnalytics.userGrowth.map((d) => d.month),
         },
+
         yAxis: { type: "value", name: "Users" },
         series: [
           {
@@ -44,6 +46,7 @@ const AdminAnalytics = () => {
           },
         ],
       };
+
       userChart.setOption(userOption);
 
       return () => userChart.dispose();
@@ -53,15 +56,11 @@ const AdminAnalytics = () => {
   const handleServiceToggle = async (serviceId, currentStatus) => {
     try {
       const newStatus = currentStatus === "active" ? "pending" : "active";
-      await axios.patch(
-        `/api/services/${serviceId}/status`,
-        { status: newStatus },
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      );
+      await axiosInstance.patch(`/services/${serviceId}/status`, {
+        status: newStatus,
+      });
       toast.success(`Service ${newStatus}`);
-      fetchAdminAnalytics(userFilter); // Refresh data
+      fetchAdminAnalytics(userFilter);
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Failed to update service status"
@@ -70,8 +69,9 @@ const AdminAnalytics = () => {
   };
 
   if (loading) return <LoadingSpinner />;
+
   if (error) {
-    toast.error(error);
+    toast.error(error, { id: "analyticsError" });
     return <div className="text-center text-red-600">Error: {error}</div>;
   }
   if (!adminAnalytics) return null;
@@ -176,7 +176,7 @@ const AdminAnalytics = () => {
                     {user.id}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {user.fullName}
+                    {user.username}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {user.email}
@@ -189,7 +189,7 @@ const AdminAnalytics = () => {
                       <button
                         onClick={() => setSelectedProvider(user)}
                         className="text-indigo-600 hover:text-indigo-800"
-                        aria-label={`View profile of ${user.fullName}`}
+                        aria-label={`View profile of ${user?.username}`}
                       >
                         View Profile
                       </button>

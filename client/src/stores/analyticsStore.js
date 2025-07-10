@@ -1,7 +1,7 @@
 import create from "zustand";
 import { axiosInstance } from "../config/axiosInstance";
 
-const useAnalyticsStore = create((set) => ({
+export const useAnalyticsStore = create((set) => ({
   analytics: null,
   adminAnalytics: null,
   loading: false,
@@ -10,10 +10,7 @@ const useAnalyticsStore = create((set) => ({
   fetchAnalytics: async () => {
     set({ loading: true, error: null });
     try {
-      const response = await axiosInstance.get(
-        "/service-provider/analytics",
-        {}
-      );
+      const response = await axiosInstance.get("/analytics/provider");
       set({ analytics: response.data, loading: false });
     } catch (error) {
       set({
@@ -26,7 +23,7 @@ const useAnalyticsStore = create((set) => ({
   fetchAdminAnalytics: async (userFilter) => {
     set({ loading: true, error: null });
     try {
-      const response = await axiosInstance.get("/admin/analytics", {
+      const response = await axiosInstance.get("/analytics/admin", {
         params: { role: userFilter },
       });
       set({ adminAnalytics: response.data, loading: false });
@@ -42,7 +39,7 @@ const useAnalyticsStore = create((set) => ({
   fetchCustomerAnalytics: async () => {
     set({ loading: true, error: null });
     try {
-      const response = await axiosInstance.get("/customer/analytics", {});
+      const response = await axiosInstance.get("analytics/customer");
       set({ customerAnalytics: response.data, loading: false });
     } catch (error) {
       set({
@@ -53,5 +50,3 @@ const useAnalyticsStore = create((set) => ({
     }
   },
 }));
-
-export default useAnalyticsStore;
