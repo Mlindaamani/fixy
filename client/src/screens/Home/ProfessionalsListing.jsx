@@ -18,7 +18,6 @@ const ProfessionalsListing = () => {
   const [selectedProfessional, setSelectedProfessional] = useState(null);
   const { user, isAuthenticated } = useAuthStore();
 
-
   const {
     providers,
     getServiceProviders,
@@ -317,7 +316,6 @@ const ProfessionalsListing = () => {
                           setShowProfileModal(true);
                         }}
                         className="flex-1 bg-white border-2 border-indigo-600 text-indigo-600 px-4 py-2 rounded-lg hover:bg-indigo-50 transition-colors"
-                        aria-label={`View ${pro?.user?.fullName}'s profile`}
                       >
                         View Profile
                       </button>

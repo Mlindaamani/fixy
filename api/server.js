@@ -19,6 +19,7 @@ const { AuthRouter } = require("./routes/AuthRoutes");
 const { ConversationRouter } = require("./routes/ConversationRoutes");
 const { ServicesRouter } = require("./routes/ServicesRoutes");
 const ReviewRouter = require("./routes/ReviewRoutes");
+const { AnalyticsRouter } = require("./routes/AnalyticsRoutes");
 
 // Middlewares
 app.use(cors());
@@ -34,6 +35,7 @@ app.use("/api/customers", CustomerRouter);
 app.use("/api/auth", AuthRouter);
 app.use("/api/messages", MessageRouter);
 app.use("/api/conversations", ConversationRouter);
+app.use("/api/analytics", AnalyticsRouter);
 
 server.listen(process.env.PORT, () => {
   startServer();

@@ -19,8 +19,8 @@ const sendMessage = async (req, res) => {
 
     // This ensures the user is part of the conversation
     if (
-      conversation.providerId.toString() !== senderId &&
-      conversation.customerId.toString() !== senderId
+      conversation.provider.toString() !== senderId &&
+      conversation.customer.toString() !== senderId
     ) {
       return res.status(403).json({ message: "Unauthorized" });
     }
@@ -40,9 +40,9 @@ const sendMessage = async (req, res) => {
 
     // Determine receiver ID
     const receiverId =
-      conversation.providerId.toString() === senderId
-        ? conversation.customerId.toString()
-        : conversation.providerId.toString();
+      conversation.provider.toString() === senderId
+        ? conversation.customer.toString()
+        : conversation.provider.toString();
 
     const receiverSocketId = getReceiverSocketId(receiverId);
 

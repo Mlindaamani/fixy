@@ -1,0 +1,23 @@
+{
+  "_id": "682b4082b2f0441c933107d8",
+  "providerId": {
+    "_id": "680f78e0f77362001980e362",
+    "email": "mlinda@domain.com",
+    "fullName": "Mlindaamani",
+    "phoneNumber": "+255782308696",
+    "profileImage": "uploads/profiles/profileImage-1747294690534-532014260.jpg"
+  },
+  "customerId": {
+    "_id": "680f78e0f77362001980e362",
+    "email": "mlinda@domain.com",
+    "fullName": "Mlindaamani",
+    "phoneNumber": "+255782308696",
+    "profileImage": "uploads/profiles/profileImage-1747294690534-532014260.jpg"
+  },
+  "lastMessageAt": "2025-07-07T15:10:04.748Z",
+  "lastMessageContent": "Sawa",
+  "isActive": true,
+  "createdAt": "2025-05-19T14:30:26.968Z",
+  "updatedAt": "2025-07-07T15:10:04.753Z",
+  "__v": 0
+}

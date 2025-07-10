@@ -14,6 +14,7 @@ export const messageStore = create((set, get) => ({
     set({ selectedConversation: userToChatWith });
   },
 
+
   setSelectedConversation: (conversation) => {
     set({ selectedConversation: conversation });
   },

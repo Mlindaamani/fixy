@@ -2,13 +2,13 @@ const { model, Schema } = require("mongoose");
 
 const conversationSchema = Schema(
   {
-    providerId: {
+    provider: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: [true, "Service provider is required"],
     },
 
-    customerId: {
+    customer: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: [true, "Customer is required"],
@@ -34,9 +34,9 @@ const conversationSchema = Schema(
   }
 );
 
-conversationSchema.index({ providerId: 1, customerId: 1 }, { unique: true });
-conversationSchema.index({ providerId: 1, lastMessageAt: -1 });
-conversationSchema.index({ customerId: 1, lastMessageAt: -1 });
+conversationSchema.index({ provider: 1, customer: 1 }, { unique: true });
+conversationSchema.index({ provider: 1, lastMessageAt: -1 });
+conversationSchema.index({ customer: 1, lastMessageAt: -1 });
 
 /** @type {import('mongoose').Model} */
 module.exports = model("Conversation", conversationSchema);

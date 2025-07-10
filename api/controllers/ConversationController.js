@@ -17,33 +17,30 @@ const createConversation = async (req, res) => {
   const { role, id: userId } = req.user;
 
   try {
-    // Validate otherUserId
     if (!otherUserId) {
       return res
         .status(400)
         .json({ message: "Please pick a user to chat with" });
     }
 
-    // Check if other user exists
     const otherUser = await User.findById(otherUserId);
     if (!otherUser) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    let providerId, customerId;
+    let provider, customer;
 
     if (role === USERROLE.SERVICEPROVIDER) {
-      providerId = userId;
-      customerId = otherUserId;
+      provider = userId;
+      customer = otherUserId;
     } else {
-      customerId = userId;
-      providerId = otherUserId;
+      customer = userId;
+      provider = otherUserId;
     }
 
-    // Check if conversation already exists
     let conversation = await Conversation.findOne({
-      providerId,
-      customerId,
+      provider,
+      customer,
     });
 
     if (conversation) {
@@ -55,8 +52,8 @@ const createConversation = async (req, res) => {
 
     // Create new conversation
     conversation = await Conversation.create({
-      providerId,
-      customerId,
+      provider,
+      customer,
       lastMessageAt: new Date(),
       lastMessageContent: "",
       isActive: true,
@@ -65,24 +62,22 @@ const createConversation = async (req, res) => {
     // Populate participant details for response
     conversation = await Conversation.findById(conversation._id)
       .populate({
-        path: "providerId",
+        path: "provider",
         select: "name email",
       })
       .populate({
-        path: "customerId",
+        path: "customer",
         select: "fullName email",
       });
 
-    const isProvider = conversation.providerId._id.toString() === userId;
-    const otherParticipant = isProvider
-      ? conversation.customerId
-      : conversation.providerId;
+    const isProvider = conversation.provider._id.toString() === userId;
+    const other = isProvider ? conversation.customer : conversation.provider;
 
     const response = {
       conversationId: conversation._id,
-      userId: otherParticipant._id,
-      name: otherParticipant.name,
-      email: otherParticipant.email,
+      userId: other._id,
+      name: other.name,
+      email: other.email,
       lastMessageContent: conversation.lastMessageContent,
       lastMessageAt: conversation.lastMessageAt,
       isActive: conversation.isActive,
@@ -107,32 +102,30 @@ const getUserConversations = async (req, res) => {
     const userId = req.user.id;
 
     const conversations = await Conversation.find({
-      $or: [{ providerId: userId }, { customerId: userId }],
+      $or: [{ provider: userId }, { customer: userId }],
     })
       .populate({
-        path: "providerId",
+        path: "provider",
         select: "_id fullName email phoneNumber profileImage",
       })
       .populate({
-        path: "customerId",
+        path: "customer",
         select: "_id fullName email phoneNumber profileImage",
       })
       .sort({ lastMessageAt: -1 });
 
+
     // Transform the response to include the other participant's details
     const formattedConversations = conversations.map((conv) => {
-      const isProvider = conv.providerId._id.toString() === userId;
-      const otherParticipant = isProvider ? conv.customerId : conv.providerId;
+      const isProvider = conv.provider._id.toString() === userId;
+      const other = isProvider ? conv.customer : conv.provider;
 
       return {
-        userId: otherParticipant._id,
+        userId: other._id,
         conversationId: conv._id,
-        fullName: otherParticipant.fullName,
-        phoneNumber: otherParticipant.phoneNumber,
-        profileImage: formatImageRepresentation(
-          req,
-          otherParticipant.profileImage
-        ),
+        fullName: other.fullName,
+        phoneNumber: other.phoneNumber,
+        profileImage: formatImageRepresentation(req, other.profileImage),
         lastMessageContent: conv.lastMessageContent,
         lastMessageAt: conv.lastMessageAt,
         isActive: conv.isActive,
