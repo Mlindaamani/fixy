@@ -15,25 +15,25 @@ const CustomerBookings = () => {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState(null);
 
-  useEffect(() => {
-    const fetchBookings = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await axiosInstance.get("/bookings", {
-          params: { status: statusFilter === "all" ? undefined : statusFilter },
-        });
-        setBookings(response.data);
-      } catch (error) {
-        const message =
-          error.response?.data?.message || "Failed to fetch bookings";
-        setError(message);
-        toast.error(message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchBookings = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axiosInstance.get("/bookings", {
+        params: { status: statusFilter === "all" ? undefined : statusFilter },
+      });
+      setBookings(response.data);
+    } catch (error) {
+      const message =
+        error.response?.data?.message || "Failed to fetch bookings";
+      setError(message);
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     if (user?.role !== "customer") {
       toast.error("Access denied. Customers only.");
       navigate("/");
@@ -45,13 +45,10 @@ const CustomerBookings = () => {
   const handleCancelBooking = async () => {
     setLoading(true);
     try {
-      await axiosInstance.patch(`/api/bookings/${selectedBookingId}/cancel`);
+      await axiosInstance.patch(`/bookings/${selectedBookingId}/cancel`);
       toast.success("Booking cancelled successfully");
       setShowCancelModal(false);
-      const response = await axiosInstance.get("/bookings", {
-        params: { status: statusFilter === "all" ? undefined : statusFilter },
-      });
-      setBookings(response.data);
+      fetchBookings();
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to cancel booking");
     } finally {
@@ -118,7 +115,7 @@ const CustomerBookings = () => {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -143,7 +140,7 @@ const CustomerBookings = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
-                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full
                           ${
                             booking.status === "completed"
                               ? "bg-green-100 text-green-800"
@@ -157,17 +154,18 @@ const CustomerBookings = () => {
                         {booking.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      <div className="inline-flex gap-4">
+                    <td className="px-6 py-4 text-sm">
+                      <div className="flex items-center gap-4">
                         <button
                           onClick={() =>
                             navigate(
                               `/customer/room?conversationId=${booking.conversationId}`
                             )
                           }
-                          className="px-3 py-1 text-indigo-600 hover:text-indigo-800 rounded-md hover:bg-indigo-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                          className="inline-flex items-center px-3 py-1 rounded-md bg-indigo-50 text-indigo-600 hover:bg-indigo-100 hover:text-indigo-800 transition-colors"
                           aria-label={`Chat about booking ${booking._id}`}
                         >
+                          <i className="fas fa-paper-plane mr-2"></i>
                           Chat
                         </button>
                         {booking.status === "pending" && (
@@ -176,9 +174,10 @@ const CustomerBookings = () => {
                               setSelectedBookingId(booking._id);
                               setShowCancelModal(true);
                             }}
-                            className="px-3 py-1 text-red-600 hover:text-red-800 rounded-md hover:bg-red-50 transition-colors focus:outline-none focus:ring-2 focus:ring-red-600"
+                            className="inline-flex items-center px-3 py-1 rounded-md bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-800 transition-colors"
                             aria-label={`Cancel booking ${booking._id}`}
                           >
+                            <i className="fas fa-times mr-2"></i>
                             Cancel
                           </button>
                         )}
@@ -199,7 +198,7 @@ const CustomerBookings = () => {
                 <h2 className="text-2xl font-bold">Cancel Booking</h2>
                 <button
                   onClick={() => setShowCancelModal(false)}
-                  className="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                  className="text-gray-500 hover:text-gray-700"
                   aria-label="Close cancel modal"
                 >
                   <i className="fas fa-times text-xl"></i>
@@ -212,14 +211,14 @@ const CustomerBookings = () => {
               <div className="flex gap-4">
                 <button
                   onClick={() => setShowCancelModal(false)}
-                  className="flex-1 bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500"
+                  className="flex-1 bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors"
                 >
                   No, Keep Booking
                 </button>
                 <button
                   onClick={handleCancelBooking}
                   disabled={loading}
-                  className={`flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-red-600 ${
+                  className={`flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors ${
                     loading ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 >
