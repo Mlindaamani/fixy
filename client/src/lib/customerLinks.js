@@ -12,6 +12,12 @@ const customerLinks = [
   },
 
   {
+    icon: "fa-solid fa-calendar-check text-indigo-600", 
+    label: "Booking Requests",
+    route: "/customer/bookings",
+  },
+
+  {
     icon: "fa-solid fa-circle-user text-indigo-600",
     label: "Profile",
     route: "/customer/profile",

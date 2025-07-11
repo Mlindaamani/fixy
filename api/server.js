@@ -20,6 +20,7 @@ const { ConversationRouter } = require("./routes/ConversationRoutes");
 const { ServicesRouter } = require("./routes/ServicesRoutes");
 const ReviewRouter = require("./routes/ReviewRoutes");
 const { AnalyticsRouter } = require("./routes/AnalyticsRoutes");
+const { BookingRouter } = require("./routes/BookingRoutes");
 
 // Middlewares
 app.use(cors());
@@ -36,6 +37,7 @@ app.use("/api/auth", AuthRouter);
 app.use("/api/messages", MessageRouter);
 app.use("/api/conversations", ConversationRouter);
 app.use("/api/analytics", AnalyticsRouter);
+app.use("/api/bookings", BookingRouter);
 
 server.listen(process.env.PORT, () => {
   startServer();

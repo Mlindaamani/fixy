@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../stores/authStore";
-import dev_steve from "../assets/extra/dev-steve.jpg";
 import { useProfileStore } from "../stores/profileStore";
 
 const DashboardHeader = () => {
@@ -35,7 +34,7 @@ const DashboardHeader = () => {
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-3">
             <img
-              src={profileData?.profileImage || dev_steve}
+              src={profileData?.profileImage || null}
               alt="Profile"
               className="w-10 h-10 rounded-full object-cover"
               loading="lazy"

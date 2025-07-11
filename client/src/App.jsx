@@ -39,6 +39,7 @@ import ServiceProviderAnalytics from "./screens/ServiceProvider/ServiceProviderA
 import CustomerAnalytics from "./screens/Customer/CustomerAnalytics";
 import AdminAnalytics from "./screens/Admin/AdminAnalytics";
 import AdminLayout from "./layouts/AdminLayout";
+import CustomerBookings from "./screens/Customer/CustomerBookings";
 
 export const App = () => {
   return (
@@ -79,6 +80,7 @@ export const App = () => {
           <Route path="/customer" element={<CustomerLayout />}>
             <Route index element={<CustomerAnalytics />} />
             <Route path="room" element={<ChatRoom />} />
+            <Route path="bookings" element={<CustomerBookings />} />
             <Route path="profile" element={<CustomerProfile />} />
             <Route path="profile/edit" element={<UpdateCustomerProfile />} />
           </Route>

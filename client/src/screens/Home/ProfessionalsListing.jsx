@@ -4,6 +4,8 @@ import { useAuthStore } from "../../stores/authStore";
 import { useNavigate } from "react-router-dom";
 import { USERROLE } from "../../utils/functions";
 import ProfileModal from "./ProfileModal";
+import toast from "react-hot-toast";
+import { axiosInstance } from "../../config/axiosInstance";
 
 const ProfessionalsListing = () => {
   const navigate = useNavigate();
@@ -15,9 +17,12 @@ const ProfessionalsListing = () => {
   const [priceRange, setPriceRange] = useState([0, 100000]);
   const [experienceLevel, setExperienceLevel] = useState("all");
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showBookingModal, setShowBookingModal] = useState(false);
   const [selectedProfessional, setSelectedProfessional] = useState(null);
+  const [selectedService, setSelectedService] = useState("");
+  const [providerServices, setProviderServices] = useState([]);
+  const [bookingLoading, setBookingLoading] = useState(false);
   const { user, isAuthenticated } = useAuthStore();
-
   const {
     providers,
     getServiceProviders,
@@ -31,6 +36,40 @@ const ProfessionalsListing = () => {
 
   const handleChatClick = async (professionalId) => {
     await createConversation(professionalId, navigate);
+  };
+
+  const fetchProviderServices = async (providerId) => {
+    try {
+      const response = await axiosInstance.get(
+        `/providers/services/${providerId}`,
+        {}
+      );
+      setProviderServices(response.data);
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to fetch services");
+    }
+  };
+
+  const handleBookService = async () => {
+    if (!selectedService) {
+      toast.error("Please select a service");
+      return;
+    }
+    setBookingLoading(true);
+    try {
+      const response = await axiosInstance.post("/bookings/", {
+        serviceId: selectedService,
+        providerId: selectedProfessional.user._id,
+      });
+      toast.success("Booking created successfully!");
+      setShowBookingModal(false);
+      navigate(`/customer/room?conversationId=${response.data.conversationId}`);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to create booking");
+    } finally {
+      setBookingLoading(false);
+    }
   };
 
   const filteredProfessionals = providers
@@ -54,11 +93,11 @@ const ProfessionalsListing = () => {
 
       const matchesExperience =
         experienceLevel === "all" ||
-        (experienceLevel === "junior" && parseInt(pro.experience) < 5) ||
+        (experienceLevel === "junior" && parseInt(pro.yearsOfExperience) < 5) ||
         (experienceLevel === "mid" &&
-          parseInt(pro.experience) >= 5 &&
-          parseInt(pro.experience) < 10) ||
-        (experienceLevel === "senior" && parseInt(pro.experience) >= 10);
+          parseInt(pro.yearsOfExperience) >= 5 &&
+          parseInt(pro.yearsOfExperience) < 10) ||
+        (experienceLevel === "senior" && parseInt(pro.yearsOfExperience) >= 10);
 
       const matchesPrice =
         pro.hourlyRate >= priceRange[0] && pro.hourlyRate <= priceRange[1];
@@ -77,7 +116,7 @@ const ProfessionalsListing = () => {
         case "rating":
           return b.rating - a.rating;
         case "experience":
-          return parseInt(b.experience) - parseInt(a.experience);
+          return parseInt(b.yearsOfExperience) - parseInt(a.yearsOfExperience);
         case "price":
           return a.hourlyRate - b.hourlyRate;
         default:
@@ -95,7 +134,6 @@ const ProfessionalsListing = () => {
           <p className="text-xl mb-8">
             Connect with skilled experts in your area
           </p>
-
           <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="relative">
@@ -153,13 +191,11 @@ const ProfessionalsListing = () => {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="container mx-auto px-6 py-12">
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="lg:w-1/4">
             <div className="bg-white rounded-xl shadow-lg p-6">
               <h3 className="text-lg font-semibold mb-4">Filters</h3>
-
               <div className="mb-6">
                 <h4 className="font-medium mb-2">Rating</h4>
                 <select
@@ -174,7 +210,6 @@ const ProfessionalsListing = () => {
                   <option value="3.5">3.5+ Stars</option>
                 </select>
               </div>
-
               <div className="mb-6">
                 <h4 className="font-medium mb-2">Experience Level</h4>
                 <select
@@ -189,7 +224,6 @@ const ProfessionalsListing = () => {
                   <option value="senior">10+ years</option>
                 </select>
               </div>
-
               <div className="mb-6">
                 <h4 className="font-medium mb-2">Price Range ($/hour)</h4>
                 <div className="flex items-center space-x-4">
@@ -216,7 +250,6 @@ const ProfessionalsListing = () => {
                   />
                 </div>
               </div>
-
               <button
                 onClick={() => {
                   setSelectedServiceType("all");
@@ -284,7 +317,6 @@ const ProfessionalsListing = () => {
                         </div>
                       </div>
                     </div>
-
                     <div className="mb-4">
                       <div className="flex items-center text-gray-600 mb-2">
                         <i className="fas fa-map-marker-alt mr-2"></i>
@@ -295,7 +327,6 @@ const ProfessionalsListing = () => {
                         <span>{pro.yearsOfExperience} experience</span>
                       </div>
                     </div>
-
                     <div className="mb-4">
                       <div className="flex flex-wrap gap-2">
                         {pro.specialties.map((specialty, index) => (
@@ -308,7 +339,6 @@ const ProfessionalsListing = () => {
                         ))}
                       </div>
                     </div>
-
                     <div className="flex space-x-4">
                       <button
                         onClick={() => {
@@ -318,6 +348,28 @@ const ProfessionalsListing = () => {
                         className="flex-1 bg-white border-2 border-indigo-600 text-indigo-600 px-4 py-2 rounded-lg hover:bg-indigo-50 transition-colors"
                       >
                         View Profile
+                      </button>
+                      <button
+                        disabled={
+                          user?.role !== USERROLE.CUSTOMER ||
+                          creatingConversation ||
+                          !isAuthenticated
+                        }
+                        onClick={() => {
+                          setSelectedProfessional(pro);
+                          fetchProviderServices(pro.user._id);
+                          setShowBookingModal(true);
+                        }}
+                        className={`flex-1 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors ${
+                          user?.role !== USERROLE.CUSTOMER ||
+                          creatingConversation ||
+                          !isAuthenticated
+                            ? "opacity-50 cursor-not-allowed"
+                            : ""
+                        }`}
+                      >
+                        <i className="fas fa-book mr-2"></i>
+                        Book Service
                       </button>
                       <button
                         disabled={
@@ -351,6 +403,60 @@ const ProfessionalsListing = () => {
           selectedProfessional={selectedProfessional}
           setShowProfileModal={setShowProfileModal}
         />
+      )}
+
+      {showBookingModal && selectedProfessional && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <div className="bg-white rounded-xl p-8 max-w-md w-full">
+            <div className="flex justify-between items-start mb-6">
+              <h2 className="text-2xl font-bold">Book a Service</h2>
+              <button
+                onClick={() => setShowBookingModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+                aria-label="Close booking modal"
+              >
+                <i className="fas fa-times text-xl"></i>
+              </button>
+            </div>
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
+                Select Service
+              </label>
+              <select
+                value={selectedService}
+                onChange={(e) => setSelectedService(e.target.value)}
+                className="w-full px-4 py-2 rounded-lg border-none text-sm text-gray-800"
+                aria-label="Select service to book"
+              >
+                <option value="">Choose a service</option>
+                {providerServices.map((service) => (
+                  <option key={service._id} value={service._id}>
+                    {service.name} (Tsh {service.price.toLocaleString()})
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex space-x-4">
+              <button
+                onClick={() => setShowBookingModal(false)}
+                className="flex-1 bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleBookService}
+                disabled={bookingLoading || !selectedService}
+                className={`flex-1 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors ${
+                  bookingLoading || !selectedService
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
+                }`}
+              >
+                {bookingLoading ? "Booking..." : "Confirm Booking"}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

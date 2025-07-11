@@ -1,4 +1,5 @@
 const ServiceProvider = require("../models/ServiceProvider");
+const Service = require("../models/Service");
 const { formatImageRepresentation } = require("../utils/helpers");
 
 /**
@@ -101,8 +102,23 @@ const getServiceProviderById = async (req, res) => {
   }
 };
 
+const getProviderServices = async (req, res) => {
+  try {
+    const services = await Service.find({
+      creator: req.params.providerId,
+      status: "active",
+    }).select("name price category");
+
+    return res.json(services);
+  } catch (error) {
+    console.error("Error fetching provider services:", error);
+    return res.status(500).json({ message: error.message || "Server error" });
+  }
+};
+
 module.exports = {
   getServiceProviders,
   updateServiceProviderProfile,
   getServiceProviderById,
+  getProviderServices,
 };
